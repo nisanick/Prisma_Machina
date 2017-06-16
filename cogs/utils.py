@@ -11,7 +11,7 @@ class Utils:
     @commands.command()
     async def time(self):
         year = datetime.now().timetuple().tm_year
-        now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%m %d %b %Y")
+        now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")
         await self.bot.say(now)
 
 
