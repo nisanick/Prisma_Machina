@@ -2,12 +2,14 @@
 import discord
 from discord import Client
 from discord.ext import commands
+from config import *
 
 # prisma = discord.Client()
 bot = commands.Bot(command_prefix='!')
 
 extensions = [
-    'cogs.utils'
+    'cogs.utils',
+    'cogs.parsing'
 ]
 
 @bot.event
@@ -29,9 +31,9 @@ async def load(*args):
         await bot.say("No argument passed")
         return
     what = 'cogs.{0}'.format(args[0])
-    await bot.say(what)
     if what in extensions:
         bot.load_extension(what)
+        await bot.say("Extension {0} loaded".format(what))
     else:
         await bot.say("No such extension available")
 
@@ -43,7 +45,7 @@ async def register(*args):
         return
     what = 'cogs.{0}'.format(args[0])
     extensions.append(what)
-    await bot.say("Extension registered")
+    await bot.say("Extension {0} registered".format(what))
 
 
 @bot.command()
@@ -53,19 +55,24 @@ async def reload(*args):
         return
     print(args)
     if args[0] == 'all':
-        ext = extensions
+        to_reload = extensions
     else:
-        ext = args
-    for e in ext:
-        if e in extensions:
-            bot.unload_extension(e)
-            bot.load_extension(e)
+        to_reload = []
+        to_reload.append("cogs.{0}".format(args[0]))
+    for extension in to_reload:
+        print(extension)
+        if extension in extensions:
+            print('reloading')
+            bot.unload_extension(extension)
+            bot.load_extension(extension)
 
 
 @bot.event
 async def on_message(message):
-    # TODO - parse messages and save most used words to database
+    words = message.content.split(" ")
     await bot.process_commands(message)
 
 
-bot.run("""{token}""")
+for ext in extensions:
+    bot.load_extension(ext)
+bot.run(TOKEN)
