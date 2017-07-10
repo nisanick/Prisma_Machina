@@ -32,13 +32,13 @@ class Parser:
                   "WHERE words.word LIKE %s"
                   "GROUP BY words.word")
         cursor_counts = db.cursor(buffered=True)
-        cursor_counts.execute(counts,(what,))
+        cursor_counts.execute(counts, (what,))
         times = ("SELECT word_count.last_use FROM word_count "
                  "JOIN users ON users.user_id = word_count.user_id "
                  "JOIN words ON word_count.word_id = words.word_id "
                  "WHERE users.identity LIKE %(who)s AND words.word LIKE %(what)s")
         cursor_times = db.cursor(buffered=True)
-        cursor_times.execute(times,{'who': ctx.message.author.id, 'what': what,})
+        cursor_times.execute(times, {'who': ctx.message.author.id, 'what': what, })
         try:
             people, word, count, use = cursor_counts.fetchone()
             last_use = cursor_times.fetchone()[0]
@@ -55,7 +55,6 @@ class Parser:
             cursor_counts.close()
             cursor_times.close()
 
-
     @stat.command(pass_context=True)
     async def me(self, ctx: commands.Context, *args):
         limit = 5
@@ -67,22 +66,20 @@ class Parser:
                       "JOIN words ON word_count.word_id = words.word_id "
                       "WHERE user_id = %s ORDER BY count DESC limit %s")
         cursor = db.cursor(buffered=True)
-        cursor.execute(user_info,(ctx.message.author.id,))
+        cursor.execute(user_info, (ctx.message.author.id,))
         try:
             user_id, message_count = cursor.fetchone()
-            result = "```Top {} used words by you:\n{:-<61}\n".format(limit,"")
-            cursor.execute(words_used,(user_id, limit))
+            result = "```Top {} used words by you:\n{:-<61}\n".format(limit, "")
+            cursor.execute(words_used, (user_id, limit))
             for (word, count, last_use) in cursor:
                 stat = "{0:18} : {1:4} time(s), last use: {2}\n"
-                result = result + stat.format(word.replace('```',''), count, '{:%d.%m.%Y %H:%M}'.format(last_use))
-            result = result + "{:-<61}\nYou sent {} messages since I was turned on.```".format("",message_count)
+                result = result + stat.format(word.replace('```', ''), count, '{:%d.%m.%Y %H:%M}'.format(last_use))
+            result = result + "{:-<61}\nYou sent {} messages since I was turned on.```".format("", message_count)
             await self.bot.say(result)
         except TypeError:
             print('something wrong happened')
         finally:
             cursor.close()
-
-
 
     def __insert(self, what, author: discord.Member):
         db = Database.get_connection()
@@ -101,18 +98,17 @@ class Parser:
         cursor.execute(insert_user, user_values)
         for word in what:
             word_values = {
-                'val': word.lower(),
+                'val': word.lower().replace('!', '').replace('?', '').replace(',', '').replace('.', ''),
                 'now': datetime.now(),
             }
             cursor.execute(insert_word, word_values)
             count_values = {
-                'val': word.lower(),
+                'val': word.lower().replace('!', '').replace('?', '').replace(',', '').replace('.', ''),
                 'ident': author.id,
                 'now': datetime.now(),
             }
             cursor.execute(insert_count, count_values)
         db.commit()
-
 
 
 def setup(bot: commands.Bot):
