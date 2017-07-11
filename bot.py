@@ -27,9 +27,6 @@ async def on_ready():
     await bot.change_presence(game=discord.Game(name="with your heart"))
 
 
-
-
-
 @bot.command(pass_context=True)
 async def hello(ctx, *args):
     print(bot.get_server(295572327826194434).__class__)
