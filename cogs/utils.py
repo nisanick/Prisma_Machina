@@ -30,7 +30,7 @@ class Utils:
         await asyncio.sleep(delay)
         await self.bot.send_message(self.bot.get_channel('322456259897065472'),
                                     "timed message {}".format(datetime.utcnow()))
-        new_delay = random.randint(36000,50400)
+        new_delay = random.randint(36000, 50400)
         print(new_delay)
         await self.timed_message(new_delay)
 
