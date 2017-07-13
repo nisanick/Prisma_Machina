@@ -10,7 +10,7 @@ class Utils:
         self.bot = bot
 
     async def on_ready(self):
-        await self.timed_message(5)
+        #await self.timed_message(5)
         pass
 
     @commands.command()

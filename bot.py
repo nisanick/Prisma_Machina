@@ -15,21 +15,45 @@ extensions = [
     'cogs.utils',
     'cogs.parsing'
 ]
-shcedule = sched.scheduler(time.time, time.sleep)
-
-server = None
+startup = datetime.utcnow()
 
 @bot.event
 async def on_ready():
     print("Client logged in")
     print(bot.user.name)
     print(bot.user.id)
+    startup = datetime.utcnow()
     await bot.change_presence(game=discord.Game(name="with your heart"))
 
 
 @bot.command(pass_context=True)
-async def hello(ctx, *args):
-    print(bot.get_server(295572327826194434).__class__)
+async def hello(ctx: commands.Context, *args):
+    #print(bot.get_server(295572327826194434).__class__)
+    #channel = commands.ChannelConverter(ctx, '322456259897065472').convert()
+    #print(channel.name)
+    channel = commands.ChannelConverter(ctx, args[0]).convert()
+    limit = args[1]
+    users = dict()
+    limit = int(limit)
+    count = limit
+    before = startup
+    bot.type()
+    while count == limit:
+        count = 0
+        async for message in bot.logs_from(channel, limit=int(limit), before=before):
+            who = message.author.id
+            users[who] = users.get(who, 0) + 1
+            count = count + 1
+            before = message
+
+    for user in users.keys():
+        name = "<deleted>"
+        try:
+            usr = commands.MemberConverter(ctx, user).convert()
+            name = usr.name
+        except discord.ext.commands.errors.BadArgument as e:
+            print(e)
+        await bot.say("User {0} sent {1} messages.".format(name, users[user]))
 
 
 @bot.command(pass_context=True)
