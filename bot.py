@@ -1,12 +1,10 @@
-#/bin/python3
-import asyncio
-import discord
-from discord import Client
-from discord.ext import commands
-from config import *
-from importlib import reload as rld
-import sched, time
+# /bin/python3
 from datetime import datetime
+
+import discord
+from discord.ext import commands
+
+from config import *
 
 # prisma = discord.Client()
 bot = commands.Bot(command_prefix=PREFIX, help_attrs=HELP_ATTRIBUTES)
@@ -17,20 +15,20 @@ extensions = [
 ]
 startup = datetime.utcnow()
 
+
 @bot.event
 async def on_ready():
     print("Client logged in")
     print(bot.user.name)
     print(bot.user.id)
-    startup = datetime.utcnow()
     await bot.change_presence(game=discord.Game(name="with your heart"))
 
 
 @bot.command()
 async def hello(ctx: commands.Context, *args):
-    #print(bot.get_server(295572327826194434).__class__)
-    #channel = commands.ChannelConverter(ctx, '322456259897065472').convert()
-    #print(channel.name)
+    # print(bot.get_server(295572327826194434).__class__)
+    # channel = commands.ChannelConverter(ctx, '322456259897065472').convert()
+    # print(channel.name)
     channel = await commands.TextChannelConverter().convert(ctx, args[0])
     limit = args[1]
     users = dict()

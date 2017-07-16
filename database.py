@@ -1,6 +1,7 @@
 from config import DATABASE
 import mysql.connector as db_driver
 
+
 class Database:
 
     _connection = None
@@ -15,6 +16,4 @@ class Database:
             Database()
         return Database._connection
 
-
-
-#have to use commit() on connection
+# have to use commit() on connection
