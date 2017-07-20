@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 from config import *
-from database import Database
+import database
 
 
 class Utils:
@@ -14,7 +14,7 @@ class Utils:
         self.bot = bot
 
     async def on_ready(self):
-        await self.timer(1)
+        #await self.timer(1)
         pass
 
     @commands.command(aliases=['what is the time'])
@@ -35,7 +35,7 @@ class Utils:
     async def timer(self, delay):
         await asyncio.sleep(delay)
         print('timer')
-        db = Database.get_connection()
+        db = await database.Database.get_connection()
         query_event = "SELECT event_id, event_type FROM schedule WHERE event_time <= %(when)s AND done = FALSE"
         query_update = "UPDATE schedule SET done = TRUE WHERE event_id = %(id)s"
         data = {
@@ -73,10 +73,11 @@ class Utils:
         db.commit()
 
     async def on_message(self, message):
-        content = message.content.lower()
+        """content = message.content.lower()
         for word in PROFANITY:
             if word in content:
-                await message.channel.send("Hey! Mind your tongue {}".format(message.author.mention))
+                await message.channel.send("Hey! Mind your tongue {}".format(message.author.mention))"""
+        print(message.content)
 
     @commands.command()
     async def add(self, ctx, *args):

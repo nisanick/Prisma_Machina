@@ -145,7 +145,7 @@ class Parser:
         insert_user = "INSERT INTO users (user_id, message_count) VALUES (%(ident)s, 1) ON DUPLICATE KEY UPDATE users.message_count = message_count + 1"
         insert_count = ("INSERT INTO word_count (word, user_id, usage_count, last_use) VALUES"
                         "("
-                        "(SELECT word FROM words WHERE word LIKE %(val)s),"
+                        "(SELECT word FROM words WHERE word = %(val)s),"
                         "(SELECT user_id FROM users WHERE user_id = %(ident)s),"
                         "1, %(now)s)"
                         "ON DUPLICATE KEY UPDATE word_count.usage_count = word_count.usage_count + 1, last_use = %(now)s")
@@ -155,8 +155,9 @@ class Parser:
         cursor = db.cursor()
         cursor.execute(insert_user, user_values)
         for word in what:
+            print(word.lower())
             word_values = {
-                'val': word.lower(),
+                'val': word.lower() + "",
                 'now': when,
                 'exclude': False
             }
@@ -164,7 +165,7 @@ class Parser:
                 word_values['exclude'] = True
             cursor.execute(insert_word, word_values)
             count_values = {
-                'val': word.lower(),
+                'val': word.lower() + "",
                 'ident': author.id,
                 'now': when,
             }

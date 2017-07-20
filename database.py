@@ -1,19 +1,19 @@
 from config import DATABASE
-import mysql.connector as db_driver
+import asyncio
+import asyncpg
 
 
 class Database:
 
     _connection = None
 
-    def __init__(self):
-        if not Database._connection:
-            Database._connection = db_driver.connect(**DATABASE)
+    def _set_connection(self, con):
+        Database._connection = con
 
     @staticmethod
-    def get_connection() -> db_driver.MySQLConnection:
+    async def get_connection() -> asyncpg.Connection:
         if not Database._connection:
-            Database()
+            Database()._set_connection(await asyncpg.connect(**DATABASE))
         return Database._connection
 
 # have to use commit() on connection
