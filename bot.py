@@ -11,8 +11,7 @@ from config import *
 bot = commands.Bot(command_prefix=PREFIX, help_attrs=HELP_ATTRIBUTES)
 
 extensions = [
-    'cogs.utils',
-    'cogs.parsing'
+    'cogs.utils'
 ]
 startup = datetime.utcnow()
 
@@ -93,7 +92,7 @@ async def reload(ctx, *args):
             bot.load_extension(extension)
 
 
-#for ext in extensions:
- #   bot.load_extension(ext)
+for ext in extensions:
+    bot.load_extension(ext)
 bot.remove_command('help')
 bot.run(TOKEN)

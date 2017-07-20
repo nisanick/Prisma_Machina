@@ -31,7 +31,7 @@ class Utils:
     async def on_member_remove(self, member):
         channel = self.bot.get_channel(322456259897065472)
         await channel.send('{} left the server'.format(member.mention))
-
+'''
     async def timer(self, delay):
         await asyncio.sleep(delay)
         print('timer')
@@ -92,7 +92,7 @@ class Utils:
         db.commit()
         cursor.close()
         await ctx.send("Message added")
-
+'''
 
 def setup(bot):
     bot.add_cog(Utils(bot))
