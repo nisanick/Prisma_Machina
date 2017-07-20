@@ -5,7 +5,7 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
-from config import *
+import config
 import database
 
 
@@ -14,7 +14,7 @@ class Utils:
         self.bot = bot
 
     async def on_ready(self):
-        #await self.timer(1)
+        # await self.timer(1)
         pass
 
     @commands.command(aliases=['what is the time'])
@@ -66,33 +66,12 @@ class Utils:
         message.execute(query_message)
         content = message.fetchone()[0]
         # TODO - maybe not more than 1 channel
-        for channel_id in TIMED_MESSAGE_CHANNELS:
+        for channel_id in config.TIMED_MESSAGE_CHANNELS:
             channel = self.bot.get_channel(channel_id)
             await channel.send(content)
         db.cursor().execute(query_insert, data)
-        db.commit()
+        db.commit()'''
 
-    async def on_message(self, message):
-        """content = message.content.lower()
-        for word in PROFANITY:
-            if word in content:
-                await message.channel.send("Hey! Mind your tongue {}".format(message.author.mention))"""
-        print(message.content)
-
-    @commands.command()
-    async def add(self, ctx, *args):
-        message = args[0]
-        db = Database.get_connection()
-        query = "INSERT INTO messages (message_content) VALUES (%(message)s)"
-        cursor = db.cursor()
-        values = {
-            'message': message
-        }
-        cursor.execute(query, values)
-        db.commit()
-        cursor.close()
-        await ctx.send("Message added")
-'''
 
 def setup(bot):
     bot.add_cog(Utils(bot))

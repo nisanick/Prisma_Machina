@@ -1,17 +1,18 @@
 # /bin/python3
 from datetime import datetime
 
-import discord
 from discord.ext import commands
-from database import Database
+import database
+import asyncio
 
-from config import *
+import config
+# from importlib import reload as rld
 
-# prisma = discord.Client()
-bot = commands.Bot(command_prefix=PREFIX, help_attrs=HELP_ATTRIBUTES)
+bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES)
 
 extensions = [
-    'cogs.utils'
+    'cogs.utils',
+    'cogs.parsing'
 ]
 startup = datetime.utcnow()
 
@@ -21,16 +22,19 @@ async def on_ready():
     print("Client logged in")
     print(bot.user.name)
     print(bot.user.id)
-    await bot.change_presence(game=discord.Game(name="with your heart"))
+    await bot.change_presence()
 
 
 @bot.command()
 async def test(ctx: commands.Context, *args):
-    con = await Database.get_connection()
+    con = await database.Database.get_connection()
     async with con.transaction():
         await con.execute("create table if not EXISTS test ( test1 INTEGER PRIMARY KEY,test2 text,test3 INTEGER);")
-        await con.execute("insert into test values(1,'first', 50) ON conflict (test1) do update set test3 = test.test3 + 10;")
-        await con.execute("insert into test VALUES (2, 'second', 100) ON conflict (test1) do update set test3 = test.test3 + 10;;")
+        query = "insert into test values($1,$2,$3) ON conflict (test1) do update set test3 = test.test3 + 10;"
+        values1 = (1, 'first', 50)
+        values2 = (2, 'second', 100)
+        await con.execute(query, *values1)
+        await con.execute(query, *values2)
     async with con.transaction():
         async for row in con.cursor("select * from test"):
             print("row {}, text {}, value {}".format(row[0], row['test2'], row[2]))
@@ -38,12 +42,15 @@ async def test(ctx: commands.Context, *args):
     # async with con.transaction():
     #    await con.execute("drop table test")
 
+
 @bot.command()
 async def load(ctx, *args):
-    if ctx.author.id not in ADMIN_USERS:
+    if ctx.author.id not in config.ADMIN_USERS:
         return
     if args.__len__() <= 0:
-        await ctx.send("No argument passed")
+        to_delete = await ctx.send("No argument passed")
+        await asyncio.sleep(5)
+        await to_delete.delete()
         return
     what = 'cogs.{0}'.format(args[0])
     if not what in extensions:
@@ -52,10 +59,9 @@ async def load(ctx, *args):
     await ctx.send("Extension {0} loaded".format(what))
 
 
-
 @bot.command()
 async def unload(ctx: commands.Context, *args):
-    if ctx.author.id not in ADMIN_USERS:
+    if ctx.author.id not in config.ADMIN_USERS:
         return
     if args.__len__() <= 0:
         await ctx.send("No argument passed")
@@ -74,20 +80,18 @@ async def unload(ctx: commands.Context, *args):
 
 @bot.command()
 async def reload(ctx, *args):
-    if ctx.message.author.id not in ADMIN_USERS:
+    if ctx.message.author.id not in config.ADMIN_USERS:
         return
     if args.__len__() <= 0:
         await ctx.send("No argument passed")
         return
-    print(args)
     if args[0] == 'all':
         to_reload = extensions
     else:
         to_reload = ["cogs.{0}".format(args[0])]
     for extension in to_reload:
-        print(extension)
         if extension in extensions:
-            print('reloading')
+            await ctx.send('reloading {}'.format(extension))
             bot.unload_extension(extension)
             bot.load_extension(extension)
 
@@ -95,4 +99,4 @@ async def reload(ctx, *args):
 for ext in extensions:
     bot.load_extension(ext)
 bot.remove_command('help')
-bot.run(TOKEN)
+bot.run(config.TOKEN)
