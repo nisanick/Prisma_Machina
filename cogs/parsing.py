@@ -41,11 +41,12 @@ class Parser:
         what = before.content
         for symbol in config.REPLACEMENTS:
             what = what.replace(symbol, '')
+        if what.__len__() < 1:
+            return
         what = what.replace("\n", " ")
         what = what.split(" ")
         when = datetime.utcnow()
         await self.__delete(what, before.author)
-
         what = after.content
         for symbol in config.REPLACEMENTS:
             what = what.replace(symbol, '')
