@@ -1,6 +1,7 @@
 # /bin/python3
 from datetime import datetime
 
+import discord
 from discord.ext import commands
 import database
 import asyncio
@@ -27,20 +28,8 @@ async def on_ready():
 
 @bot.command()
 async def test(ctx: commands.Context, *args):
-    con = await database.Database.get_connection()
-    async with con.transaction():
-        await con.execute("create table if not EXISTS test ( test1 INTEGER PRIMARY KEY,test2 text,test3 INTEGER);")
-        query = "insert into test values($1,$2,$3) ON conflict (test1) do update set test3 = test.test3 + 10;"
-        values1 = (1, 'first', 50)
-        values2 = (2, 'second', 100)
-        await con.execute(query, *values1)
-        await con.execute(query, *values2)
-    async with con.transaction():
-        async for row in con.cursor("select * from test"):
-            print("row {}, text {}, value {}".format(row[0], row['test2'], row[2]))
-    await con.close()
-    # async with con.transaction():
-    #    await con.execute("drop table test")
+    enbed = discord.Embed(color=1048560, title="test")
+    await ctx.send(embed=enbed)
 
 
 @bot.command()
