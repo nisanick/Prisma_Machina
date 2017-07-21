@@ -5,7 +5,7 @@ import asyncpg
 
 class Database:
 
-    _connection : asyncpg.Connection = None
+    _connection = None
 
     def _set_connection(self, con):
         Database._connection = con
