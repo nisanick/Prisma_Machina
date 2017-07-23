@@ -10,17 +10,15 @@ import database
 from paginator import HelpPaginator, CannotPaginate
 import config
 from web import Web
+from data.links import *
 
 class Utils:
     def __init__(self, bot):
         self.bot = bot
 
-    async def on_ready(self):
-        # await self.timer(1)
-        pass
-
     @commands.command(name='help')
     async def _help(self, ctx, *, command: str = None):
+        return
         """Shows help about a command or the bot"""
 
         try:
@@ -44,11 +42,13 @@ class Utils:
     async def time(self, ctx):
         year = datetime.now().timetuple().tm_year
         now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")
-        await ctx.send(now)
+        embed = discord.Embed(title="Current Galactic Time", description=now, color=discord.Colour.dark_orange())
+        await ctx.message.delete(reason="Command cleanup")
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def link(self, ctx, verification, *, account):
-        link = 'http://www.prismatic-imperium.com/api/link_account.php'
+        link = account_link
         args = {
             'discord_id': ctx.message.author.id,
             'username': account,
@@ -70,7 +70,7 @@ class Utils:
             to_delete.append(
                 await ctx.send('❌ This account is already linked to Discord.'))
         await asyncio.sleep(5)
-        await ctx.channel.delete_messages(to_delete, reason="Deletion of unneeded messages.")
+        await ctx.channel.delete_messages(to_delete, reason="Command and response cleanup.")
 
     async def on_member_join(self, member: discord.Member):
         channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)

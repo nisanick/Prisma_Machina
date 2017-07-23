@@ -1,32 +1,41 @@
 import discord
-from datetime import datetime
 from discord.ext import commands
-import config
+
 import database
-import aiohttp
+from data.links import *
 from web import Web
+
 
 class Stats:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.command()
-    async def statistics(self, ctx: commands.Context, who=None):
+    async def statistic(self, ctx: commands.Context, who=None):
+        if who is None:
+            who = ctx.author
+        else:
+            try:
+                who = await commands.MemberConverter().convert(ctx, who)
+            except commands.CommandError:
+                who = ctx.author
+
         limit = 6
         db = await database.Database.get_connection()
-        user_info = "SELECT message_count, reaction_count FROM users WHERE user_id = $1"
+        user_info = "SELECT message_count, reaction_count, special FROM users WHERE user_id = $1"
         words_used = ("SELECT words.word, usage_count, word_count.last_use FROM word_count "
                       "JOIN words ON word_count.word = words.word AND words.excluded = FALSE "
                       "WHERE user_id = $1 ORDER BY usage_count DESC LIMIT $2")
-        reactions_used = (
-        "SELECT reactions.reaction, usage_count, reaction_count.last_use, reactions.custom FROM reaction_count "
-        "JOIN reactions ON reaction_count.reaction = reactions.reaction "
-        "WHERE user_id = $1 ORDER BY usage_count DESC LIMIT $2")
+        reactions_used = ("SELECT reactions.reaction, usage_count, reaction_count.last_use, reactions.custom FROM reaction_count "
+                          "JOIN reactions ON reaction_count.reaction = reactions.reaction "
+                          "WHERE user_id = $1 ORDER BY usage_count DESC LIMIT $2")
         async with db.transaction():
-            user_id = ctx.author.id
+            user_id = who.id
             embed = discord.Embed(colour=discord.Colour(0xb85f98))
-            embed.set_author(icon_url=ctx.author.avatar_url, name=ctx.author.name)
-            message_count, reaction_count = await db.fetchrow(user_info, str(ctx.author.id))
+            embed.set_author(icon_url=who.avatar_url, name=who.name)
+            message_count, reaction_count, special = await db.fetchrow(user_info, str(who.id))
+            if user_id is 186829544764866560:
+                embed.set_footer(text="You said 'By Achenar' {} times.".format(special))
             embed.add_field(name="Message statistics", inline=False,
                             value="You sent {} messages. Top used words:".format(message_count))
             async for (word, count, last_use) in db.cursor(words_used, *(str(user_id), limit)):
@@ -43,10 +52,11 @@ class Stats:
                 embed.add_field(name=emoji or reaction, inline=True, value="{0:4} time(s), last use: {1}"
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
             await ctx.send(embed=embed)
+            await ctx.message.delete(reason="Command cleanup")
 
     @commands.command()
     async def diamonds(self, ctx, who=None):
-        link = 'http://www.prismatic-imperium.com/api/user_statistics.php'
+        link = user_data_link
         if who:
             who = await commands.MemberConverter().convert(ctx, who)
         else:

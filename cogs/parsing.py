@@ -26,11 +26,13 @@ class Parser:
                     last = message
                     what = message.content
                     what = what.replace("\n", " ")
+                    if message.author.id is 186829544764866560:
+                        await self.techeron_check(what)
                     what = what.split(" ")
-                    await self.__insert(what, message.author, message.created_at)
+                    await self.__insert(what, message.author, message.created_at, history=True)
                     for reaction in message.reactions:
                         async for user in reaction.users():
-                            await self.__insert_reaction(reaction, user, message.created_at)
+                            await self.__insert_reaction(reaction, user, message.created_at, history=True)
                     count = count + 1
         await ctx.send("History of {} added.".format(channel.name))
 
@@ -39,6 +41,8 @@ class Parser:
             return
         what = message.content
         what = what.replace("\n", " ")
+        if message.author.id is 186829544764866560:
+            await self.techeron_check(what)
         what = what.split(" ")
         await self.__insert(what, message.author, message.created_at)
 
@@ -99,12 +103,25 @@ class Parser:
             return
         await self.__delete_reaction(reaction, user)
 
-    async def __insert(self, what, author: discord.Member, when: datetime):
+    async def techeron_check(self, message):
+        text = "by achenar"
+        if not message.lower().__contains__(text):
+            return
+        insert = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET special = users.special + 1"
+        db = database.Database.get_connection()
+        async with db.transaction():
+            await db.execute(insert, str(186829544764866560))
+
+    async def __insert(self, what, author: discord.Member, when: datetime, history=False):
         db = await database.Database.get_connection()
         insert_word = "INSERT INTO words (word, excluded, last_use) VALUES ($1, $2, $3) ON CONFLICT (word) DO UPDATE SET last_use = $3"
         insert_user = "INSERT INTO users (user_id, message_count, reaction_count) VALUES ($1, 1, 0) ON CONFLICT (user_id) DO UPDATE SET message_count = users.message_count + 1"
         insert_count = ("INSERT INTO word_count (word, user_id, usage_count, last_use) VALUES($1, $2, 1, $3)"
                         "ON CONFLICT (word,user_id) DO UPDATE SET usage_count = word_count.usage_count + 1, last_use = $3")
+        if history:
+            insert_word = "INSERT INTO words (word, excluded, last_use) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING "
+            insert_count = ("INSERT INTO word_count (word, user_id, usage_count, last_use) VALUES($1, $2, 1, $3)"
+                            "ON CONFLICT (word,user_id) DO UPDATE SET usage_count = word_count.usage_count + 1")
         async with db.transaction():
             await db.execute(insert_user, str(author.id))
             for word in what:
@@ -144,11 +161,15 @@ class Parser:
                 )
                 await db.execute(insert_count, *count_values)
 
-    async def __insert_reaction(self, reaction, who, when):
+    async def __insert_reaction(self, reaction, who, when, history=False):
         insert_reaction = "INSERT INTO reactions(reaction, custom, last_use) VALUES ($1, $2, $3) ON CONFLICT (reaction) DO UPDATE SET last_use = $3"
         insert_user = "INSERT INTO users (user_id, message_count, reaction_count) VALUES ($1, 0, 1) ON CONFLICT (user_id) DO UPDATE SET reaction_count = users.reaction_count + 1"
         insert_count = ("INSERT INTO reaction_count(reaction, user_id, usage_count, last_use) VALUES ($1, $2, 1, $3)"
                         "ON CONFLICT (reaction, user_id) DO UPDATE SET usage_count = reaction_count.usage_count + 1, last_use = $3")
+        if history:
+            insert_reaction = "INSERT INTO reactions(reaction, custom, last_use) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING "
+            insert_count = ("INSERT INTO reaction_count(reaction, user_id, usage_count, last_use) VALUES ($1, $2, 1, $3)"
+                            "ON CONFLICT (reaction, user_id) DO UPDATE SET usage_count = reaction_count.usage_count + 1")
         db = await database.Database.get_connection()
         async with db.transaction():
             await db.execute(insert_user, str(who.id))

@@ -19,15 +19,6 @@ logger.addHandler(handler)
 
 bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, status=discord.Status.offline)
 
-extensions = [
-    'cogs.utils',
-    'cogs.parsing',
-    'cogs.stats'
-]
-
-default = [
-    'cogs.testing'
-]
 startup = datetime.utcnow()
 
 
@@ -35,7 +26,7 @@ startup = datetime.utcnow()
 async def on_ready():
     await database.Database.init_connection(bot.loop)
     print("Client logged in")
-    await bot.change_presence()
+    print(startup)
     print(bot.user.name)
     print(bot.user.id)
 
@@ -52,8 +43,8 @@ async def load(ctx, *args):
         await to_delete.delete()
         return
     what = 'cogs.{0}'.format(args[0])
-    if not what in extensions:
-        extensions.append(what)
+    if not what in config.EXTENSIONS:
+        config.EXTENSIONS.append(what)
     bot.load_extension(what)
     await ctx.send("Extension {0} loaded".format(what))
 
@@ -71,8 +62,8 @@ async def unload(ctx: commands.Context, *args):
     if what == 'cogs.permisions':
         await ctx.send("Permisions can't be unloaded")
         return
-    if what in extensions:
-        extensions.remove(what)
+    if what in config.EXTENSIONS:
+        config.EXTENSIONS.remove(what)
         bot.unload_extension(what)
         await ctx.send("Extension {0} uloaded".format(what))
     else:
@@ -87,17 +78,17 @@ async def reload(ctx, *args):
         await ctx.send("No argument passed")
         return
     if args[0] == 'all':
-        to_reload = extensions
+        to_reload = config.EXTENSIONS
     else:
         to_reload = ["cogs.{0}".format(args[0])]
     for extension in to_reload:
-        if extension in extensions:
+        if extension in config.EXTENSIONS:
             await ctx.send('reloading {}'.format(extension))
             bot.unload_extension(extension)
             bot.load_extension(extension)
 
 
 bot.remove_command('help')
-for ext in extensions:
+for ext in config.EXTENSIONS:
     bot.load_extension(ext)
 bot.run(config.TOKEN, reconnect=True)
