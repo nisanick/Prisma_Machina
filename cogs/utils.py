@@ -30,7 +30,7 @@ class Utils:
                 entity = self.bot.get_cog(command) or self.bot.get_command(command)
 
                 if entity is None:
-                    return await ctx.send(f'Command "{command}" not found.')
+                    return await ctx.send('Command "{}" not found.'.format(command))
                 elif isinstance(entity, commands.Command):
                     p = await HelpPaginator.from_command(ctx, entity)
                 else:
