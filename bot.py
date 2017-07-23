@@ -7,32 +7,42 @@ import database
 import asyncio
 
 import config
+import checks
 # from importlib import reload as rld
+import logging
 
-bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES)
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
+bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, status=discord.Status.offline)
 
 extensions = [
     'cogs.utils',
-    'cogs.parsing'
+    'cogs.parsing',
+    'cogs.stats'
+]
+
+default = [
+    'cogs.testing'
 ]
 startup = datetime.utcnow()
 
 
 @bot.event
 async def on_ready():
+    await database.Database.init_connection(bot.loop)
     print("Client logged in")
+    await bot.change_presence()
     print(bot.user.name)
     print(bot.user.id)
-    await bot.change_presence()
 
 
 @bot.command()
-async def test(ctx: commands.Context, *args):
-    enbed = discord.Embed(color=1048560, title="test")
-    await ctx.send(embed=enbed)
-
-
-@bot.command()
+@commands.check(checks.can_manage_bot)
+@commands.check(checks.in_admin_channel)
 async def load(ctx, *args):
     if ctx.author.id not in config.ADMIN_USERS:
         return
@@ -49,6 +59,8 @@ async def load(ctx, *args):
 
 
 @bot.command()
+@commands.check(checks.can_manage_bot)
+@commands.check(checks.in_admin_channel)
 async def unload(ctx: commands.Context, *args):
     if ctx.author.id not in config.ADMIN_USERS:
         return
@@ -68,9 +80,9 @@ async def unload(ctx: commands.Context, *args):
 
 
 @bot.command()
+@commands.check(checks.can_manage_bot)
+@commands.check(checks.in_admin_channel)
 async def reload(ctx, *args):
-    if ctx.message.author.id not in config.ADMIN_USERS:
-        return
     if args.__len__() <= 0:
         await ctx.send("No argument passed")
         return
@@ -85,7 +97,7 @@ async def reload(ctx, *args):
             bot.load_extension(extension)
 
 
+bot.remove_command('help')
 for ext in extensions:
     bot.load_extension(ext)
-bot.remove_command('help')
-bot.run(config.TOKEN)
+bot.run(config.TOKEN, reconnect=True)

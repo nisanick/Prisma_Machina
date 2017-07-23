@@ -5,9 +5,11 @@ from datetime import datetime
 import discord
 from discord.ext import commands
 
-import config
+import checks
 import database
-
+from paginator import HelpPaginator, CannotPaginate
+import config
+from web import Web
 
 class Utils:
     def __init__(self, bot):
@@ -17,20 +19,72 @@ class Utils:
         # await self.timer(1)
         pass
 
-    @commands.command(aliases=['what is the time'])
+    @commands.command(name='help')
+    async def _help(self, ctx, *, command: str = None):
+        """Shows help about a command or the bot"""
+
+        try:
+            if command is None:
+                p = await HelpPaginator.from_bot(ctx)
+            else:
+                entity = self.bot.get_cog(command) or self.bot.get_command(command)
+
+                if entity is None:
+                    return await ctx.send(f'Command "{command}" not found.')
+                elif isinstance(entity, commands.Command):
+                    p = await HelpPaginator.from_command(ctx, entity)
+                else:
+                    p = await HelpPaginator.from_cog(ctx, entity)
+
+            await p.paginate()
+        except CannotPaginate as e:
+            await ctx.send(e)
+
+    @commands.command()
     async def time(self, ctx):
         year = datetime.now().timetuple().tm_year
         now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")
         await ctx.send(now)
 
+    @commands.command()
+    async def link(self, ctx, verification, *, account):
+        link = 'http://www.prismatic-imperium.com/api/link_account.php'
+        args = {
+            'discord_id': ctx.message.author.id,
+            'username': account,
+            'verification': verification,
+            'discord_name': "{}#{}".format(ctx.message.author.name, ctx.message.author.discriminator)
+        }
+        response = await Web.get_response(link, args)
+        to_delete = [ctx.message]
+        if response['response'] == 'User not found':
+            to_delete.append(
+                await ctx.send('❌ Please register on our website first\nhttp://www.prismatic-imperium.com/reg_form.php'))
+        elif response['response'] == 'Invalid Verification Code':
+            to_delete.append(
+                await ctx.send('❌ Check your verification code and try again.'))
+        elif response['response'] == 'Success':
+            to_delete.append(
+                await ctx.send('✅'))
+        elif response['response'] == 'Account is already linked':
+            to_delete.append(
+                await ctx.send('❌ This account is already linked to Discord.'))
+        await asyncio.sleep(5)
+        await ctx.channel.delete_messages(to_delete, reason="Deletion of unneeded messages.")
+
     async def on_member_join(self, member: discord.Member):
-        # TODO - where is the message going? no magical numbers in code
-        channel = self.bot.get_channel(322456259897065472)
-        await channel.send('Welcome to Prismatic Imperium {}'.format(member.mention))
+        channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
+        await channel.send(config.WELCOME.format(member.mention))
+        for role in member.guild.roles:
+            if role.name == 'High Council':
+                mention = role.mention
+        await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send("{} just joined the server. {}".format(member.mention, mention))
 
     async def on_member_remove(self, member):
-        channel = self.bot.get_channel(322456259897065472)
+        channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
         await channel.send('{} left the server'.format(member.mention))
+
+
 '''
     async def timer(self, delay):
         await asyncio.sleep(delay)

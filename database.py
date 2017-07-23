@@ -16,4 +16,9 @@ class Database:
             Database()._set_connection(await asyncpg.connect(**DATABASE))
         return Database._connection
 
+    @staticmethod
+    async def init_connection(loop):
+        if not Database._connection or Database._connection.is_closed():
+            Database()._set_connection(await asyncpg.connect(loop=loop, **DATABASE))
+
 # have to use commit() on connection
