@@ -404,7 +404,10 @@ class HelpPaginator(Pages):
         # ...
 
         for cog, commands in itertools.groupby(entries, key=key):
-            plausible = [cmd for cmd in commands if (await _can_run(cmd, ctx)) and not cmd.hidden]
+            plausible = []
+            for cmd in commands:
+                if (await _can_run(cmd, ctx)) and not cmd.hidden:
+                    plausible.append(cmd)
             if len(plausible) == 0:
                 continue
 
