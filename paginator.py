@@ -373,7 +373,10 @@ class HelpPaginator(Pages):
         except AttributeError:
             entries = []
         else:
-            entries = [cmd for cmd in entries if (await _can_run(cmd, ctx)) and not cmd.hidden]
+            entries = []
+            for cmd in entries:
+                if (await _can_run(cmd, ctx)) and not cmd.hidden:
+                    entries.append(cmd)
 
         self = cls(ctx, entries)
         self.title = command.signature
