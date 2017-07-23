@@ -18,7 +18,7 @@ class Fun:
             'Lesking from systems',
             'Hidden under the sofa'
         ]
-        member = commands.MemberConverter().convert(ctx, who)
+        member = await commands.MemberConverter().convert(ctx, who)
         if member.id != 205504598792863744:
             await ctx.send("You will never be as awesome as Wisewolf")
         else:
