@@ -39,6 +39,15 @@ class Utils:
             await ctx.send(e)
 
     @commands.command()
+    async def feedback(self, ctx, *, message):
+        embed = discord.Embed(title="Suggestion", description=message, colour=discord.Colour.green())
+        embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+        channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
+        await channel.send("<@163037317278203908>", embed=embed)
+        await ctx.message.add_reaction('✅')
+
+
+    @commands.command()
     async def time(self, ctx):
         year = datetime.now().timetuple().tm_year
         now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")

@@ -30,6 +30,12 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
 
+@bot.event
+async def on_guild_join(guild):
+    channel = guild.get_channel(int(config.ADMINISTRATION_CHANNEL))
+    if channel:
+        channel.send("Server joined on () timestamp {}".format(datetime.utcnow(), datetime.timestamp()))
+
 
 @bot.command()
 @commands.check(checks.can_manage_bot)

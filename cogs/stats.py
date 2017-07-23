@@ -66,22 +66,35 @@ class Stats:
             'discord_id': who.id
         }
         response = await Web.get_response(link, args)
-        count = int(response['Diamonds'])
-        emoji_type = ''
-        if count > 500:
-            emoji_type = 2
-        elif count > 2500:
-            emoji_type = 3
-        elif count > 10000:
-            emoji_type = 4
-        try:
-            emoji = await commands.EmojiConverter().convert(ctx, "diamond{}".format(emoji_type))
-        except commands.CommandError as err:
-            emoji = '💎'
-        embed = discord.Embed(description="{} {}".format(emoji, count), color=discord.Colour.blue())
-        embed.set_author(icon_url=who.avatar_url, name=who.name)
-        await ctx.send(embed=embed)
-        await ctx.message.delete("Command cleanup")
+        to_delete = [ctx.message]
+        sleep = 2
+        if response['Response'] == 'User not found':
+            if who is ctx.message.author:
+                to_delete.append(await ctx.send("❌ This account is not linked"))
+            else:
+                sleep = 10
+                to_delete.append(await ctx.send("❌ Link your account first. Use !link {verification_code} {website_username} . You can find your verification code on website."))
+        else:
+            count = int(response['Diamonds'])
+            emoji_type = ''
+            if count > 500:
+                emoji_type = 2
+            elif count > 2500:
+                emoji_type = 3
+            elif count > 10000:
+                emoji_type = 4
+            try:
+                emoji = await commands.EmojiConverter().convert(ctx, "diamond{}".format(emoji_type))
+            except commands.CommandError as err:
+                emoji = '💎'
+            embed = discord.Embed(description="{} {}".format(emoji, count), color=discord.Colour.blue())
+            rank = ""
+            if response['Prismatic_rank'] != 'None':
+                rank = response['Prismatic_rank']
+            embed.set_author(icon_url=who.avatar_url, name="{} {}".format(rank, who.name))
+            await ctx.send(embed=embed)
+        await asyncio.sleep(sleep)
+        await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 
     @commands.command()
     async def word(self, ctx: commands.Context, *args):

@@ -16,7 +16,10 @@ class Parser:
         limit = 100
         channel = await commands.TextChannelConverter().convert(ctx, channel)
         count = limit
-        last = None
+        if before:
+            last = datetime.utcfromtimestamp(before)
+        else:
+            last = None
         async with channel.typing():
             while count == limit:
                 count = 0
@@ -205,6 +208,7 @@ class Parser:
                 str(who.id)
             )
             await db.execute(delete_count, *reaction_data)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Parser(bot))
