@@ -17,7 +17,7 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, status=discord.Status.offline)
+bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, game=discord.Game(name='services to CMDRs'))
 
 startup = datetime.utcnow()
 
@@ -32,9 +32,8 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    channel = guild.get_channel(int(config.ADMINISTRATION_CHANNEL))
-    if channel:
-        channel.send("Server joined on () timestamp {}".format(datetime.utcnow(), datetime.timestamp()))
+    print(datetime.utcnow())
+    print(datetime.timestamp())
 
 
 @bot.command()
