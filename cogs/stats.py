@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import asyncio
 
 import database
 from data.links import *
@@ -39,7 +40,7 @@ class Stats:
             embed.add_field(name="Message statistics", inline=False,
                             value="You sent {} messages. Top used words:".format(message_count))
             async for (word, count, last_use) in db.cursor(words_used, *(str(user_id), limit)):
-                embed.add_field(name=word, inline=True, value="{0:4} time(s), last use: {1}".format(count,
+                embed.add_field(name=word, inline=True, value="{0:4} time(s)\nLast use: {1}".format(count,
                                                                                                     '{:%d.%m.%Y %H:%M}'.format(
                                                                                                         last_use)))
             embed.add_field(name="Reaction statistics", inline=False,
@@ -49,7 +50,7 @@ class Stats:
                 if custom:
                     emoji = self.bot.get_emoji(int(reaction))
                     reaction = "<:{}:{}>".format(emoji.name, emoji.id)
-                embed.add_field(name=emoji or reaction, inline=True, value="{0:4} time(s), last use: {1}"
+                embed.add_field(name=emoji or reaction, inline=True, value="{0:4} time(s)\nLast use: {1}"
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
             await ctx.send(embed=embed)
             await ctx.message.delete(reason="Command cleanup")
@@ -80,16 +81,15 @@ class Stats:
         embed = discord.Embed(description="{} {}".format(emoji, count), color=discord.Colour.blue())
         embed.set_author(icon_url=who.avatar_url, name=who.name)
         await ctx.send(embed=embed)
+        await ctx.message.delete("Command cleanup")
 
-    @commands.group()
-    async def stat(self, ctx: commands.Context):
-        if ctx.invoked_subcommand is None:
-            ctx.send("Invalid subcommand!")
-
-    @stat.command()
+    @commands.command()
     async def word(self, ctx: commands.Context, *args):
+        to_delete = [ctx.message]
         if args.__len__() < 1:
-            await ctx.send('You must provide a word')
+            to_delete.append(await ctx.send('You must provide a word'))
+            await asyncio.sleep(5)
+            await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
             return
         what = args[0].lower().strip()
         db = await database.Database.get_connection()
@@ -98,24 +98,21 @@ class Stats:
                   "JOIN words ON word_count.word = words.word "
                   "WHERE words.word = $1"
                   "GROUP BY words.word")
-        times = ("SELECT word_count.last_use FROM word_count "
+        times = ("SELECT word_count.last_use, usage_count FROM word_count "
                  "JOIN users ON users.user_id = word_count.user_id "
                  "JOIN words ON word_count.word = words.word "
                  "WHERE users.user_id = $1 AND words.word = $2")
         async with db.transaction():
             try:
                 people, word, count, use = await db.fetchrow(counts, what)
-                last_use = await db.fetchrow(times, *(str(ctx.message.author.id), what))
-                await ctx.send("```"
-                               "Word {0} was used {1} times by {2} people.\n"
-                               "Time of last use: {3:%d.%m.%Y %H:%M}\n"
-                               "Time of your last use: {4:%d.%m.%Y %H:%M}"
-                               "```".format(word, count, people, use, last_use[0]))
+                last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
+                embed = discord.Embed(title=what, color=13434828, description="Word {} was used {} times by {} people, {} times by you".format(word, count, people, usage))
+                embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M}".format(last_use))
+                embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M}".format(use))
             except TypeError as e:
-                print(e)
-                await ctx.send("```"
-                               "Word {0} was never used before."
-                               "```".format(what))
+                embed = discord.Embed(title=what, color=13434828,description="Word {} was never used before.".format(what))
+        await ctx.send(embed=embed)
+        await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 
 
 def setup(bot: commands.Bot):

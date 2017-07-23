@@ -9,4 +9,4 @@ async def can_manage_bot(ctx):
     return False
 
 async def in_admin_channel(ctx):
-    return ctx.channel.id == config.ADMINISTRATION_CHANNEL
+    return ctx.channel.id == int(config.ADMINISTRATION_CHANNEL)

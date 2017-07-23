@@ -12,11 +12,9 @@ class Parser:
 
     @commands.command()
     @commands.check(checks.can_manage_bot)
-    async def history(self, ctx, *args):
-        if args.__len__() == 0:
-            return
+    async def history(self, ctx, channel, before=None):
         limit = 100
-        channel = await commands.TextChannelConverter().convert(ctx, args[0])
+        channel = await commands.TextChannelConverter().convert(ctx, channel)
         count = limit
         last = None
         async with channel.typing():
