@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 import random
 
@@ -23,6 +24,14 @@ class Fun:
         else:
             await ctx.send(random.choice(options))
         await ctx.message.delete("Command cleanup")
+
+    async def on_message(self, message):
+        if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
+            await message.add_reaction('🍺')
+
+        if message.content.lower().__contains__("thargoid"):
+            emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
+            await message.add_reaction(emoji or '👽')
 
 
 def setup(bot: commands.Bot):
