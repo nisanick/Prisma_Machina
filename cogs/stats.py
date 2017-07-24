@@ -11,7 +11,7 @@ class Stats:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=['stat', 'stats', 'statistics'])
     async def statistic(self, ctx: commands.Context, who=None):
         if who is None:
             who = ctx.author
@@ -35,7 +35,7 @@ class Stats:
             embed = discord.Embed(colour=discord.Colour(0xb85f98))
             embed.set_author(icon_url=who.avatar_url, name=who.name)
             message_count, reaction_count, special = await db.fetchrow(user_info, str(who.id))
-            if user_id is 186829544764866560:
+            if user_id == 186829544764866560:
                 embed.set_footer(text="You said 'By Achenar' {} times.".format(special))
             embed.add_field(name="Message statistics", inline=False,
                             value="You sent {} messages. Top used words:".format(message_count))

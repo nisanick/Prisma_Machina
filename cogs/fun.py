@@ -26,7 +26,7 @@ class Fun:
 
     async def on_message(self, message: discord.Message):
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
-            await message.add_reaction('🍺')
+            await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
         if message.content.lower().__contains__("thargoid"):
             emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')

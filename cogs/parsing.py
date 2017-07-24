@@ -109,7 +109,7 @@ class Parser:
         if not message.lower().__contains__(text):
             return
         insert = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET special = users.special + 1"
-        db = database.Database.get_connection()
+        db = await database.Database.get_connection()
         async with db.transaction():
             await db.execute(insert, str(186829544764866560))
 
@@ -125,10 +125,15 @@ class Parser:
                             "ON CONFLICT (word,user_id) DO UPDATE SET usage_count = word_count.usage_count + 1")
         async with db.transaction():
             await db.execute(insert_user, str(author.id))
+            replaced = []
             for word in what:
                 if not word.startswith("<"):
                     for symbol in config.REPLACEMENTS:
                         word = word.replace(symbol, ' ')
+                replaced.append(word)
+            what = " ".join(replaced)
+            what = what.split(" ")
+            for word in what:
                 word_values = [
                     word.lower().strip(),
                     False,
@@ -152,10 +157,15 @@ class Parser:
                         "WHERE word = $1 AND user_id = $2")
         async with db.transaction():
             await db.execute(insert_user, str(author.id))
+            replaced = []
             for word in what:
                 if not word.startswith("<"):
                     for symbol in config.REPLACEMENTS:
                         word = word.replace(symbol, ' ')
+                replaced.append(word)
+            what = " ".join(replaced)
+            what = what.split(" ")
+            for word in what:
                 count_values = (
                     word.lower().strip(),
                     str(author.id)

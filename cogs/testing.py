@@ -23,10 +23,18 @@ class Testing:
         await self.bot.logout()
 
     @commands.command()
-    async def test(self, ctx: commands.Context):
-        await ctx.send(ctx.message.author.discriminator)
-        #print(" ".join(args[0:-1]))
-        #print(args[-1])
+    async def test(self, ctx: commands.Context, *, what):
+        what = what.replace("\n", " ")
+        what = what.split(" ")
+        replaced = []
+        for word in what:
+            if not word.startswith("<"):
+                for symbol in config.REPLACEMENTS:
+                    word = word.replace(symbol, ' ')
+            replaced.append(word)
+        what = " ".join(replaced)
+        what = what.split(" ")
+        print(" ".join(what))
 
     async def on_message(self, message):
         for word in message.content.split(" "):
