@@ -17,7 +17,7 @@ class Parser:
         channel = await commands.TextChannelConverter().convert(ctx, channel)
         count = limit
         if before:
-            last = datetime.utcfromtimestamp(before)
+            last = datetime.utcfromtimestamp(float(before))
         else:
             last = None
         async with channel.typing():
