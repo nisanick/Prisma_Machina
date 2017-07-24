@@ -20,7 +20,7 @@ class Parser:
             last = datetime.utcfromtimestamp(float(before))
         else:
             last = None
-        async with channel.typing():
+        async with ctx.typing():
             while count == limit:
                 count = 0
                 async for message in channel.history(limit=limit, before=last):
