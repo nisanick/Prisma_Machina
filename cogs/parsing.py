@@ -192,6 +192,9 @@ class Parser:
             if isinstance(reaction.emoji, discord.Emoji):
                 emoji = str(reaction.emoji.id)
                 custom = True
+            elif isinstance(reaction.emoji, discord.PartialReactionEmoji):
+                emoji = reaction.emoji.name
+                custom = False
             else:
                 emoji = reaction.emoji
                 custom = False
