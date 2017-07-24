@@ -95,7 +95,7 @@ async def reload(ctx, *args):
 @bot.event
 async def on_command_error(ctx, error):
     to_delete = [ctx.message]
-    to_delete.append(await ctx.send('❌ command error ❌'))
+    to_delete.append(await ctx.send('❌ We are sorry, your command was not recognized. Please refer to the Help command. ❌'))
     channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
     embed = discord.Embed(title="Command invocation error.", description=str(error), color=discord.Colour.red())
     embed.add_field(name="User", value=ctx.message.author.mention)
@@ -103,7 +103,7 @@ async def on_command_error(ctx, error):
     embed.add_field(name="Command", value=ctx.invoked_with)
     embed.add_field(name="Time", value="{:%d.%m.%Y %H:%M} (UTC)".format(datetime.utcnow()))
     await channel.send("<@163037317278203908>", embed=embed)
-    await asyncio.sleep(1)
+    await asyncio.sleep(3)
     await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 
 

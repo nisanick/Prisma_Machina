@@ -23,7 +23,6 @@ class Fun:
             await ctx.send("You will never be as awesome as Wisewolf")
         else:
             await ctx.send(random.choice(options))
-        await ctx.message.delete("Command cleanup")
 
     async def on_message(self, message: discord.Message):
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
