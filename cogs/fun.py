@@ -16,7 +16,11 @@ class Fun:
             'is 43',
             'is Over safety limits',
             'is Leeking from systems',
-            'is Hidden under the sofa'
+            'is Hidden under the sofa',
+            'is Defined in 345.654.655 dictionaries as Stunning',
+            'is Traveling at warp 6.9',
+            'Can get to Beagle Point in less than 5 parsecs',
+
         ]
         member = await commands.MemberConverter().convert(ctx, who)
         if member.id == 205504598792863744:
