@@ -68,16 +68,16 @@ class Utils:
         }
         response = await Web.get_response(link, args)
         to_delete = [ctx.message]
-        if response['response'] == 'User not found':
+        if response['Response'] == 'User not found':
             to_delete.append(
                 await ctx.send('❌ Please register on our website first\nhttp://www.prismatic-imperium.com/reg_form.php'))
-        elif response['response'] == 'Invalid Verification Code':
+        elif response['Response'] == 'Invalid Verification Code':
             to_delete.append(
                 await ctx.send('❌ Check your verification code and try again.'))
-        elif response['response'] == 'Success':
+        elif response['Response'] == 'Success':
             to_delete.append(
                 await ctx.send('✅'))
-        elif response['response'] == 'Account is already linked':
+        elif response['Response'] == 'Account is already linked':
             to_delete.append(
                 await ctx.send('❌ This account is already linked to Discord.'))
         await asyncio.sleep(5)
