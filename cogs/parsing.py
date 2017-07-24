@@ -137,20 +137,24 @@ class Parser:
             what = " ".join(replaced)
             what = what.split(" ")
             for word in what:
-                word_values = [
-                    word.lower().strip(),
-                    False,
-                    when
-                ]
-                if word.lower().strip() in config.EXCLUDED:
-                    word_values[1] = True
+                import asyncpg
+                try:
+                    word_values = [
+                        word.lower().strip(),
+                        False,
+                        when
+                    ]
+                    if word.lower().strip() in config.EXCLUDED:
+                        word_values[1] = True
 
-                await db.execute(insert_word, *word_values)
-                count_values = (
-                    word.lower().strip(),
-                    str(author.id),
-                    when,
-                )
+                    await db.execute(insert_word, *word_values)
+                    count_values = (
+                        word.lower().strip(),
+                        str(author.id),
+                        when,
+                    )
+                except asyncpg.StringDataRightTruncationError as err:
+                    print(word + " " + err)
                 await db.execute(insert_count, *count_values)
         await database.Database.close_connection(db)
 
