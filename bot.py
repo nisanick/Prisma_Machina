@@ -110,7 +110,8 @@ async def on_command_error(ctx, error):
     embed.add_field(name="Time", value="{:%d.%m.%Y %H:%M} (UTC)".format(datetime.utcnow()))
     await channel.send("<@163037317278203908>", embed=embed)
     await asyncio.sleep(3)
-    await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
+    if not isinstance(ctx.channel, discord.DMChannel):
+        await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 
 
 bot.remove_command('help')
