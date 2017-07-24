@@ -19,6 +19,7 @@ class Stats:
             try:
                 who = await commands.UserConverter().convert(ctx, who)
             except commands.CommandError:
+                await ctx.send('{} not found, showing your stats instead'.format(who))
                 who = ctx.author
 
         limit = 6
