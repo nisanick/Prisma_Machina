@@ -42,9 +42,10 @@ class Utils:
     async def feedback(self, ctx, *, message):
         embed = discord.Embed(title="Suggestion", description=message, colour=discord.Colour.green())
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
-        channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
-        #await channel.send("<@163037317278203908>", embed=embed)
-        await channel.send("", embed=embed)
+        channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
+        #channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
+        await channel.send("<@163037317278203908>", embed=embed)
+        #await channel.send("", embed=embed)
         await ctx.message.add_reaction('✅')
 
 
