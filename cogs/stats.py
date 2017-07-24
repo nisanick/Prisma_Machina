@@ -17,7 +17,7 @@ class Stats:
             who = ctx.author
         else:
             try:
-                who = await commands.MemberConverter().convert(ctx, who)
+                who = await commands.UserConverter().convert(ctx, who)
             except commands.CommandError:
                 who = ctx.author
 
