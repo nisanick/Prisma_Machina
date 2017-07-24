@@ -10,19 +10,19 @@ class Fun:
     @commands.command()
     async def awesomenessof(self, ctx, who):
         options = [
-            'Exceeding expectations',
+            'is Exceeding expectations',
             'Went down by 1 point since last time',
             'Needs to be 20% higher',
             '43',
-            'Over safety limits',
-            'Lesking from systems',
-            'Hidden under the sofa'
+            'is Over safety limits',
+            'is Leeking from systems',
+            'is Hidden under the sofa'
         ]
         member = await commands.MemberConverter().convert(ctx, who)
         if member.id != 205504598792863744:
             await ctx.send("You will never be as awesome as Wisewolf")
         else:
-            await ctx.send(random.choice(options))
+            await ctx.send("Awesomeness of Wisewolf {}".format(random.choice(options)))
 
     async def on_message(self, message: discord.Message):
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
