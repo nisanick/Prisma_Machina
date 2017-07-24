@@ -13,16 +13,16 @@ class Fun:
             'is Exceeding expectations',
             'Went down by 1 point since last time',
             'Needs to be 20% higher',
-            '43',
+            'is 43',
             'is Over safety limits',
             'is Leeking from systems',
             'is Hidden under the sofa'
         ]
         member = await commands.MemberConverter().convert(ctx, who)
-        if member.id != 205504598792863744:
-            await ctx.send("You will never be as awesome as Wisewolf")
-        else:
+        if member.id == 205504598792863744:
             await ctx.send("Awesomeness of Wisewolf {}".format(random.choice(options)))
+        else:
+            await ctx.send("You will never be as awesome as Wisewolf")
 
     async def on_message(self, message: discord.Message):
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
