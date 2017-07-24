@@ -29,11 +29,11 @@ class Parser:
                     what = what.replace("\n", " ")
                     if message.author.id == 186829544764866560:
                         await self.techeron_check(what)
-                    '''what = what.split(" ")
+                    what = what.split(" ")
                     await self.__insert(what, message.author, message.created_at, history=True)
                     for reaction in message.reactions:
                         async for user in reaction.users():
-                            await self.__insert_reaction(reaction, user, message.created_at, history=True)'''
+                            await self.__insert_reaction(reaction, user, message.created_at, history=True)
                     count = count + 1
         await ctx.send("History of {} added.".format(channel.name))
 
