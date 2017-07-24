@@ -100,12 +100,12 @@ async def on_command_error(ctx, error):
     embed = discord.Embed(title="Command invocation error.", description=str(error), color=discord.Colour.red())
     embed.add_field(name="User", value=ctx.message.author.mention)
     if isinstance(ctx.channel, discord.DMChannel):
-        channel = ctx.channel.recipient.mention
+        ch = ctx.channel.recipient.mention
     elif isinstance(ctx.channel, discord.TextChannel):
-        channel = ctx.channel.mention
+        ch = ctx.channel.mention
     else:
-        channel = ctx.channel.name
-    embed.add_field(name="Channel", value=channel)
+        ch = ctx.channel.name
+    embed.add_field(name="Channel", value=ch)
     embed.add_field(name="Command", value=ctx.invoked_with)
     embed.add_field(name="Time", value="{:%d.%m.%Y %H:%M} (UTC)".format(datetime.utcnow()))
     await channel.send("<@163037317278203908>", embed=embed)
