@@ -5,20 +5,26 @@ import asyncpg
 
 class Database:
 
-    _connection = None
+    _pool = None
 
-    def _set_connection(self, con):
-        Database._connection = con
+    def _set_pool(self, pool):
+        Database._pool = pool
 
     @staticmethod
-    async def get_connection() -> asyncpg.Connection:
-        if not Database._connection or Database._connection.is_closed():
-            Database()._set_connection(await asyncpg.connect(**DATABASE))
-        return Database._connection
+    async def get_connection(loop) -> asyncpg.Connection:
+        if not Database._pool:
+            Database()._set_pool(await asyncpg.create_pool(loop=loop, **DATABASE))
+        return await Database._pool.acquire()
 
     @staticmethod
     async def init_connection(loop):
-        if not Database._connection or Database._connection.is_closed():
-            Database()._set_connection(await asyncpg.connect(loop=loop, **DATABASE))
+        if not Database._pool:
+            Database()._set_pool(await asyncpg.create_pool(loop=loop, **DATABASE))
+
+    @staticmethod
+    async def close_connection(con):
+        await Database._pool.release(con)
+
+
 
 # have to use commit() on connection

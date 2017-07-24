@@ -54,7 +54,7 @@ class Parser:
         what = what.replace("\n", " ")
         what = what.split(" ")
         await self.__delete(what, message.author)
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         insert = "INSERT INTO history (message_id, user_id, old, modification_date, type) VALUES ($1, $2, $3, $4, 'delete')"
         values = (
             str(message.id),
@@ -64,6 +64,7 @@ class Parser:
         )
         async with db.transaction():
             await db.execute(insert, *values)
+        await database.Database.close_connection(db)
 
     async def on_message_edit(self, before, after):
         if before.author.id == self.bot.user.id or before.content.startswith(tuple(config.PREFIX)):
@@ -81,7 +82,7 @@ class Parser:
         when = datetime.utcnow()
         await self.__insert(what, after.author, when)
 
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         insert = ("INSERT INTO history (message_id, user_id, old, new, modification_date, type) "
                   "VALUES ($1, $2, $3, $4, $5, 'edit')")
         values = (
@@ -93,6 +94,7 @@ class Parser:
         )
         async with db.transaction():
             await db.execute(insert, *values)
+        await database.Database.close_connection(db)
 
     async def on_reaction_add(self, reaction, user):
         if user.bot:
@@ -109,12 +111,13 @@ class Parser:
         if not message.lower().__contains__(text):
             return
         insert = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET special = users.special + 1"
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         async with db.transaction():
             await db.execute(insert, str(186829544764866560))
+        await database.Database.close_connection(db)
 
     async def __insert(self, what, author: discord.Member, when: datetime, history=False):
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         insert_word = "INSERT INTO words (word, excluded, last_use) VALUES ($1, $2, $3) ON CONFLICT (word) DO UPDATE SET last_use = $3"
         insert_user = "INSERT INTO users (user_id, message_count, reaction_count) VALUES ($1, 1, 0) ON CONFLICT (user_id) DO UPDATE SET message_count = users.message_count + 1"
         insert_count = ("INSERT INTO word_count (word, user_id, usage_count, last_use) VALUES($1, $2, 1, $3)"
@@ -149,9 +152,10 @@ class Parser:
                     when,
                 )
                 await db.execute(insert_count, *count_values)
+        await database.Database.close_connection(db)
 
     async def __delete(self, what, author: discord.Member):
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         insert_user = "INSERT INTO users (user_id, message_count, reaction_count) VALUES ($1, 0, 0) ON CONFLICT (user_id) DO UPDATE SET message_count = users.message_count - 1"
         insert_count = ("UPDATE word_count SET usage_count = word_count.usage_count - 1 "
                         "WHERE word = $1 AND user_id = $2")
@@ -171,6 +175,7 @@ class Parser:
                     str(author.id)
                 )
                 await db.execute(insert_count, *count_values)
+        await database.Database.close_connection(db)
 
     async def __insert_reaction(self, reaction, who, when, history=False):
         insert_reaction = "INSERT INTO reactions(reaction, custom, last_use) VALUES ($1, $2, $3) ON CONFLICT (reaction) DO UPDATE SET last_use = $3"
@@ -181,7 +186,7 @@ class Parser:
             insert_reaction = "INSERT INTO reactions(reaction, custom, last_use) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING "
             insert_count = ("INSERT INTO reaction_count(reaction, user_id, usage_count, last_use) VALUES ($1, $2, 1, $3)"
                             "ON CONFLICT (reaction, user_id) DO UPDATE SET usage_count = reaction_count.usage_count + 1")
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         async with db.transaction():
             await db.execute(insert_user, str(who.id))
             if isinstance(reaction.emoji, discord.Emoji):
@@ -202,11 +207,12 @@ class Parser:
                 when
             )
             await db.execute(insert_count, *count_data)
+        await database.Database.close_connection(db)
 
     async def __delete_reaction(self, reaction, who):
         insert_user = "INSERT INTO users (user_id, message_count, reaction_count) VALUES ($1, 0, 0) ON CONFLICT (user_id) DO UPDATE SET reaction_count = users.reaction_count - 1"
         delete_count = "UPDATE reaction_count SET usage_count = usage_count - 1 WHERE reaction = $1 AND user_id = $2"
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         async with db.transaction():
             await db.execute(insert_user, str(who.id))
             if isinstance(reaction.emoji, discord.Emoji):
@@ -218,6 +224,7 @@ class Parser:
                 str(who.id)
             )
             await db.execute(delete_count, *reaction_data)
+        await database.Database.close_connection(db)
 
 
 def setup(bot: commands.Bot):

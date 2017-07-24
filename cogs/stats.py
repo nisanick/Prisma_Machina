@@ -22,7 +22,7 @@ class Stats:
                 who = ctx.author
 
         limit = 6
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         user_info = "SELECT message_count, reaction_count, special FROM users WHERE user_id = $1"
         words_used = ("SELECT words.word, usage_count, word_count.last_use FROM word_count "
                       "JOIN words ON word_count.word = words.word AND words.excluded = FALSE "
@@ -54,6 +54,7 @@ class Stats:
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
             await ctx.send(embed=embed)
             await ctx.message.delete(reason="Command cleanup")
+        await database.Database.close_connection(db)
 
     @commands.command()
     async def diamonds(self, ctx, who=None):
@@ -124,8 +125,9 @@ class Stats:
                 embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M}".format(use))
             except TypeError as e:
                 embed = discord.Embed(title=what, color=13434828,description="Word {} was never used before.".format(what))
-        await ctx.send(embed=embed)
+        await ctx.send("", embed=embed)
         await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
+        await database.Database.close_connection(db)
 
 
 def setup(bot: commands.Bot):
