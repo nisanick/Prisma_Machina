@@ -34,7 +34,10 @@ class Stats:
         async with db.transaction():
             user_id = who.id
             embed = discord.Embed(colour=discord.Colour(0xb85f98))
-            embed.set_author(icon_url=who.avatar_url, name=who.name)
+            name = who.name
+            if isinstance(who, discord.Member):
+                name = who.nick
+            embed.set_author(icon_url=who.avatar_url, name=name)
             message_count, reaction_count, special = await db.fetchrow(user_info, str(who.id))
             if user_id == 186829544764866560:
                 embed.set_footer(text="You said 'By Achenar' {} times.".format(special))
@@ -122,7 +125,10 @@ class Stats:
                 people, word, count, use = await db.fetchrow(counts, what)
                 last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
                 embed = discord.Embed(title=what, color=13434828, description="\"{}\" was used {} times by {} people, {} time(s) by you".format(word, count, people, usage))
-                embed.set_author(name=ctx.author.nick, icon_url=ctx.author.avatar_url)
+                name = ctx.author.name
+                if isinstance(ctx.author, discord.Member):
+                    name = ctx.author.nick
+                embed.set_author(name=name, icon_url=ctx.author.avatar_url)
                 embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(last_use))
                 embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(use))
             except TypeError as e:
