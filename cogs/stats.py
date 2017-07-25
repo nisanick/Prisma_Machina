@@ -107,7 +107,7 @@ class Stats:
             await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
             return
         what = args[0].lower().strip()
-        db = await database.Database.get_connection()
+        db = await database.Database.get_connection(self.bot.loop)
         counts = ("SELECT count(*) AS people, words.word, sum(usage_count) AS count, words.last_use "
                   "FROM word_count "
                   "JOIN words ON word_count.word = words.word "
