@@ -92,7 +92,7 @@ class Utils:
         for role in member.guild.roles:
             if role.name == 'High Council':
                 mention = role.mention
-        await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send("{} just joined the server. {}".format(member.mention, mention))
+        await self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).send("{} just joined the server. {}".format(member.mention, mention))
 
     async def on_member_remove(self, member):
         channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
