@@ -12,16 +12,16 @@ class Stats:
         self.bot = bot
 
     @commands.command(aliases=['statistics', 'stat', 'stats'])
-    async def statistic(self, ctx: commands.Context, who=None):
-        """Shows statiostics of messages and reactions you or specified member sent."""
-        if who is None:
-            who = ctx.author
+    async def statistic(self, ctx: commands.Context, user=None):
+        """Shows statiostics of messages and reactions you or specified member sent. Use full name or tag."""
+        if user is None:
+            user = ctx.author
         else:
             try:
-                who = await commands.UserConverter().convert(ctx, who)
+                user = await commands.UserConverter().convert(ctx, user)
             except commands.CommandError:
-                await ctx.send('{} not found, showing your stats instead'.format(who))
-                who = ctx.author
+                await ctx.send('{} not found, showing your stats instead'.format(user))
+                user = ctx.author
 
         limit = 6
         db = await database.Database.get_connection(self.bot.loop)
@@ -33,13 +33,13 @@ class Stats:
                           "JOIN reactions ON reaction_count.reaction = reactions.reaction "
                           "WHERE user_id = $1 ORDER BY usage_count DESC LIMIT $2")
         async with db.transaction():
-            user_id = who.id
+            user_id = user.id
             embed = discord.Embed(colour=discord.Colour(0xb85f98))
-            name = who.name
-            if isinstance(who, discord.Member):
-                name = who.nick
-            embed.set_author(icon_url=who.avatar_url, name=name)
-            message_count, reaction_count, special = await db.fetchrow(user_info, str(who.id))
+            name = user.name
+            if isinstance(user, discord.Member):
+                name = user.nick
+            embed.set_author(icon_url=user.avatar_url, name=name)
+            message_count, reaction_count, special = await db.fetchrow(user_info, str(user.id))
             if user_id == 186829544764866560:
                 embed.set_footer(text="You said 'By Achenar' {} times.".format(special))
             embed.add_field(name="Message statistics", inline=False,
@@ -64,12 +64,16 @@ class Stats:
 
     @commands.command()
     async def diamonds(self, ctx, member=None):
-        """Shows how many diamonds you or specified member have. Requires linked account!"""
+        """Shows how many diamonds you or specified member have. Requires linked account! Use full name or tag."""
         link = user_data_link
-        if member:
-            member = await commands.MemberConverter().convert(ctx, member)
+        if member is None:
+            member = ctx.author
         else:
-            member = ctx.message.author
+            try:
+                member = await commands.MemberConverter().convert(ctx, member)
+            except commands.CommandError:
+                await ctx.send('{} not found, showing your diamond count instead'.format(member))
+                member = ctx.author
         args = {
             'discord_id': member.id
         }
@@ -109,11 +113,6 @@ class Stats:
     async def word(self, ctx: commands.Context, *, what):
         """Shows usage statistics for specified word"""
         to_delete = [ctx.message]
-        if what.__len__() < 1:
-            to_delete.append(await ctx.send('You must provide a word'))
-            await asyncio.sleep(5)
-            await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
-            return
         what = what[0].lower().strip()
         db = await database.Database.get_connection(self.bot.loop)
         counts = ("SELECT count(*) AS people, words.word, sum(usage_count) AS count, words.last_use "
