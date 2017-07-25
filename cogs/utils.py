@@ -54,7 +54,8 @@ class Utils:
         year = datetime.now().timetuple().tm_year
         now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")
         embed = discord.Embed(title="Current Galactic Time", description=now, color=discord.Colour.dark_orange())
-        await ctx.message.delete(reason="Command cleanup")
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.message.delete(reason="Command cleanup")
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -81,7 +82,8 @@ class Utils:
             to_delete.append(
                 await ctx.send('❌ This account is already linked to Discord.'))
         await asyncio.sleep(5)
-        await ctx.channel.delete_messages(to_delete, reason="Command and response cleanup.")
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.channel.delete_messages(to_delete, reason="Command and response cleanup.")
 
     async def on_member_join(self, member: discord.Member):
         channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))

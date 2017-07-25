@@ -57,7 +57,8 @@ class Stats:
                 embed.add_field(name=emoji or reaction, inline=True, value="{0:4} time(s)\nLast use: {1}"
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
             await ctx.send(embed=embed)
-            await ctx.message.delete(reason="Command cleanup")
+            if not isinstance(ctx.channel, discord.DMChannel):
+                await ctx.message.delete(reason="Command cleanup")
         await database.Database.close_connection(db)
 
     @commands.command()
@@ -99,7 +100,8 @@ class Stats:
             embed.set_author(icon_url=who.avatar_url, name="{} {}".format(rank, who.name))
             await ctx.send(embed=embed)
         await asyncio.sleep(sleep)
-        await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 
     @commands.command()
     async def word(self, ctx: commands.Context, *args):
@@ -134,7 +136,8 @@ class Stats:
             except TypeError as e:
                 embed = discord.Embed(title=what, color=13434828,description="\"{}\" was never used before.".format(what))
         await ctx.send("", embed=embed)
-        await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
         await database.Database.close_connection(db)
 
 
