@@ -348,11 +348,11 @@ class HelpPaginator(Pages):
         cog_name = cog.__class__.__name__
 
         # get the commands
-        entries = sorted(ctx.bot.get_cog_commands(cog_name), key=lambda c: c.name)
+        commands = sorted(ctx.bot.get_cog_commands(cog_name), key=lambda c: c.name)
 
         # remove the ones we can't run
         entries = []
-        for cmd in entries:
+        for cmd in commands:
             if (await _can_run(cmd, ctx)) and not cmd.hidden:
                 entries.append(cmd)
 
@@ -362,19 +362,19 @@ class HelpPaginator(Pages):
         self.prefix = cleanup_prefix(ctx.bot, ctx.prefix)
 
         # no longer need the database
-        await ctx.release()
+        #await ctx.release()
 
         return self
 
     @classmethod
     async def from_command(cls, ctx, command):
         try:
-            entries = sorted(command.commands, key=lambda c: c.name)
+            commands = sorted(command.commands, key=lambda c: c.name)
         except AttributeError:
             entries = []
         else:
             entries = []
-            for cmd in entries:
+            for cmd in commands:
                 if (await _can_run(cmd, ctx)) and not cmd.hidden:
                     entries.append(cmd)
 
@@ -387,7 +387,7 @@ class HelpPaginator(Pages):
             self.description = command.help or 'No help given.'
 
         self.prefix = cleanup_prefix(ctx.bot, ctx.prefix)
-        await ctx.release()
+        #await ctx.release()
         return self
 
     @classmethod
@@ -397,7 +397,7 @@ class HelpPaginator(Pages):
 
         entries = sorted(ctx.bot.commands, key=key)
         nested_pages = []
-        per_page = 9
+        per_page = 5
 
         # 0: (cog, desc, commands) (max len == 9)
         # 1: (cog, desc, commands) (max len == 9)
@@ -426,7 +426,7 @@ class HelpPaginator(Pages):
 
         # swap the get_page implementation with one that supports our style of pagination
         self.get_page = self.get_bot_page
-        self._is_bot = True
+        # self._is_bot = False
 
         # replace the actual total
         self.total = sum(len(o) for _, _, o in nested_pages)
@@ -480,8 +480,8 @@ class HelpPaginator(Pages):
     async def show_help(self):
         """shows this message"""
 
-        self.embed.title = 'Paginator help'
-        self.embed.description = 'Hello! Welcome to the help page.'
+        self.embed.title = 'Interactive terminal'
+        self.embed.description = 'How to use this interactive terminal? Well I\'m glad you asked.'
 
         messages = ['{} {}'.format(emoji, func.__doc__) for emoji, func in self.reaction_emojis]
         self.embed.clear_fields()
@@ -497,10 +497,10 @@ class HelpPaginator(Pages):
         self.bot.loop.create_task(go_back_to_current_page())
 
     async def show_bot_help(self):
-        """shows how to use the bot"""
+        """shows how to use this bot"""
 
         self.embed.title = 'Using the bot'
-        self.embed.description = 'Hello! Welcome to the help page.'
+        self.embed.description = 'Lost in symbols? You came to right place.'
         self.embed.clear_fields()
 
         entries = (

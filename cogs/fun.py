@@ -7,7 +7,7 @@ class Fun:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(hidden=True)
     async def awesomenessof(self, ctx, who):
         options = [
             'is Exceeding expectations',

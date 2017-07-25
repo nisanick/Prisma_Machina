@@ -11,8 +11,9 @@ class Stats:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(aliases=['stat', 'stats', 'statistics'])
+    @commands.command(aliases=['statistics', 'stat', 'stats'])
     async def statistic(self, ctx: commands.Context, who=None):
+        """Shows statiostics of messages and reactions you or specified member sent."""
         if who is None:
             who = ctx.author
         else:
@@ -62,20 +63,21 @@ class Stats:
         await database.Database.close_connection(db)
 
     @commands.command()
-    async def diamonds(self, ctx, who=None):
+    async def diamonds(self, ctx, member=None):
+        """Shows how many diamonds you or specified member have. Requires linked account!"""
         link = user_data_link
-        if who:
-            who = await commands.MemberConverter().convert(ctx, who)
+        if member:
+            member = await commands.MemberConverter().convert(ctx, member)
         else:
-            who = ctx.message.author
+            member = ctx.message.author
         args = {
-            'discord_id': who.id
+            'discord_id': member.id
         }
         response = await Web.get_response(link, args)
         to_delete = [ctx.message]
         sleep = 2
         if response['Response'] == 'User not found':
-            if who is ctx.message.author:
+            if member is ctx.message.author:
                 to_delete.append(await ctx.send("❌ This account is not linked"))
             else:
                 sleep = 10
@@ -97,21 +99,22 @@ class Stats:
             rank = ""
             if response['Prismatic_rank'] != 'None':
                 rank = response['Prismatic_rank']
-            embed.set_author(icon_url=who.avatar_url, name="{} {}".format(rank, who.name))
+            embed.set_author(icon_url=member.avatar_url, name="{} {}".format(rank, member.name))
             await ctx.send(embed=embed)
         await asyncio.sleep(sleep)
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 
     @commands.command()
-    async def word(self, ctx: commands.Context, *args):
+    async def word(self, ctx: commands.Context, *, what):
+        """Shows usage statistics for specified word"""
         to_delete = [ctx.message]
-        if args.__len__() < 1:
+        if what.__len__() < 1:
             to_delete.append(await ctx.send('You must provide a word'))
             await asyncio.sleep(5)
             await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
             return
-        what = args[0].lower().strip()
+        what = what[0].lower().strip()
         db = await database.Database.get_connection(self.bot.loop)
         counts = ("SELECT count(*) AS people, words.word, sum(usage_count) AS count, words.last_use "
                   "FROM word_count "

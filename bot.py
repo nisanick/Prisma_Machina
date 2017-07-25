@@ -36,7 +36,7 @@ async def on_guild_join(guild):
     print(datetime.timestamp())
 
 
-@bot.command()
+@bot.command(hidden=True)
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def load(ctx, *args):
@@ -54,7 +54,7 @@ async def load(ctx, *args):
     await ctx.send("Extension {0} loaded".format(what))
 
 
-@bot.command()
+@bot.command(hidden=True)
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def unload(ctx: commands.Context, *args):
@@ -75,7 +75,7 @@ async def unload(ctx: commands.Context, *args):
         await ctx.send("Extension {0} wasn't loaded".format(what))
 
 
-@bot.command()
+@bot.command(hidden=True)
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def reload(ctx, *args):
@@ -95,21 +95,30 @@ async def reload(ctx, *args):
 @bot.event
 async def on_command_error(ctx, error):
     to_delete = [ctx.message]
-    to_delete.append(await ctx.send('❌ We are sorry, your command was not recognized. Please refer to the Help command. ❌'))
-    channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
-    embed = discord.Embed(title="Command invocation error.", description=str(error), color=discord.Colour.red())
-    embed.add_field(name="User", value=ctx.message.author.mention)
-    if isinstance(ctx.channel, discord.DMChannel):
-        ch = ctx.channel.recipient.mention
-    elif isinstance(ctx.channel, discord.TextChannel):
-        ch = ctx.channel.mention
+    if ctx.guild is not None:
+        permissions = ctx.channel.permissions_for(ctx.guild.me)
     else:
-        ch = ctx.channel.name
-    embed.add_field(name="Channel", value=ch)
-    embed.add_field(name="Command", value=ctx.invoked_with)
-    embed.add_field(name="Time", value="{:%d.%m.%Y %H:%M} (UTC)".format(datetime.utcnow()))
-    await channel.send("<@163037317278203908>", embed=embed)
-    await asyncio.sleep(3)
+        permissions = ctx.channel.permissions_for(ctx.bot.user)
+    if permissions.send_messages:
+        to_delete.append(
+            await ctx.send('❌ We are sorry, your command was not recognized. Please refer to the Help command. ❌'))
+    if isinstance(error, commands.MissingRequiredArgument):
+        pass
+    else:
+        channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
+        embed = discord.Embed(title="Command invocation error.", description=str(error), color=discord.Colour.red())
+        embed.add_field(name="User", value=ctx.message.author.mention)
+        if isinstance(ctx.channel, discord.DMChannel):
+            ch = ctx.channel.recipient.mention
+        elif isinstance(ctx.channel, discord.TextChannel):
+            ch = ctx.channel.mention
+        else:
+            ch = ctx.channel.name
+        embed.add_field(name="Channel", value=ch)
+        embed.add_field(name="Command", value=ctx.invoked_with)
+        embed.add_field(name="Time", value="{:%d.%m.%Y %H:%M} (UTC)".format(datetime.utcnow()))
+        await channel.send("<@163037317278203908>", embed=embed)
+    await asyncio.sleep(5)
     if not isinstance(ctx.channel, discord.DMChannel):
         await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 

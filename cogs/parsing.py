@@ -10,7 +10,7 @@ class Parser:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
     async def history(self, ctx, channel, before=None):
         limit = 100
