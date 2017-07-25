@@ -123,10 +123,10 @@ class Stats:
                 last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
                 embed = discord.Embed(title=what, color=13434828, description="\"{}\" was used {} times by {} people, {} time(s) by you".format(word, count, people, usage))
                 embed.set_author(name=ctx.author.nick, icon_url=ctx.author.avatar_url)
-                embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M}(UTC)".format(last_use))
-                embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M}(UTC)".format(use))
+                embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(last_use))
+                embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(use))
             except TypeError as e:
-                embed = discord.Embed(title=what, color=13434828,description="Word {} was never used before.".format(what))
+                embed = discord.Embed(title=what, color=13434828,description="\"{}\" was never used before.".format(what))
         await ctx.send("", embed=embed)
         await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
         await database.Database.close_connection(db)
