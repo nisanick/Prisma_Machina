@@ -21,7 +21,7 @@ class Utils:
     async def _help(self, ctx, *, command: str = None):
         # return
         """Shows help about a command or the bot"""
-
+        await ctx.message.delete(reason="Command cleanup.")
         try:
             if command is None:
                 p = await HelpPaginator.from_bot(ctx)
