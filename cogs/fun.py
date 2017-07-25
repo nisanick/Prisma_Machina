@@ -36,6 +36,22 @@ class Fun:
             emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
             await message.add_reaction(emoji or '👽')
 
+        if message.content.lower().__contains__("vigor"):
+            emoji = discord.utils.get(message.guild.emojis, name='vigor')
+            await message.add_reaction(emoji)
+
+        if message.content.lower().__contains__("sight"):
+            emoji = discord.utils.get(message.guild.emojis, name='sight')
+            await message.add_reaction(emoji)
+
+        if message.content.lower().__contains__("mind"):
+            emoji = discord.utils.get(message.guild.emojis, name='mind')
+            await message.add_reaction(emoji)
+
+        if message.content.lower().__contains__("aurora"):
+            emoji = discord.utils.get(message.guild.emojis, name='aurora')
+            await message.add_reaction(emoji)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
