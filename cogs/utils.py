@@ -42,7 +42,7 @@ class Utils:
     @commands.command()
     async def feedback(self, ctx, *, message):
         """Sends your feedback to High Council"""
-        embed = discord.Embed(title="Suggestion", description=message, colour=discord.Colour.green())
+        embed = discord.Embed(title="Suggestion", description=message, colour=discord.Colour.green(), timestamp=datetime.utcnow())
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
         # channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
