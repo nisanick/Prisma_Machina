@@ -122,6 +122,7 @@ class Stats:
                 people, word, count, use = await db.fetchrow(counts, what)
                 last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
                 embed = discord.Embed(title=what, color=13434828, description="Word {} was used {} times by {} people, {} times by you".format(word, count, people, usage))
+                embed.set_author(name=ctx.author.name,icon_url=ctx.author.avatar_url)
                 embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M}".format(last_use))
                 embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M}".format(use))
             except TypeError as e:
