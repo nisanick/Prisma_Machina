@@ -84,15 +84,16 @@ class Utils:
         await ctx.channel.delete_messages(to_delete, reason="Command and response cleanup.")
 
     async def on_member_join(self, member: discord.Member):
-        channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
+        channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
         await channel.send(config.WELCOME.format(member.mention))
+        mention = ""
         for role in member.guild.roles:
             if role.name == 'High Council':
                 mention = role.mention
         await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send("{} just joined the server. {}".format(member.mention, mention))
 
     async def on_member_remove(self, member):
-        channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
+        channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
         await channel.send('{} left the server'.format(member.mention))
 
 
