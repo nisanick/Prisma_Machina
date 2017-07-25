@@ -450,7 +450,7 @@ class HelpPaginator(Pages):
             value = 'For more help, join the official bot support server: https://discord.gg/pYuKF2Z'
             self.embed.add_field(name='Support', value=value, inline=False)
 
-        self.embed.set_footer(text='Use "{}help command" for more info on a command.'.format(self.prefix))
+        #self.embed.set_footer(text='Use "{}help command" for more info on a command.'.format(self.prefix))
 
         signature = _command_signature
 
