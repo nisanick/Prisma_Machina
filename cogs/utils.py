@@ -53,7 +53,6 @@ class Utils:
     @commands.command()
     async def link(self, ctx, verification, *, account):
         """Links your discord and web account together. This allows more bot features for you."""
-        from data.links import account_link
         link = account_link
         args = {
             'discord_id': ctx.message.author.id,

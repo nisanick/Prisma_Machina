@@ -25,6 +25,10 @@ class Fun:
         member = await commands.MemberConverter().convert(ctx, who)
         if member.id == 205504598792863744:
             await ctx.send("Awesomeness of Wisewolf {}".format(random.choice(options)))
+        elif member.id == 186829544764866560:
+            await ctx.send("BY ACHENAR... you?")
+        elif member.id == 152527690291871745:
+            await ctx.send("[REDACTED BY ADMINISTRATION - Clasified information]")
         else:
             await ctx.send("You will never be as awesome as Wisewolf")
 
@@ -36,19 +40,19 @@ class Fun:
             emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
             await message.add_reaction(emoji or '👽')
 
-        if message.content.lower().__contains__("vigor"):
+        if message.content.lower().__contains__("Vigor"):
             emoji = discord.utils.get(message.guild.emojis, name='vigor')
             await message.add_reaction(emoji)
 
-        if message.content.lower().__contains__("sight"):
+        if message.content.lower().__contains__("Sight"):
             emoji = discord.utils.get(message.guild.emojis, name='sight')
             await message.add_reaction(emoji)
 
-        if message.content.lower().__contains__("mind"):
+        if message.content.lower().__contains__("Mind"):
             emoji = discord.utils.get(message.guild.emojis, name='mind')
             await message.add_reaction(emoji)
 
-        if message.content.lower().__contains__("aurora"):
+        if message.content.lower().__contains__("Aurora"):
             emoji = discord.utils.get(message.guild.emojis, name='aurora')
             await message.add_reaction(emoji)
 
