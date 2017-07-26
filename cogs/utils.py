@@ -94,7 +94,7 @@ class Utils:
         await channel.send(config.WELCOME.format(member.mention))
         mention = ""
         for role in member.guild.roles:
-            if role.name == 'High Council':
+            if role.name == 'Council Member':
                 mention = role.mention
         await self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).send(
             "{} just joined the server. {}".format(member.mention, mention))
