@@ -102,7 +102,7 @@ class Utils:
     async def on_member_remove(self, member):
         channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
         if isinstance(member, discord.Member):
-            await channel.send('{} left the server'.format(member.mention))
+            await channel.send('{} left the server. {}'.format(member.name, member.mention))
         else:
             await channel.send('{} left the server'.format(member.name))
 
