@@ -26,6 +26,9 @@ class Stats:
                     await ctx.send('{} not found, showing your stats instead'.format(user))
                     user = ctx.author
 
+        if user.id == 169379380504559616:
+            print("I'm Kevin")
+
         limit = 6
         db = await database.Database.get_connection(self.bot.loop)
         user_info = "SELECT message_count, reaction_count, special FROM users WHERE user_id = $1"
