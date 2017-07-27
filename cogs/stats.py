@@ -18,10 +18,13 @@ class Stats:
             user = ctx.author
         else:
             try:
-                user = await commands.UserConverter().convert(ctx, user)
+                user = await commands.MemberConverter().convert(ctx, user)
             except commands.CommandError:
-                await ctx.send('{} not found, showing your stats instead'.format(user))
-                user = ctx.author
+                try:
+                    user = await commands.UserConverter().convert(ctx, user)
+                except commands.CommandError:
+                    await ctx.send('{} not found, showing your stats instead'.format(user))
+                    user = ctx.author
 
         limit = 6
         db = await database.Database.get_connection(self.bot.loop)
