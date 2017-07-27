@@ -28,6 +28,7 @@ class Stats:
 
         if user.id == 169379380504559616:
             print("I'm Kevin")
+        print("stats of ", user.id)
 
         limit = 6
         db = await database.Database.get_connection(self.bot.loop)
