@@ -37,8 +37,8 @@ class Fun:
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
             await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
-        # 75% chance to trigger this block
-        if number > 750:
+        # 30% chance to trigger this block
+        if number > 700:
             if message.content.lower().__contains__("tharg"):
                 emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
                 await message.add_reaction(emoji or '👽')
