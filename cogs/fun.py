@@ -33,32 +33,35 @@ class Fun:
             await ctx.send("You will never be as awesome as Wisewolf")
 
     async def on_message(self, message: discord.Message):
+        number = random.random(1, 1000)
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
             await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
-        if message.content.lower().__contains__("tharg"):
-            emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
-            await message.add_reaction(emoji or '👽')
+        # 75% chance to trigger this block
+        if number > 750:
+            if message.content.lower().__contains__("tharg"):
+                emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
+                await message.add_reaction(emoji or '👽')
 
-        if message.content.__contains__("Vigor"):
-            emoji = discord.utils.get(message.guild.emojis, name='vigor')
-            await message.add_reaction(emoji)
+            if message.content.__contains__("Vigor"):
+                emoji = discord.utils.get(message.guild.emojis, name='vigor')
+                await message.add_reaction(emoji)
 
-        if message.content.__contains__("Sight"):
-            emoji = discord.utils.get(message.guild.emojis, name='sight')
-            await message.add_reaction(emoji)
+            if message.content.__contains__("Sight"):
+                emoji = discord.utils.get(message.guild.emojis, name='sight')
+                await message.add_reaction(emoji)
 
-        if message.content.__contains__("Mind"):
-            emoji = discord.utils.get(message.guild.emojis, name='mind')
-            await message.add_reaction(emoji)
+            if message.content.__contains__("Mind"):
+                emoji = discord.utils.get(message.guild.emojis, name='mind')
+                await message.add_reaction(emoji)
 
-        if message.content.__contains__("Aurora"):
-            emoji = discord.utils.get(message.guild.emojis, name='aurora')
-            await message.add_reaction(emoji)
+            if message.content.__contains__("Aurora"):
+                emoji = discord.utils.get(message.guild.emojis, name='aurora')
+                await message.add_reaction(emoji)
 
-        if message.content.lower().__contains__("aisling") or message.content.lower().__contains__("duval"):
-            emoji = discord.utils.get(message.guild.emojis, name='aislingduval')
-            await message.add_reaction(emoji)
+            if message.content.lower().__contains__("aisling") or message.content.lower().__contains__("duval"):
+                emoji = discord.utils.get(message.guild.emojis, name='aislingduval')
+                await message.add_reaction(emoji)
 
 
 
