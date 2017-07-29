@@ -33,7 +33,7 @@ class Fun:
             await ctx.send("You will never be as awesome as Wisewolf")
 
     async def on_message(self, message: discord.Message):
-        number = random.random(1, 1000)
+        number = random.randint(1, 1000)
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
             await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
