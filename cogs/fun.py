@@ -37,6 +37,11 @@ class Fun:
         if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
             await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
+        if message.content.lower().__contains__("hi bot"):
+            emoji = self.bot.get_emoji(340954397502865409)
+            if emoji:
+                await message.add_reaction(emoji)
+
         # 30% chance to trigger this block
         if number > 700:
             if message.content.lower().__contains__("tharg"):
@@ -62,7 +67,6 @@ class Fun:
             if message.content.lower().__contains__("aisling") or message.content.lower().__contains__("duval"):
                 emoji = discord.utils.get(message.guild.emojis, name='aislingduval')
                 await message.add_reaction(emoji)
-
 
 
 def setup(bot: commands.Bot):
