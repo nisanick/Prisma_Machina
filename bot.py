@@ -30,11 +30,6 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
 
-@bot.event
-async def on_guild_join(guild):
-    print(datetime.utcnow())
-    print(datetime.timestamp())
-
 
 @bot.command(hidden=True)
 @commands.check(checks.can_manage_bot)
