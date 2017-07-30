@@ -2,11 +2,13 @@ import discord
 from discord.ext import commands
 import random
 
+default_chance = 600
+
 
 class Fun:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.limit = 700
+        self.limit = default_chance
 
     @commands.command(hidden=True)
     async def awesomenessof(self, ctx, who):
@@ -47,26 +49,32 @@ class Fun:
             if message.content.lower().__contains__("tharg"):
                 emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
                 await message.add_reaction(emoji or '👽')
+                self.limit = default_chance
 
             if message.content.__contains__("Vigor"):
                 emoji = discord.utils.get(message.guild.emojis, name='vigor')
                 await message.add_reaction(emoji)
+                self.limit = default_chance
 
             if message.content.__contains__("Sight"):
                 emoji = discord.utils.get(message.guild.emojis, name='sight')
                 await message.add_reaction(emoji)
+                self.limit = default_chance
 
             if message.content.__contains__("Mind"):
                 emoji = discord.utils.get(message.guild.emojis, name='mind')
                 await message.add_reaction(emoji)
+                self.limit = default_chance
 
             if message.content.__contains__("Aurora"):
                 emoji = discord.utils.get(message.guild.emojis, name='aurora')
                 await message.add_reaction(emoji)
+                self.limit = default_chance
 
             if message.content.lower().__contains__("aisling") or message.content.lower().__contains__("duval"):
                 emoji = discord.utils.get(message.guild.emojis, name='aislingduval')
                 await message.add_reaction(emoji)
+                self.limit = default_chance
         else:
             self.limit = self.limit - 50
 

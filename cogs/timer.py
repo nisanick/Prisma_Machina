@@ -6,6 +6,7 @@ import config
 import re
 import discord
 import random
+import checks
 
 
 class Timer:
@@ -21,7 +22,9 @@ class Timer:
             await self.check_events()
             await asyncio.sleep(self.step)
 
-    @commands.command()
+    @commands.command(hidden=True)
+    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.in_admin_channel)
     async def stop(self, ctx):
         self.execute = False
 
