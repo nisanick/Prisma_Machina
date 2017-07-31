@@ -12,7 +12,7 @@ class Stats:
         self.bot = bot
 
     @commands.command(aliases=['statistics', 'stat', 'stats'])
-    async def statistic(self, ctx: commands.Context, user=None):
+    async def statistic(self, ctx: commands.Context, *, user=None):
         """Shows statiostics of messages and reactions you or specified member sent. Use full name or tag."""
         if user is None:
             user = ctx.author
@@ -66,7 +66,7 @@ class Stats:
         await database.Database.close_connection(db)
 
     @commands.command()
-    async def diamonds(self, ctx, member=None):
+    async def diamonds(self, ctx, *, member=None):
         """Shows how many diamonds you or specified member have. Requires linked account! Use full name or tag."""
         link = user_data_link
         if member is None:
