@@ -52,7 +52,7 @@ class Timer:
         event_insert = "INSERT INTO schedule(event_time, event_type) VALUES ($1, $2)"
         message_update = "UPDATE messages SET used = messages.used + 1 WHERE message_id = $1"
         stamp = datetime.utcnow().timestamp()
-        if event_type == 1:
+        if event_type == 2:
             thumbnail = 'https://prismaticimperiumdotcom.files.wordpress.com/2016/02/aliciamellor.png?w=723'
             time = datetime.fromtimestamp(stamp + random.randint(21600, 43200))
         else:
@@ -70,8 +70,7 @@ class Timer:
                 row['usage']
             ]
             async for (message_id, message_title, message_author, message_content, message_footer, message_color) in db.cursor(message_select, *values):
-                #message_text = self.replace_emotes(message_content)
-                message_text = message_content
+                message_text = self.replace_emotes(message_content)
                 channel = self.bot.get_channel(config.RP_CHANNEL)
                 embed = discord.Embed(title=message_title, description=message_text, color=message_color)
                 embed.set_author(name=message_author)
@@ -89,17 +88,14 @@ class Timer:
         expression = re.compile(emote_string)
         result = expression.findall(text)
         for word in result:
-            if word:
-                emote_name = word[1:-1]
-                emote = word
-                print(emote)
-                for emoji in self.bot.emojis:
-                    if emoji.name == emote_name.lower():
-                        emote = emoji
-                if isinstance(emote, discord.Emoji):
-                    return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
-                else:
-                    return_text = return_text.replace(word, emote)
+            emote_name = word[1:-1]
+            emote = word
+            print(emote)
+            for emoji in self.bot.emojis:
+                if emoji.name == emote_name.lower():
+                    emote = emoji
+            return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
+
         print('after emote')
         return return_text
 
