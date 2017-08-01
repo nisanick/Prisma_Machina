@@ -87,16 +87,17 @@ class Timer:
         expression = re.compile(emote_string)
         result = expression.findall(text)
         for word in result:
-            emote_name = word[1:-1]
-            emote = word
-            print(emote)
-            for emoji in self.bot.emojis:
-                if emoji.name == emote_name.lower():
-                    emote = emoji
-            if isinstance(emote, discord.Emoji):
-                return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
-            else:
-                return_text = return_text.replace(word, emote)
+            if word:
+                emote_name = word[1:-1]
+                emote = word
+                print(emote)
+                for emoji in self.bot.emojis:
+                    if emoji.name == emote_name.lower():
+                        emote = emoji
+                if isinstance(emote, discord.Emoji):
+                    return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
+                else:
+                    return_text = return_text.replace(word, emote)
         print('after emote')
         return return_text
 
