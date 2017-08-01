@@ -7,6 +7,8 @@ import re
 import discord
 import random
 import checks
+from web import Web
+from data import links
 
 
 class Timer:
@@ -31,15 +33,19 @@ class Timer:
     async def check_events(self):
         """ event types are as follows:
             2 - The Daily Chat
+            0 - article check
         """
-        event_select = "SELECT event_id, event_type FROM schedule WHERE done = FALSE AND event_time <= $1"
+        event_select = "SELECT event_id, event_type, event_special FROM schedule WHERE done = FALSE AND event_time <= $1"
         event_update = "UPDATE schedule SET done = TRUE WHERE event_id = $1"
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
-            async for (event_id, event_type) in db.cursor(event_select, datetime.utcnow()):
+            async for (event_id, event_type, event_special) in db.cursor(event_select, datetime.utcnow()):
                 # The Daily Chat
                 if event_type == 2:
                     await self.send_article(event_type, True)
+                # article check
+                if event_type == 0:
+                    await self.check_articles(event_special)
                 await db.execute(event_update, event_id)
         await Database.close_connection(db)
 
@@ -94,6 +100,25 @@ class Timer:
             return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
 
         return return_text
+
+    async def check_articles(self, event_special):
+        response = await Web.get_response(links.last_article_link)
+        event_insert = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 0, $2)"
+        if response['last_newsID'] != event_special:
+            headers = await Web.get_site_header(response['last_newsID'])
+            embed = discord.Embed(title=headers['title'], url=headers['url'], description=headers['description'], color=discord.Colour.greyple())
+            embed.set_thumbnail(url=headers['image'])
+            channel = self.bot.get_channel(config.NEWS_CHANNEL)
+            await channel.send("There is a new article on our website!!", embed=embed)
+        db = await Database.get_connection(self.bot.loop)
+        async with db.transaction():
+            stamp = datetime.utcnow().timestamp()
+            values = [
+                datetime.fromtimestamp(stamp + 600),
+                response['last_newsID']
+            ]
+            await db.execute(event_insert, *values)
+        await Database.close_connection(db)
 
 
 def setup(bot):

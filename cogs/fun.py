@@ -76,7 +76,7 @@ class Fun:
                 await message.add_reaction(emoji)
                 self.limit = default_chance
         else:
-            self.limit = self.limit - 50
+            self.limit = self.limit - 10
 
 
 def setup(bot: commands.Bot):
