@@ -39,7 +39,6 @@ class Timer:
             async for (event_id, event_type) in db.cursor(event_select, datetime.utcnow()):
                 # The Daily Chat
                 if event_type == 2:
-                    print("messgae")
                     await self.send_article(event_type, True)
                 await db.execute(event_update, event_id)
         await Database.close_connection(db)
@@ -61,7 +60,6 @@ class Timer:
             time,
             event_type
         ]
-        print('here')
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
             row = await db.fetchrow(count_select, event_type)
@@ -90,13 +88,11 @@ class Timer:
         for word in result:
             emote_name = word[1:-1]
             emote = word
-            print(emote)
             for emoji in self.bot.emojis:
-                if emoji.name == emote_name.lower():
+                if emoji.name.lower() == emote_name.lower():
                     emote = emoji
             return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
 
-        print('after emote')
         return return_text
 
 
