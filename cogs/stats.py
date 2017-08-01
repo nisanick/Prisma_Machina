@@ -116,7 +116,7 @@ class Stats:
     async def word(self, ctx: commands.Context, what):
         """Shows usage statistics for specified word"""
         to_delete = [ctx.message]
-        what = what[0].lower().strip()
+        what = what.lower().strip()
         db = await database.Database.get_connection(self.bot.loop)
         counts = ("SELECT count(*) AS people, words.word, sum(usage_count) AS count, words.last_use "
                   "FROM word_count "
