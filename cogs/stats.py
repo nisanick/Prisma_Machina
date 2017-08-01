@@ -113,7 +113,7 @@ class Stats:
             await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
 
     @commands.command()
-    async def word(self, ctx: commands.Context, *, what):
+    async def word(self, ctx: commands.Context, what):
         """Shows usage statistics for specified word"""
         to_delete = [ctx.message]
         what = what[0].lower().strip()
