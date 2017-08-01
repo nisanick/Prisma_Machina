@@ -98,7 +98,7 @@ async def on_command_error(ctx, error):
         to_delete.append(
             await ctx.send('❌ We are sorry, your command was not recognized. Please refer to the Help command. ❌'))
     if isinstance(error, commands.MissingRequiredArgument):
-        pass
+        print("argument missing")
     else:
         channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
         embed = discord.Embed(title="Command invocation error.", description=str(error), color=discord.Colour.red())
