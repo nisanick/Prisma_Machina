@@ -61,6 +61,7 @@ class Timer:
             time,
             event_type
         ]
+        print('here')
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
             row = await db.fetchrow(count_select, event_type)
