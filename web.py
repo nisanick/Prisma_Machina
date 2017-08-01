@@ -14,7 +14,6 @@ class Web:
                     url = "{}?{}".format(link, urllib.parse.urlencode(parameters))
                 else:
                     url = '{}'.format(link)
-                print(url)
                 async with session.get(url) as response:
                     return json.loads(await response.text(encoding='utf8'))
 
