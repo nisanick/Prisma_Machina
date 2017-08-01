@@ -114,7 +114,7 @@ class Timer:
         async with db.transaction():
             stamp = datetime.utcnow().timestamp()
             values = [
-                datetime.fromtimestamp(stamp + 600),
+                datetime.fromtimestamp(stamp + 3600),
                 response['last_newsID']
             ]
             await db.execute(event_insert, *values)
