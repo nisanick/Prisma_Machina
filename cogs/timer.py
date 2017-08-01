@@ -92,7 +92,10 @@ class Timer:
             for emoji in self.bot.emojis:
                 if emoji.name == emote_name.lower():
                     emote = emoji
-            return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
+            if isinstance(emote, discord.Emoji):
+                return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
+            else:
+                return_text = return_text.replace(word, emote)
         print('after emote')
         return return_text
 
