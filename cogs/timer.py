@@ -89,6 +89,7 @@ class Timer:
         for word in result:
             emote_name = word[1:-1]
             emote = word
+            print(emote)
             for emoji in self.bot.emojis:
                 if emoji.name == emote_name.lower():
                     emote = emoji
