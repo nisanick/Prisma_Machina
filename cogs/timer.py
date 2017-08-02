@@ -60,7 +60,7 @@ class Timer:
         message_update = "UPDATE messages SET used = messages.used + 1 WHERE message_id = $1"
         stamp = datetime.utcnow().timestamp()
         if event_type == 2:
-            thumbnail = 'https://lh3.googleusercontent.com/dRFknpoQQptQwESPCoNm54SOXD3GhGiDdnZJI_pFnoUCsrSiZn8lZIE2NtI4or1kJqJliGdNayqQYaA=w1680-h949'
+            thumbnail = 'https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678'
             time = datetime.fromtimestamp(stamp + random.randint(21600, 43200))
         else:
             return
