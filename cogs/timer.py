@@ -58,7 +58,7 @@ class Timer:
         message_update = "UPDATE messages SET used = messages.used + 1 WHERE message_id = $1"
         stamp = datetime.utcnow().timestamp()
         if event_type == 2:
-            thumbnail = 'https://prismaticimperiumdotcom.files.wordpress.com/2016/02/aliciamellor.png?w=723'
+            thumbnail = 'https://lh3.googleusercontent.com/dRFknpoQQptQwESPCoNm54SOXD3GhGiDdnZJI_pFnoUCsrSiZn8lZIE2NtI4or1kJqJliGdNayqQYaA=w1680-h949'
             time = datetime.fromtimestamp(stamp + random.randint(21600, 43200))
         else:
             return
