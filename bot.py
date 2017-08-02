@@ -87,6 +87,7 @@ async def reload(ctx, *args):
             bot.unload_extension(extension)
             bot.load_extension(extension)
 
+
 @bot.event
 async def on_command_error(ctx, error):
     to_delete = [ctx.message]

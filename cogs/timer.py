@@ -1,14 +1,16 @@
-from discord.ext import commands
 import asyncio
-from database import Database
-from datetime import datetime
-import config
-import re
-import discord
 import random
+import re
+from datetime import datetime
+
+import discord
+from discord.ext import commands
+
 import checks
-from web import Web
+import config
 from data import links
+from database import Database
+from web import Web
 
 
 class Timer:
