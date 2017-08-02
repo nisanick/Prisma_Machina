@@ -41,7 +41,7 @@ class Stats:
             name = user.name
             if isinstance(user, discord.Member):
                 name = user.nick
-            embed.set_author(icon_url=user.avatar_url, name=name)
+            embed.set_author(icon_url=user.avatar_url, name=name or user.name)
             message_count, reaction_count, special = await db.fetchrow(user_info, str(user.id))
             if user_id == 186829544764866560:
                 embed.set_footer(text="You said 'By Achenar' {} times.".format(special))
