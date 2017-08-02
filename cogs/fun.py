@@ -42,6 +42,7 @@ class Fun:
 
         for embed in msg.embeds:
             embed.set_thumbnail(url='https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678')
+            await msg.edit(embed=embed)
 
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)
