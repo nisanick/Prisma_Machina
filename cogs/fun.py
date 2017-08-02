@@ -32,6 +32,8 @@ class Fun:
             await ctx.send("BY ACHENAR... you compared to almighty Wisewolf? Please")
         elif member.id == 152527690291871745:
             await ctx.send("[REDACTED BY ADMINISTRATION - Clasified information]")
+        elif member.id == 184799127807328258:
+            await ctx.send("Her awesomeness will be greatly missed in our hearts. May her soul find its place amongst the eagles of Empire.")
         else:
             await ctx.send("You will never be as awesome as Wisewolf")
 
