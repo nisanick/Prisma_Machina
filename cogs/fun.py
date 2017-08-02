@@ -35,7 +35,7 @@ class Fun:
         else:
             await ctx.send("You will never be as awesome as Wisewolf")
 
-    @commands.command()
+    @commands.command(hidden=True)
     async def fix(self, ctx: commands.Context, message_id):
         return
         channel = ctx.guild.get_channel(338128432947003392)
