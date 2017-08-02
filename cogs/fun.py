@@ -37,7 +37,7 @@ class Fun:
 
     @commands.command()
     async def fix(self, ctx: commands.Context, message_id):
-        msg = await ctx.get_message(int(message_id))
+        msg = await ctx.guild.get_message(int(message_id))
         for embed in msg.embeds:
             embed.set_thumbnail(url='https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678')
 
