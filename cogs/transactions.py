@@ -12,7 +12,7 @@ class Transactions:
 
     @commands.command()
     async def donate(self, ctx: commands.Context, amount, *, who):
-        """Gives {amount} of diamonds from your account to whoever you choose"""
+        """Gives {amount} of diamonds from your account to whoever you choose. Requires linked accounts!"""
         to_delete = []
         member = await commands.MemberConverter().convert(ctx, who)
         if ctx.author.id == member.id:
