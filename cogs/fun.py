@@ -86,6 +86,11 @@ class Fun:
                 emoji = discord.utils.get(message.guild.emojis, name='aislingduval')
                 await message.add_reaction(emoji)
                 self.limit = default_chance
+
+            if message.content.lower().__contains__("kumo") or message.content.lower().__contains__("burger"):
+                emoji = discord.utils.get(message.guild.emojis, name='KumoBurger')
+                await message.add_reaction(emoji)
+                self.limit = default_chance
         else:
             self.limit = self.limit - 10
 
