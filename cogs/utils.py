@@ -100,6 +100,7 @@ class Utils:
             "{} just joined the server. {}".format(member.mention, mention))
 
     @commands.command(hidden=True)
+    @commands.check(checks.can_manage_bot())
     async def probe(self, ctx, *, who):
         user = await commands.MemberConverter().convert(ctx, who)
         probation = discord.utils.find(lambda r: r.name == 'Probation', ctx.guild.roles)
