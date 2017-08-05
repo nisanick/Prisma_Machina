@@ -115,7 +115,7 @@ class Utils:
         db = await database.Database.get_connection(self.bot.loop)
         async with db.transaction():
             await db.execute(insert_probation, *values)
-            await ctx.send("Probation for {} will end at {:%d.%m.%Y %H:%M} (UTC)".format(user.mention, time))
+            await ctx.send("Probation for {} should end at {:%d.%m.%Y %H:%M} (UTC)".format(user.mention, time))
             await ctx.message.delete()
         await database.Database.close_connection(db)
 
