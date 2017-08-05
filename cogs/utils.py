@@ -105,7 +105,7 @@ class Utils:
         user = await commands.MemberConverter().convert(ctx, who)
         probation = discord.utils.find(lambda r: r.name == 'Probation', ctx.guild.roles)
         senator = discord.utils.find(lambda r: r.name == 'Senator', ctx.guild.roles)
-        await user.add_roles([probation, senator])
+        await user.add_roles(*[probation, senator])
         insert_probation = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 1, $2)"
         time = datetime.fromtimestamp(datetime.utcnow().timestamp() + 1209600)
         values = [
