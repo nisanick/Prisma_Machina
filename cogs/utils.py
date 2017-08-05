@@ -99,6 +99,25 @@ class Utils:
         await self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).send(
             "{} just joined the server. {}".format(member.mention, mention))
 
+    @commands.command(hidden=True)
+    async def probe(self, ctx, *, who):
+        user = await commands.MemberConverter().convert(ctx, who)
+        probation = discord.utils.find(lambda r: r.name == 'Probation', ctx.guild.roles)
+        senator = discord.utils.find(lambda r: r.name == 'Senator', ctx.guild.roles)
+        await user.add_roles([probation, senator])
+        insert_probation = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 1, $2)"
+        time = datetime.fromtimestamp(datetime.utcnow().timestamp() + 1209600)
+        values = [
+            time,
+            str(user.id)
+        ]
+        db = await database.Database.get_connection(self.bot.loop)
+        async with db.transaction():
+            await db.execute(insert_probation, *values)
+            await ctx.send("Probation for {} will end at {:%d.%m.%Y %H:%M} (UTC)".format(user.mention, time))
+            await ctx.message.delete()
+        await database.Database.close_connection(db)
+
     async def on_member_remove(self, member):
         channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
         if isinstance(member, discord.Member):

@@ -34,20 +34,24 @@ class Timer:
 
     async def check_events(self):
         """ event types are as follows:
-            2 - The Daily Chat
-            0 - article check
+            0 - Website article
+            1 - Probation
+            2 - RP message
         """
         event_select = "SELECT event_id, event_type, event_special FROM schedule WHERE done = FALSE AND event_time <= $1"
         event_update = "UPDATE schedule SET done = TRUE WHERE event_id = $1"
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
             async for (event_id, event_type, event_special) in db.cursor(event_select, datetime.utcnow()):
-                # The Daily Chat
-                if event_type == 2:
-                    await self.send_article(event_type, True)
-                # article check
+                # Website article
                 if event_type == 0:
                     await self.check_articles(event_special)
+                # Probation
+                if event_type == 1:
+                    await self.probation(event_special)
+                # RP message
+                elif event_type == 2:
+                    await self.send_article(event_special, True)
                 await db.execute(event_update, event_id)
         await Database.close_connection(db)
 
@@ -56,7 +60,7 @@ class Timer:
         message_select = ("SELECT message_id, message_title, message_author, message_content, message_footer, message_color "
                           "FROM messages WHERE message_type = $1 AND used = $2 ORDER BY "
                           "floor(random()*(SELECT count(*) FROM messages WHERE used = $2)) LIMIT 1")
-        event_insert = "INSERT INTO schedule(event_time, event_type) VALUES ($1, $2)"
+        event_insert = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 2, $2)"
         message_update = "UPDATE messages SET used = messages.used + 1 WHERE message_id = $1"
         stamp = datetime.utcnow().timestamp()
         if event_type == 2:
@@ -121,6 +125,10 @@ class Timer:
             ]
             await db.execute(event_insert, *values)
         await Database.close_connection(db)
+
+    async def probation(self, member):
+        channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
+        await channel.send("Probation for <@{}> expired. <@{}>".format(member, 205504598792863744))
 
 
 def setup(bot):
