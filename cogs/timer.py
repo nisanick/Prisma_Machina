@@ -70,7 +70,7 @@ class Timer:
             return
         event_values = [
             time,
-            event_type
+            str(event_type)
         ]
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
