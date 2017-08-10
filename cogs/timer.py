@@ -65,7 +65,7 @@ class Timer:
         stamp = datetime.utcnow().timestamp()
         if event_type == 2:
             thumbnail = 'https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678'
-            time = datetime.fromtimestamp(stamp + random.randint(21600, 43200))
+            time = datetime.fromtimestamp(stamp + random.randint(39600, 46800))
         else:
             return
         event_values = [
