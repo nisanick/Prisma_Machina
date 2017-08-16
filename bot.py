@@ -17,7 +17,7 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, game=discord.Game(name='services to CMDRs'))
+bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, game=discord.Game(name='services to CMDRs', type=0))
 
 startup = datetime.utcnow()
 
@@ -116,7 +116,7 @@ async def on_command_error(ctx, error):
         await channel.send("<@163037317278203908>", embed=embed)
     await asyncio.sleep(5)
     if not isinstance(ctx.channel, discord.DMChannel):
-        await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
+        await ctx.channel.delete_messages(to_delete)
 
 
 bot.remove_command('help')

@@ -21,7 +21,7 @@ class Utils:
     async def _help(self, ctx, *, command: str = None):
         # return
         """Shows help about a command or the bot"""
-        await ctx.message.delete(reason="Command cleanup.")
+        await ctx.message.delete()
         try:
             if command is None:
                 p = await HelpPaginator.from_bot(ctx)
@@ -77,7 +77,7 @@ class Utils:
                 await ctx.send('❌ This account is already linked to Discord.'))
         await asyncio.sleep(5)
         if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.channel.delete_messages(to_delete, reason="Command and response cleanup.")
+            await ctx.channel.delete_messages(to_delete)
 
     @commands.command()
     async def time(self, ctx):

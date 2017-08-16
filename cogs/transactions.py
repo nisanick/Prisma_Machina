@@ -46,7 +46,7 @@ class Transactions:
             to_delete.append(await ctx.send('Invalid amount'))
         await asyncio.sleep(5)
         if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.channel.delete_messages(to_delete, reason="Command cleanup.")
+            await ctx.channel.delete_messages(to_delete)
 
 
 def setup(bot):

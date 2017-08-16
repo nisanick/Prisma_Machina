@@ -62,7 +62,7 @@ class Stats:
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
             await ctx.send(embed=embed)
             if not isinstance(ctx.channel, discord.DMChannel):
-                await ctx.message.delete(reason="Command cleanup")
+                await ctx.message.delete()
         await database.Database.close_connection(db)
 
     @commands.command()
@@ -142,7 +142,7 @@ class Stats:
                 embed = discord.Embed(title=what, color=13434828,description="\"{}\" was never used before.".format(what))
         await ctx.send("", embed=embed)
         if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
+            await ctx.channel.delete_messages(to_delete)
         await database.Database.close_connection(db)
 
 
