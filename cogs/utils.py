@@ -86,7 +86,7 @@ class Utils:
         now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")
         embed = discord.Embed(title="Current Galactic Time", description=now, color=discord.Colour.dark_orange())
         if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.message.delete(reason="Command cleanup")
+            await ctx.message.delete()
         await ctx.send(embed=embed)
 
     async def on_member_join(self, member: discord.Member):

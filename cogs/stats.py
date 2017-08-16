@@ -110,7 +110,7 @@ class Stats:
             await ctx.send(embed=embed)
         await asyncio.sleep(sleep)
         if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.channel.delete_messages(to_delete, reason="Command cleanup")
+            await ctx.channel.delete_messages(to_delete)
 
     @commands.command()
     async def word(self, ctx: commands.Context, what):
