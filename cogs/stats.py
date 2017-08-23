@@ -92,12 +92,12 @@ class Stats:
         else:
             count = int(response['Diamonds'])
             emoji_type = ''
-            if count > 500:
-                emoji_type = 2
+            if count > 10000:
+                emoji_type = 4
             elif count > 2500:
                 emoji_type = 3
-            elif count > 10000:
-                emoji_type = 4
+            elif count > 500:
+                emoji_type = 2
             try:
                 emoji = await commands.EmojiConverter().convert(ctx, "diamond{}".format(emoji_type))
             except commands.CommandError as err:
