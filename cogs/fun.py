@@ -37,14 +37,16 @@ class Fun:
         else:
             await ctx.send("You will never be as awesome as Wisewolf")
 
-    # @commands.command(hidden=True)
+    @commands.command(hidden=True)
     async def fix(self, ctx: commands.Context, message_id):
         channel = ctx.guild.get_channel(338128432947003392)
         msg = await channel.get_message(int(message_id))
 
-        for embed in msg.embeds:
-            embed.set_thumbnail(url='https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678')
-            await msg.edit(embed=embed)
+        embed = discord.Embed(color=discord.Colour.gold(),title="::THE PEOPLE’S MEDIA:: - The Daily Chat", description="Breaking news filled the HoloStreams today as hundreds of witnesses reported seeing a phantom floating around the streets of Capitol City.  The ghostly figure resembled **Senator Adonis Manu** and he was heard reciting a mashup of his lectures.  While we would like to claim that the ghost is the haunting return of the late Senator there is official investigations proving that the ghost is a hologram broadcasting segments of recorded lectures.  We will spend an hour discussing the taboo of such a hoax and attempt to find a motivation.  Additionally, **The Administration of the Overseer** are taking control of the investigation giving us a clue that this hoax may be more sinister than an elaborate prank.")
+        embed.set_author(name="Alicia Mellor")
+        embed.set_thumbnail(url="https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678")
+        embed.set_footer(text="Only on The People’s Media, Your Voice in the Empire and the Stars Beyond.")
+        await msg.edit(embed=embed)
 
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)
