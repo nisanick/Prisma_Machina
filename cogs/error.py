@@ -18,11 +18,12 @@ class CommandErrorHandler:
         channel = await discord.ext.commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
 
         if isinstance(error, discord.ext.commands.CommandNotFound):
+            await self.clean_after_error(ctx, to_delete)
             return
 
         try:
             if isinstance(error.original, discord.errors.Forbidden):
-                await ctx.send('**I do not have the required permissions to run this command.**')
+                to_delete.append(await ctx.send('**I do not have the required permissions to run this command.**'))
         except AttributeError:
             pass
 
@@ -48,6 +49,8 @@ class CommandErrorHandler:
             print(ctx.command.qualified_name)
             if ctx.command.qualified_name == 'diamonds':
                 return await ctx.send('I could not find that member. Please try again.')
+
+        await self.clean_after_error(ctx, to_delete)
 
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)

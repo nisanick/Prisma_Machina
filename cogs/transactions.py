@@ -21,9 +21,9 @@ class Transactions:
 
     @commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
-    async def take(self, ctx, amount: int, *, who: discord.Member):
+    async def take(self, ctx, amount, *, who: discord.Member):
         try:
-            member = await commands.MemberConverter().convert(ctx, 294171600478142466)
+            member = await commands.MemberConverter().convert(ctx, '294171600478142466')
         except commands.CommandError:
             member = ctx.author
         await self.transaction(ctx, amount,  who, member)
