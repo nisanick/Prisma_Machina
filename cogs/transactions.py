@@ -22,7 +22,11 @@ class Transactions:
     @commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
     async def take(self, ctx, amount: int, *, who: discord.Member):
-        await self.transaction(ctx, amount,  who, ctx.author)
+        try:
+            member = await commands.MemberConverter().convert(ctx, 294171600478142466)
+        except commands.CommandError:
+            member = ctx.author
+        await self.transaction(ctx, amount,  who, member)
 
     def react_check(self, reaction, user):
         if user is None or user.id != self.author.id:
@@ -56,8 +60,6 @@ class Transactions:
             await ctx.message.add_reaction('❌')
             return
         await ctx.message.clear_reactions()
-
-        print(self.process_transaction)
 
         if not self.process_transaction:
             await ctx.message.add_reaction('❌')
