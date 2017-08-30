@@ -87,7 +87,7 @@ async def reload(ctx, *args):
             bot.unload_extension(extension)
             bot.load_extension(extension)
 
-'''
+
 @bot.event
 async def on_command_error(ctx, error):
     to_delete = [ctx.message]
@@ -119,7 +119,7 @@ async def on_command_error(ctx, error):
         await channel.send(message, embed=embed)
     await asyncio.sleep(5)
     if not isinstance(ctx.channel, discord.DMChannel):
-        await ctx.channel.delete_messages(to_delete)'''
+        await ctx.channel.delete_messages(to_delete)
 
 
 bot.remove_command('help')
