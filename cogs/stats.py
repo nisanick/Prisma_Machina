@@ -65,8 +65,8 @@ class Stats:
                 await ctx.message.delete()
         await database.Database.close_connection(db)
 
-    @commands.command()
-    async def diamonds(self, ctx, *, member=None):
+    @commands.command(aliases=['diamond'])
+    async def diamonds(self, ctx, *, member: discord.Member=None):
         """Shows how many diamonds you or specified member have. Requires linked account! Use full name or tag."""
         link = user_data_link
         if member is None:
