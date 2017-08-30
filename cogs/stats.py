@@ -66,17 +66,12 @@ class Stats:
         await database.Database.close_connection(db)
 
     @commands.command(aliases=['diamond'])
-    async def diamonds(self, ctx, *, member: discord.Member=None):
+    async def diamonds(self, ctx, member: discord.Member=None):
         """Shows how many diamonds you or specified member have. Requires linked account! Use full name or tag."""
         link = user_data_link
         if member is None:
             member = ctx.author
-        else:
-            try:
-                member = await commands.MemberConverter().convert(ctx, member)
-            except commands.CommandError:
-                await ctx.send('{} not found, showing your diamond count instead'.format(member))
-                member = ctx.author
+
         args = {
             'discord_id': member.id
         }
