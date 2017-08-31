@@ -17,6 +17,9 @@ class CommandErrorHandler:
         to_delete = [ctx.message]
         channel = await discord.ext.commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
 
+        if isinstance(error, discord.ext.commands.MissingRequiredArgument):
+            pass
+
         if isinstance(error, discord.ext.commands.CommandNotFound):
             await self.clean_after_error(ctx, to_delete)
             return

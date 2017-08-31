@@ -87,7 +87,8 @@ class Transactions:
                         await ctx.message.add_reaction('❌')
                         to_delete.append(await ctx.send("Not enough diamonds"))
                     else:
-                        await ctx.message.add_reaction('✅')
+                        emoji = self.bot.get_emoji(352874998618128384)
+                        await ctx.message.add_reaction(emoji)
                         admin_channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
                         await admin_channel.send(
                             "{} diamonds went from {} to {}".format(amount, giver.nick or giver.name,
