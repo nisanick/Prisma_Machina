@@ -39,6 +39,7 @@ class Fun:
 
     # @commands.command(hidden=True)
     async def fix(self, ctx: commands.Context, message_id):
+        return
         channel = ctx.guild.get_channel(338128432947003392)
         msg = await channel.get_message(int(message_id))
 

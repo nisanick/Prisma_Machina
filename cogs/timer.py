@@ -122,7 +122,7 @@ class Timer:
             headers = await Web.get_site_header(response['last_newsID'])
             embed = discord.Embed(title=headers['title'], url=headers['url'], description=headers['description'], color=discord.Colour.greyple())
             image = urllib.parse.urlparse(headers['image'])
-            embed.set_thumbnail(url="{}://{}{}".format(image.scheme, image.netloc, urllib.parse.quote(image.path)))
+            embed.set_image(url="{}://{}{}".format(image.scheme, image.netloc, urllib.parse.quote(image.path)))
             channel = self.bot.get_channel(config.NEWS_CHANNEL)
             await channel.send("There is a new article on our website!!", embed=embed)
 

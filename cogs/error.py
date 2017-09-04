@@ -1,67 +1,76 @@
+import datetime
 import traceback
-import sys
-import discord.ext
-import asyncio
+
+import discord
+from discord.ext import commands
+
 import config
+import asyncio
+
+
+class AssBotException(Exception):
+    pass
+
+
+class ResponseStatusError(AssBotException):
+    def __init__(self, status, reason, url):
+        msg = f'REQUEST::[STATUS TOO HIGH    ]: {status} - {reason} - [[{url}]]'
+        super().__init__(msg)
 
 
 class CommandErrorHandler:
-    def __init__(self, bot):
-        self.bot = bot
-
     async def on_command_error(self, ctx, error):
         """The event triggered when an error is raised while invoking a command.
         ctx   : Context
         error : Exception"""
 
         to_delete = [ctx.message]
-        channel = await discord.ext.commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
 
-        if isinstance(error, discord.ext.commands.MissingRequiredArgument):
-            pass
+        error = getattr(error, 'original', error)
 
-        if isinstance(error, discord.ext.commands.CommandNotFound):
-            await self.clean_after_error(ctx, to_delete)
+        ignored = commands.CommandNotFound
+        if isinstance(error, ignored):
+            to_delete.append(await ctx.send('This command doesn\'t exist.'))
+            await asyncio.sleep(7)
+            if not isinstance(ctx.channel, discord.DMChannel):
+                await ctx.channel.delete_messages(to_delete)
             return
+        else:
+            message = "<@163037317278203908>"
+
+        handler = {
+            discord.Forbidden: '**I do not have the required permissions to run this command.**',
+            commands.DisabledCommand: '{} has been disabled.'.format(ctx.command),
+            commands.NoPrivateMessage: '{} can not be used in Private Messages.'.format(ctx.command),
+            commands.CheckFailure: '**You aren\'t allowed to use this command!**'
+        }
 
         try:
-            if isinstance(error.original, discord.errors.Forbidden):
-                to_delete.append(await ctx.send('**I do not have the required permissions to run this command.**'))
-        except AttributeError:
-            pass
+            message = handler[type(error)]
+        except KeyError:
+            to_delete.append(await ctx.send('❌ Your command couldn\'t be processed. Please reffer to [p]help command. ❌'))
+        else:
+            to_delete.append(await ctx.send(message))
 
-        if isinstance(error, discord.ext.commands.DisabledCommand):
-            try:
-                await ctx.send('{} has been disabled.'.format(ctx.command))
-            except:
-                pass
-            finally:
-                await self.clean_after_error(ctx, to_delete)
-                return
+        await asyncio.sleep(7)
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.channel.delete_messages(to_delete)
 
-        if isinstance(error, discord.ext.commands.NoPrivateMessage):
-            try:
-                await ctx.author.send('{} can not be used in Private Messages.'.format(ctx.command))
-            except:
-                pass
-            finally:
-                await self.clean_after_error(ctx, to_delete)
-                return
+        embed = discord.Embed(title=f'Command Exception', color=discord.Color.red())
+        embed.set_footer(text='Occured on')
+        embed.timestamp = datetime.datetime.utcnow()
 
-        if isinstance(error, discord.ext.commands.BadArgument):
-            print(ctx.command.qualified_name)
-            if ctx.command.qualified_name == 'diamonds':
-                return await ctx.send('I could not find that member. Please try again.')
+        exc = ''.join(traceback.format_exception(type(error), error, error.__traceback__, chain=False))
+        exc = exc.replace('`', '\u200b`')
+        embed.description = '```py\n{}\n```'.format(exc)
 
-        await self.clean_after_error(ctx, to_delete)
+        embed.add_field(name='Command', value=ctx.command.qualified_name)
+        embed.add_field(name='Invoker', value=ctx.author)
+        embed.add_field(name='Location', value='Channel: {0.channel}'.format(ctx))
+        embed.add_field(name='Message', value=ctx.message.content)
 
-        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
-        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
-
-    async def clean_after_error(self, ctx, to_delete):
-        await asyncio.sleep(5)
-        await ctx.channel.delete_messages(to_delete)
+        await ctx.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).send(message, embed=embed)
 
 
 def setup(bot):
-    bot.add_cog(CommandErrorHandler(bot))
+    bot.add_cog(CommandErrorHandler())
