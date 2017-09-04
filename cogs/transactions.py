@@ -28,19 +28,6 @@ class Transactions:
             member = ctx.author
         await self.transaction(ctx, amount,  who, member)
 
-    def react_check(self, reaction, user):
-        if user is None or user.id != self.author.id:
-            return False
-
-        if reaction.message.id != self.message.id:
-            return False
-
-        for emoji, process in [('❌', False), ('✅', True)]:
-            if reaction.emoji == emoji:
-                self.process_transaction = process
-                return True
-        return False
-
     async def transaction(self, ctx, amount, giver: discord.Member, receiver: discord.Member):
         to_delete = []
         if giver.id == receiver.id:
@@ -54,7 +41,7 @@ class Transactions:
         await ctx.message.add_reaction('❌')
 
         try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=self.react_check, timeout=30.0)
+            reaction, user = await self.bot.wait_for('reaction_add', check=checks.react_check, timeout=30.0)
         except asyncio.TimeoutError:
             await ctx.message.clear_reactions()
             await ctx.message.add_reaction('❌')

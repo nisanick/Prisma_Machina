@@ -132,6 +132,12 @@ class Utils:
     async def _say(self, ctx, channel: discord.TextChannel, *, message):
         await channel.send(message)
 
+    @commands.command(name='embed', hidden=True)
+    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.in_admin_channel)
+    async def _embed(self, ctx, channel: discord.TextChannel):
+        pass
+
 
 def setup(bot):
     bot.add_cog(Utils(bot))

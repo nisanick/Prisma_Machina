@@ -40,6 +40,7 @@ class Timer:
         """
         event_select = "SELECT event_id, event_type, event_special FROM schedule WHERE done = FALSE AND event_time <= $1"
         event_update = "UPDATE schedule SET done = TRUE WHERE event_id = $1"
+
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
             async for (event_id, event_type, event_special) in db.cursor(event_select, datetime.utcnow()):
@@ -52,6 +53,7 @@ class Timer:
                 # RP message
                 elif event_type == 2:
                     await self.send_article(int(event_special), True)
+
                 await db.execute(event_update, event_id)
         await Database.close_connection(db)
 
@@ -63,6 +65,7 @@ class Timer:
         event_insert = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 2, $2)"
         message_update = "UPDATE messages SET used = messages.used + 1 WHERE message_id = $1"
         stamp = datetime.utcnow().timestamp()
+
         if event_type == 2:
             thumbnail = 'https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678'
             time = datetime.fromtimestamp(stamp + random.randint(39600, 46800))
@@ -72,6 +75,7 @@ class Timer:
             time,
             str(event_type)
         ]
+
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
             row = await db.fetchrow(count_select, event_type)
@@ -79,6 +83,7 @@ class Timer:
                 event_type,
                 row['usage']
             ]
+
             async for (message_id, message_title, message_author, message_content, message_footer, message_color) in db.cursor(message_select, *values):
                 message_text = self.replace_emotes(message_content)
                 channel = self.bot.get_channel(config.RP_CHANNEL)
@@ -88,6 +93,7 @@ class Timer:
                 embed.set_footer(text=message_footer)
                 await channel.send(embed=embed)
                 await db.execute(message_update, message_id)
+
                 if schedule:
                     await db.execute(event_insert, *event_values)
         await Database.close_connection(db)
@@ -97,6 +103,7 @@ class Timer:
         return_text = text
         expression = re.compile(emote_string)
         result = expression.findall(text)
+
         for word in result:
             emote_name = word[1:-1]
             emote = word
@@ -110,12 +117,14 @@ class Timer:
     async def check_articles(self, event_special):
         response = await Web.get_response(links.last_article_link)
         event_insert = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 0, $2)"
+
         if response['last_newsID'] != event_special:
             headers = await Web.get_site_header(response['last_newsID'])
             embed = discord.Embed(title=headers['title'], url=headers['url'], description=headers['description'], color=discord.Colour.greyple())
             embed.set_thumbnail(url=headers['image'].replace(" ", "%20"))
             channel = self.bot.get_channel(config.NEWS_CHANNEL)
             await channel.send("There is a new article on our website!!", embed=embed)
+
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
             stamp = datetime.utcnow().timestamp()
