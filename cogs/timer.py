@@ -113,7 +113,7 @@ class Timer:
         if response['last_newsID'] != event_special:
             headers = await Web.get_site_header(response['last_newsID'])
             embed = discord.Embed(title=headers['title'], url=headers['url'], description=headers['description'], color=discord.Colour.greyple())
-            embed.set_thumbnail(url=headers['image'])
+            embed.set_thumbnail(url=headers['image'].replace(" ", "%20"))
             channel = self.bot.get_channel(config.NEWS_CHANNEL)
             await channel.send("There is a new article on our website!!", embed=embed)
         db = await Database.get_connection(self.bot.loop)
