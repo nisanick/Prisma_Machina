@@ -101,7 +101,6 @@ class Utils:
 
     @commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
-    @commands.check(checks.in_admin_channel)
     async def probe(self, ctx, *, who):
         user = await commands.MemberConverter().convert(ctx, who)
         probation = discord.utils.find(lambda r: r.name == 'Probation', ctx.guild.roles)
@@ -129,6 +128,7 @@ class Utils:
 
     @commands.command(name='say')
     @commands.check(checks.can_manage_bot)
+    @commands.check(checks.in_admin_channel)
     async def _say(self, ctx, channel: discord.TextChannel, *, message):
         await channel.send(message)
 
