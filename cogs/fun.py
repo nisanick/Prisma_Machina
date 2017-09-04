@@ -51,7 +51,7 @@ class Fun:
 
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)
-        if message.author.id == 186829544764866560 and message.content.lower().__contains__("by achenar"):
+        if message.author.id == 186829544764866560 and message.content.lower().__contains__("by") and message.content.lower().__contains__("achenar"):
             await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
         if message.content.lower().__contains__("hi bot"):
