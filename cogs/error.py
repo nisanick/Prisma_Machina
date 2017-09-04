@@ -14,7 +14,7 @@ class AssBotException(Exception):
 
 class ResponseStatusError(AssBotException):
     def __init__(self, status, reason, url):
-        msg = f'REQUEST::[STATUS TOO HIGH    ]: {status} - {reason} - [[{url}]]'
+        msg = 'REQUEST::[STATUS TOO HIGH    ]: {} - {} - [[{}]]'.format(status, reason, url)
         super().__init__(msg)
 
 
