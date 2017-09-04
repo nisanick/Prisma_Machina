@@ -56,7 +56,7 @@ class CommandErrorHandler:
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.channel.delete_messages(to_delete)
 
-        embed = discord.Embed(title=f'Command Exception', color=discord.Color.red())
+        embed = discord.Embed(title='Command Exception', color=discord.Color.red())
         embed.set_footer(text='Occured on')
         embed.timestamp = datetime.datetime.utcnow()
 
