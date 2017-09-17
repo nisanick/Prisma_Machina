@@ -35,16 +35,20 @@ async def on_ready():
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def load(ctx, *args):
+
     if ctx.author.id not in config.ADMIN_USERS:
         return
+
     if args.__len__() <= 0:
         to_delete = await ctx.send("No argument passed")
         await asyncio.sleep(5)
         await to_delete.delete()
         return
+
     what = 'cogs.{0}'.format(args[0])
-    if not what in config.EXTENSIONS:
+    if what not in config.EXTENSIONS:
         config.EXTENSIONS.append(what)
+
     bot.load_extension(what)
     await ctx.send("Extension {0} loaded".format(what))
 
@@ -53,15 +57,19 @@ async def load(ctx, *args):
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def unload(ctx: commands.Context, *args):
+
     if ctx.author.id not in config.ADMIN_USERS:
         return
+
     if args.__len__() <= 0:
         await ctx.send("No argument passed")
         return
+
     what = 'cogs.{0}'.format(args[0])
     if what == 'cogs.permisions':
         await ctx.send("Permisions can't be unloaded")
         return
+
     if what in config.EXTENSIONS:
         config.EXTENSIONS.remove(what)
         bot.unload_extension(what)
@@ -74,53 +82,21 @@ async def unload(ctx: commands.Context, *args):
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def reload(ctx, *args):
+
     if args.__len__() <= 0:
         await ctx.send("No argument passed")
         return
+
     if args[0] == 'all':
         to_reload = config.EXTENSIONS
     else:
         to_reload = ["cogs.{0}".format(args[0])]
+
     for extension in to_reload:
         if extension in config.EXTENSIONS:
             await ctx.send('reloading {}'.format(extension))
             bot.unload_extension(extension)
             bot.load_extension(extension)
-
-'''
-@bot.event
-async def on_command_error(ctx, error):
-    to_delete = [ctx.message]
-    if ctx.guild is not None:
-        permissions = ctx.channel.permissions_for(ctx.guild.me)
-    else:
-        permissions = ctx.channel.permissions_for(ctx.bot.user)
-    if permissions.send_messages:
-        to_delete.append(
-            await ctx.send('❌ We are sorry, your command was not recognized. Please refer to the Help command. ❌'))
-    if isinstance(error, commands.MissingRequiredArgument):
-        print("argument missing")
-    else:
-        channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
-        embed = discord.Embed(title="Command invocation error.", description=str(error), color=discord.Colour.red())
-        embed.add_field(name="User", value=ctx.message.author.mention)
-        if isinstance(ctx.channel, discord.DMChannel):
-            ch = ctx.channel.recipient.mention
-        elif isinstance(ctx.channel, discord.TextChannel):
-            ch = ctx.channel.mention
-        else:
-            ch = ctx.channel.name
-        embed.add_field(name="Channel", value=ch)
-        embed.add_field(name="Command", value=ctx.invoked_with)
-        embed.add_field(name="Time", value="{:%d.%m.%Y %H:%M} (UTC)".format(datetime.utcnow()))
-        message = "<@163037317278203908>"
-        if str(error).__contains__("NameError"):
-            message = ""
-        await channel.send(message, embed=embed)
-    await asyncio.sleep(5)
-    if not isinstance(ctx.channel, discord.DMChannel):
-        await ctx.channel.delete_messages(to_delete)
-        '''
 
 
 bot.remove_command('help')
