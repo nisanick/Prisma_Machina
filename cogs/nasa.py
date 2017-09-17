@@ -20,6 +20,7 @@ class Nasa:
         embed.set_footer(text='Generated on ')
 
         await ctx.send(content=None, embed=embed)
+        await ctx.message.delete()
 
 
 def setup(bot: commands.Bot):

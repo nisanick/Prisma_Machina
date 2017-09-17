@@ -45,15 +45,19 @@ class Timer:
         db = await Database.get_connection(self.bot.loop)
         async with db.transaction():
             async for (event_id, event_type, event_special) in db.cursor(event_select, datetime.utcnow()):
+
                 # Website article
                 if event_type == 0:
                     await self.check_articles(event_special)
+
                 # Probation
                 if event_type == 1:
                     await self.probation(event_special)
+
                 # RP message
                 elif event_type == 2:
                     await self.send_article(int(event_special), True)
+
                 await db.execute(event_update, event_id)
         await Database.close_connection(db)
 
