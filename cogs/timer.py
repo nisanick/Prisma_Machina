@@ -119,7 +119,7 @@ class Timer:
         return return_text
 
     async def check_articles(self, event_special):
-        response = await Web.get_response(links.last_article_link)
+        response = await Web.get_response(links.last_article_link, {'bot': 'yes'})
         event_insert = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 0, $2)"
 
         if response['last_newsID'] != event_special:
