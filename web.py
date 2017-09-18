@@ -12,6 +12,7 @@ class Web:
             with async_timeout.timeout(10):
                 if parameters:
                     url = "{}?{}".format(link, urllib.parse.urlencode(parameters))
+                    print(url)
                 else:
                     url = '{}'.format(link)
                 async with session.get(url) as response:
@@ -21,7 +22,7 @@ class Web:
     async def get_site_header(article_id):
         async with aiohttp.ClientSession() as session:
             with async_timeout.timeout(10):
-                url = "http://www.prismatic-imperium.com/news.php?id={}".format(article_id)
+                url = "http://www.prismatic-imperium.com/news.php?id={}?bot=yes".format(article_id)
                 async with session.get(url) as response:
                     soup = BeautifulSoup(await response.text(), "html.parser")
                     title = soup.find("meta", property="og:title")
