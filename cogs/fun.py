@@ -38,7 +38,7 @@ class Fun:
             await ctx.send("You will never be as awesome as Wisewolf")
 
     @commands.command(hidden=True)
-    async def report(self, ctx, *, message):
+    async def report(self, ctx, *, message=None):
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
         ctx.send("This incident was reported to proper authorities!")

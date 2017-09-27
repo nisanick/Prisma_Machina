@@ -12,7 +12,6 @@ class Web:
             with async_timeout.timeout(10):
                 if parameters:
                     url = "{}?{}".format(link, urllib.parse.urlencode(parameters))
-                    print(url)
                 else:
                     url = '{}'.format(link)
                 async with session.get(url) as response:
