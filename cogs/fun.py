@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import random
+import asyncio
 
 default_chance = 600
 
@@ -39,9 +40,10 @@ class Fun:
 
     @commands.command(hidden=True)
     async def report(self, ctx, *, message=None):
-        if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.message.delete()
         await ctx.send("This incident was reported to proper authorities!")
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await asyncio.sleep(10)
+            await ctx.message.delete()
 
     # @commands.command(hidden=True)
     async def fix(self, ctx: commands.Context, message_id):
