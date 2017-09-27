@@ -41,7 +41,7 @@ class Fun:
     async def report(self, ctx, *, message=None):
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
-        ctx.send("This incident was reported to proper authorities!")
+        await ctx.send("This incident was reported to proper authorities!")
 
     # @commands.command(hidden=True)
     async def fix(self, ctx: commands.Context, message_id):
