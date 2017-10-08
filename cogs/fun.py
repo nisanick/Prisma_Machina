@@ -42,7 +42,7 @@ class Fun:
     async def report(self, ctx, *, message=None):
         await ctx.send("This incident was reported to proper authorities!")
         if not isinstance(ctx.channel, discord.DMChannel):
-            await asyncio.sleep(10)
+            await asyncio.sleep(5)
             await ctx.message.delete()
 
     # @commands.command(hidden=True)
