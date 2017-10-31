@@ -132,6 +132,16 @@ class Utils:
     async def _say(self, ctx, channel: discord.TextChannel, *, message):
         await channel.send(message)
 
+    @commands.command(name='dm')
+    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.in_say_channel)
+    async def _dm(self, ctx, user: discord.User, *, message):
+        channel = user.dm_channel
+        if channel is None:
+            await user.create_dm
+            channel = user.dm_channel
+        await channel.send(message)
+
     @commands.command(name='embed', hidden=True)
     @commands.check(checks.can_manage_bot)
     @commands.check(checks.in_admin_channel)
