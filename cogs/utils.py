@@ -138,7 +138,7 @@ class Utils:
     async def _dm(self, ctx, user: discord.User, *, message):
         channel = user.dm_channel
         if channel is None:
-            await user.create_dm
+            await user.create_dm()
             channel = user.dm_channel
         await channel.send(message)
 
