@@ -148,6 +148,18 @@ class Utils:
     async def _embed(self, ctx, channel: discord.TextChannel):
         pass
 
+    async def on_message(self, message: discord.Message):
+        if message.author.id == self.bot.user.id or message.content.startswith(tuple(config.PREFIX)):
+            return
+        if message.channel is discord.DMChannel:
+            embed = discord.Embed(title="DM to bot", description=message, colour=discord.Colour.blurple(),
+                                  timestamp=message.created_at.utcnow())
+            embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
+            channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
+            # channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
+            await channel.send("", embed=embed)
+            # await channel.send("", embed=embed)
+            await message.add_reaction('✅')
 
 def setup(bot):
     bot.add_cog(Utils(bot))
