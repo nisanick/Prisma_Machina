@@ -44,7 +44,7 @@ class Fun:
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
 
-    # @commands.command(hidden=True)
+    """@commands.command(hidden=True)
     async def fix(self, ctx: commands.Context, message_id):
         return
         channel = ctx.guild.get_channel(338128432947003392)
@@ -54,7 +54,7 @@ class Fun:
         embed.set_author(name="Alicia Mellor")
         embed.set_thumbnail(url="https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678")
         embed.set_footer(text="Only on The People’s Media, Your Voice in the Empire and the Stars Beyond.")
-        await msg.edit(embed=embed)
+        await msg.edit(embed=embed)"""
 
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)

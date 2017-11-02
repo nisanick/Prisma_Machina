@@ -37,6 +37,45 @@ class Parser:
                     count = count + 1
         await ctx.send("History of {} added.".format(channel.name))
 
+    @commands.command(hidden=True)
+    @commands.check(checks.can_manage_bot)
+    async def merge(self, ctx, old_id, new_id):
+        async with ctx.typing():
+            db = await database.Database.get_connection(self.bot.loop)
+            words_select = "SELECT word, usage_count, last_use FROM word_count WHERE user_id = $1"
+            insert_word_count = ("INSERT INTO word_count (word, user_id, usage_count, last_use) VALUES($1, $2, $3, $4)"
+                                 "ON CONFLICT (word,user_id) DO UPDATE SET usage_count = word_count.usage_count + $3, last_use = $4")
+
+            react_select = "SELECT reaction, usage_count, last_use FROM reaction_count WHERE user_id = $1"
+            insert_react_count = ("INSERT INTO reaction_count(reaction, user_id, usage_count, last_use) VALUES ($1, $2, $3, $4)"
+                                  "ON CONFLICT (reaction, user_id) DO UPDATE SET usage_count = reaction_count.usage_count + $3, last_use = $4")
+
+            update_totals = ("update users set message_count = message_count + (select message_count from users where user_id = $1),"
+                             " reaction_count = reaction_count + (select reaction_count from users where user_id = $1)"
+                             " where user_id = $2")
+            async with db.transaction():
+                async for (word, count, last_use) in db.cursor(words_select, *(old_id, )):
+                    count_values = (
+                        word,
+                        new_id,
+                        count,
+                        last_use,
+                    )
+                    await db.execute(insert_word_count, *count_values)
+
+                async for (reaction, count, last_use) in db.cursor(react_select, *(old_id, )):
+                    count_values = (
+                        reaction,
+                        new_id,
+                        count,
+                        last_use,
+                    )
+                    await db.execute(insert_react_count, *count_values)
+
+                await db.execute(update_totals, *(old_id, new_id))
+            await database.Database.close_connection(db)
+            await ctx.send("done")
+
     async def on_message(self, message: discord.Message):
         if message.author.id == self.bot.user.id or message.content.startswith(tuple(config.PREFIX)):
             return
