@@ -37,7 +37,7 @@ class Parser:
                     count = count + 1
         await ctx.send("History of {} added.".format(channel.name))
 
-    @commands.command(hidden=True)
+    """"@commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
     async def merge(self, ctx, old_id, new_id):
         async with ctx.typing():
@@ -74,7 +74,7 @@ class Parser:
 
                 await db.execute(update_totals, *(old_id, new_id))
             await database.Database.close_connection(db)
-            await ctx.send("done")
+            await ctx.send("done")"""
 
     async def on_message(self, message: discord.Message):
         if message.author.id == self.bot.user.id or message.content.startswith(tuple(config.PREFIX)):
