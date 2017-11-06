@@ -19,6 +19,7 @@ class Roleplay:
         Base command for RP utilities. Use !help rp for details.
         Mind that parameters [who] [channel] are admin exclusive.
         """
+        await ctx.message.delete()
         if ctx.invoked_subcommand is None:
             await ctx.send("Subcommand required!")
 
@@ -252,7 +253,7 @@ class Roleplay:
     @_rp.command(name='els')
     async def _els(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Environmental Layout Scanner
+        Activates Environmental Layout Scanner
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -315,7 +316,7 @@ class Roleplay:
     @_rp.command(name='hsl')
     async def _hsl(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Heat Sink Launcher
+        Activates Heat Sink Launcher
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -368,7 +369,7 @@ class Roleplay:
     @_rp.command(name='kws')
     async def _kws(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Kill Warrant Scanner
+        Activates Kill Warrant Scanner
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -411,7 +412,7 @@ class Roleplay:
     @_rp.command(name='hdp')
     async def _hdp(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Holo-Me Decoy Projector
+        Activates Holo-Me Decoy Projector
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -449,7 +450,7 @@ class Roleplay:
     @_rp.command(name='vdc')
     async def _vdc(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Virtual Distortion Cloak
+        Activates Virtual Distortion Cloak
         """
         if not await can_manage_bot(ctx):
             who = None
