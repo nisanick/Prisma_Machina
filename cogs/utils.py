@@ -126,13 +126,13 @@ class Utils:
         else:
             await channel.send('{} left the server'.format(member.name))
 
-    @commands.command(name='say')
+    @commands.command(name='say', hidden=True)
     @commands.check(checks.can_manage_bot)
     @commands.check(checks.in_say_channel)
     async def _say(self, ctx, channel: discord.TextChannel, *, message):
         await channel.send(message)
 
-    @commands.command(name='dm')
+    @commands.command(name='dm', hidden=True)
     @commands.check(checks.can_manage_bot)
     @commands.check(checks.in_say_channel)
     async def _dm(self, ctx, user: discord.User, *, message):
