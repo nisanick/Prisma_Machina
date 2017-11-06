@@ -97,6 +97,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Shield Cell Bank::**")
 
@@ -106,7 +110,7 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 60:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
@@ -115,20 +119,20 @@ class Roleplay:
                                  "Processing…\n"
                                  ":rp_utility1: Thermal Weaponry are recharged to full capacity.\n"
                                  ":rp_utility1: Massive Heat Surge Detected.\n"
-                                 "Allow **5 minutes** for utility to cool for optimal performance.")
+                                 "Allow **5 minutes** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.green()
         elif chance > 90:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility0: Module Malfunction Detected.\n"
                                  ":rp_utility0: Personal Shield Devices failed to recharge.\n"
                                  ":rp_utility0: Thermal Weaponry failed to recharge.\n"
                                  ":rp_utility1: Massive Heat Surge Detected.\n"
                                  ":rp_utility0: Meltdown Detected.\n"
-                                 "Allow **5 minutes** for utility to cool before triggering.")
+                                 "Allow **5 minutes** for utility to cool before triggering.```")
             embed.colour = discord.Colour.red()
         else:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
@@ -137,7 +141,7 @@ class Roleplay:
                                  "Processing…\n"
                                  ":rp_utility1: hermal Weaponry are recharged to full capacity.\n"
                                  ":rp_utility1: Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool for optimal performance.")
+                                 "Allow **60 seconds** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
@@ -149,6 +153,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Auto Field Maintenance Unit::**")
 
@@ -158,7 +166,7 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 50:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility1: Armor Integrity restored to 100%.\n"
@@ -175,10 +183,10 @@ class Roleplay:
                                  ":rp_utility1: Malfunctioned Utilities restored to 100%.\n"
                                  ":rp_utility1: Large Heat Surge Detected.\n"
                                  ":rp_utility0: Meltdown Detected.\n"
-                                 "Allow **10 minutes** for utility to cool for optimal performance.")
+                                 "Allow **10 minutes** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.green()
         elif chance > 75:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility0: Module Malfunction Detected.\n"
                                  ":rp_utility0: Armor Integrity ignored by device.\n"
@@ -187,10 +195,10 @@ class Roleplay:
                                  ":rp_utility0: Malfunctioned Utilities ignored by device.\n"
                                  ":rp_utility1: Large Heat Surge Detected.\n"
                                  ":rp_utility0: Meltdown Detected.\n"
-                                 "Allow **10 minutes** for utility to cool before triggering.")
+                                 "Allow **10 minutes** for utility to cool before triggering.```")
             embed.colour = discord.Colour.red()
         else:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  ":rp_utility0: Armor Integrity ignored by device.\n"
                                  "Processing…\n"
                                  ":rp_utility0: Armor Modifier Integrity ignored by device.\n"
@@ -203,7 +211,7 @@ class Roleplay:
                                  ":rp_utility1: Malfunctioned Utilities restored to 100%.\n"
                                  ":rp_utility1: Large Heat Surge Detected.\n"
                                  ":rp_utility0: Meltdown Detected.\n"
-                                 "Allow **10 minutes** for utility to cool for optimal performance.")
+                                 "Allow **10 minutes** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
@@ -215,6 +223,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Chaff Launcher::**")
 
@@ -224,16 +236,16 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 90:
-            embed.description = (":rp_utility1: Chaff launched successfully.\n"
+            embed.description = ("```:rp_utility1: Chaff launched successfully.\n"
                                  ":rp_utility1: Hostile Sensors are unable to track for 20 Seconds.\n"
                                  ":rp_utility1: Minor Heat Surge Detected.\n"
-                                 "Allow **30 seconds** for utility to cool for optimal performance.")
+                                 "Allow **30 seconds** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.green()
         else:
-            embed.description = (":rp_utility0: Module Malfunction Detected.\n"
+            embed.description = ("```:rp_utility0: Module Malfunction Detected.\n"
                                  ":rp_utility0: Chaff failed to launch.\n"
                                  ":rp_utility1: Minor Heat Surge Detected.\n"
-                                 "Allow **30 seconds** for utility to cool before triggering.")
+                                 "Allow **30 seconds** for utility to cool before triggering.```")
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
@@ -245,6 +257,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Environmental Layout Scanner::**")
 
@@ -254,7 +270,7 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 50:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility1: Scan completed successfully.\n"
@@ -264,10 +280,10 @@ class Roleplay:
                                  ":rp_utility1: Data Package created, ready to download to a memory drive.\n"
                                  ":rp_utility1: Information updated to any detected Visual Assistant Systems in the squad.\n"
                                  ":rp_utility1: Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool for optimal performance.")
+                                 "Allow **60 seconds** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.green()
         elif chance > 90:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility0: Module Malfunction Detected.\n"
                                  ":rp_utility0: Scan failed.\n"
@@ -276,10 +292,10 @@ class Roleplay:
                                  "Processing…\n"
                                  ":rp_utility0: Data Package failed, purging corrupted data.\n"
                                  ":rp_utility1: Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool before triggering.")
+                                 "Allow **60 seconds** for utility to cool before triggering.```")
             embed.colour = discord.Colour.red()
         else:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility1: Scan completed successfully.\n"
@@ -292,7 +308,7 @@ class Roleplay:
                                  ":rp_utility1: Data Package created, ready to download to a memory drive.\n"
                                  ":rp_utility1: Information updated to any detected Visual Assistant Systems in the squad.\n"
                                  ":rp_utility1: Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool for optimal performance.")
+                                 "Allow **60 seconds** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
@@ -304,6 +320,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Heat Sink Launcher::**")
 
@@ -313,7 +333,7 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 90:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing...\n"
                                  ":rp_utility1: All Generated Heat successfully pulled from Utilities.\n"
                                  "Processing…\n"
@@ -324,10 +344,10 @@ class Roleplay:
                                  ":rp_utility1: Heat Sink spin cycle initiated, preparing to launch.\n"
                                  "Processing…\n"
                                  "Processing…\n"
-                                 ":rp_utility1: Heat Sink launched successfully.")
+                                 ":rp_utility1: Heat Sink launched successfully.```")
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing...\n"
                                  ":rp_utility1: All Generated Heat successfully pulled from Utilities.\n"
                                  "Processing…\n"
@@ -341,7 +361,7 @@ class Roleplay:
                                  ":rp_utility0: Heat buildup exceeds Heat Sink capacity.  Preparing to Overcharge disk.\n"
                                  "WARNING: Keep clear of Heat Sink when launched;\n"
                                  ":rp_utility1: Overcharged Heat Sink launched, certain to explode on contact.\n"
-                                 "Utility ready for use.")
+                                 "Utility ready for use.```")
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
@@ -353,6 +373,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Kill Warrant Scanner::**")
 
@@ -362,7 +386,7 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 90:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
@@ -371,16 +395,16 @@ class Roleplay:
                                  ":rp_utility1: Identity Scan Completed.\n"
                                  ":rp_utility1: Information updated to any detected Visual Assistant Systems in the squad.\n"
                                  ":rp_utility1: Heat Surge Detected.\n"
-                                 "Allow **30 seconds** for utility to cool for optimal performance.")
+                                 "Allow **30 seconds** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility0: Module Malfunction Detected.\n"
                                  ":rp_utility1: Identity Scan Failed.\n"
                                  ":rp_utility1: Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool before triggering.")
+                                 "Allow **60 seconds** for utility to cool before triggering.```")
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
@@ -392,6 +416,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Holo-Me Decoy Projector::**")
 
@@ -401,20 +429,20 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 90:
-            embed.description = (":rp_utility1: 28 Decoy Clones projected successfully.\n"
+            embed.description = ("```:rp_utility1: 28 Decoy Clones projected successfully.\n"
                                  ":rp_utility1: Audio Shimmering transmitted successfully.\n"
                                  ":rp_utility1: Immune to targeting for 10 Seconds.\n"
                                  ":rp_utility1: Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+                                 "Allow **2 Minutes** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("Processing…\n"
+            embed.description = ("```Processing…\n"
                                  "Processing…\n"
                                  ":rp_utility0: Module Malfunction Detected.\n"
                                  ":rp_utility0: Decoy Clones failed to project.\n"
                                  ":rp_utility0: Audio Shimmering failed to transmit.\n"
                                  ":rp_utility1: Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool before triggering.")
+                                 "Allow **2 Minutes** for utility to cool before triggering.```")
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
@@ -426,6 +454,10 @@ class Roleplay:
         if not await can_manage_bot(ctx):
             who = None
             channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
         chance = random.randint(1, 100)
         embed = discord.Embed(title="**::Virtual Distortion Cloak::**")
 
@@ -435,19 +467,19 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 90:
-            embed.description = (":rp_utility1: 60 Corrupted Holograms projected per minute.\n"
+            embed.description = ("```:rp_utility1: 60 Corrupted Holograms projected per minute.\n"
                                  ":rp_utility1: Generating disruptive audio successfully.\n"
                                  ":rp_utility1: Immune to recognition software for ten minutes.\n"
                                  ":rp_utility1: Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+                                 "Allow **2 Minutes** for utility to cool for optimal performance.```")
             embed.colour = discord.Colour.green()
         else:
-            embed.description = (":rp_utility0: Module Malfunction Detected.\n"
+            embed.description = ("```:rp_utility0: Module Malfunction Detected.\n"
                                  ":rp_utility0: 400 Corrupted Holograms erratically projected before jamming projector orb.\n"
                                  ":rp_utility1: Disrupted audio hauntingly transmitted before overloading system memory.\n"
                                  ":rp_utility1: Failed to conceal identity, drawing attention.\n"
                                  ":rp_utility1: Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool before triggering.")
+                                 "Allow **2 Minutes** for utility to cool before triggering.```")
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
