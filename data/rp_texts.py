@@ -1,5 +1,5 @@
 hacks_pass = [
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Security Interface Readout initiated;
 Processing…
@@ -31,9 +31,9 @@ Processing…
 Processing…
 Processing…
 Security Interface Readout Complete;
-Running Action Commands;```""",
+Running Action Commands;""",
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Security Defense Override Initiated;
 Processing…
@@ -65,9 +65,9 @@ Processing…
 Data Package Creation Complete;
 Information updated to any detected Visual Assistant Systems in the squad;
 Security Defense Override Complete;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Network Cracking Initiated;
 Processing…
@@ -102,9 +102,9 @@ Processing…
 Network Defense Program Emulated;
 Information updated to any detected Visual Assistant Systems in the squad;
 Network Cracking Complete;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Mainframe Access Initiated;
 Processing…
@@ -135,9 +135,9 @@ Processing…
 Batching Command Structure for User Interface;
 Mainframe Command Structure Batched;
 Information updated to any detected Visual Assistant Systems in the squad;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Restructuring Ownership Properties Initiated;
 Processing…
@@ -172,9 +172,9 @@ Processing…
 ATTENTION: Ownership Properties Restructured;
 Ownership Transferred to User;
 Information updated to any detected Visual Assistant Systems in the squad;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Quan-Tech Network Hack Initiated;
 Quantum Data Transfer cannot be displayed; 
@@ -219,12 +219,12 @@ Processing…
 Processing…
 Data Package Complete;
 Information updated to any detected Visual Assistant Systems in the squad;
-    ```""",
+    """,
 
 ]
 
 hacks_fail = [
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Security Interface Readout initiated;
 Processing…
@@ -258,9 +258,9 @@ Processing…
 Security Interface Readout Failed;
 ACCESS TO SYSTEM DENIED;
 Terminating Process;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Security Defense Override Initiated;
 Processing…
@@ -294,9 +294,9 @@ Data Package Creation Failed;
 Security Defense Override Failed;
 ACCESS TO SYSTEM DENIED;
 Terminating Process;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Network Cracking Initiated;
 Processing…
@@ -332,9 +332,9 @@ Network Defense Program Has Initiated Lockdown;
 Network Cracking Failed;
 ACCESS TO SYSTEM DENIED;
 Terminating Process;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Mainframe Access Initiated;
 Processing…
@@ -366,9 +366,9 @@ Command Structure Cannot Be Found;
 Mainframe Command Structure Batch Failed;
 ACCESS TO SYSTEM DENIED;
 Terminating Process;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Restructuring Ownership Properties Initiated;
 Processing…
@@ -404,9 +404,9 @@ ATTENTION: Ownership Properties Failed;
 Ownership Transferred Failed;
 ACCESS TO SYSTEM DENIED;
 Terminating Process;
-    ```""",
+    """,
 
-    """```
+    """
 Encryption Cracking Unit # ******* owned by {}
 Quan-Tech Network Hack Initiated;
 Quantum Data Transfer cannot be displayed; 
@@ -452,6 +452,6 @@ Processing…
 Data Package Failed;
 ACCESS TO SYSTEM DENIED;
 Terminating Process;
-    ```""",
+    """,
 ]
 
