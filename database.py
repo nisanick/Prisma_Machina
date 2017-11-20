@@ -13,7 +13,7 @@ class Database:
     @staticmethod
     async def get_connection(loop) -> asyncpg.Connection:
         if not Database._pool:
-            Database()._set_pool(await asyncpg.create_pool(loop=loop, **DATABASE))
+            Database()._set_pool(await asyncpg.create_pool(loop=loop, max_size=50, **DATABASE))
         return await Database._pool.acquire()
 
     @staticmethod
