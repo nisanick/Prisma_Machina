@@ -19,7 +19,7 @@ class Database:
     @staticmethod
     async def init_connection(loop):
         if not Database._pool:
-            Database()._set_pool(await asyncpg.create_pool(loop=loop, **DATABASE))
+            Database()._set_pool(await asyncpg.create_pool(loop=loop, max_size=50, **DATABASE))
 
     @staticmethod
     async def close_connection(con):
