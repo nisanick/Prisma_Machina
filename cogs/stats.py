@@ -13,7 +13,7 @@ class Stats:
 
     @commands.command(aliases=['statistics', 'stat', 'stats'])
     async def statistic(self, ctx: commands.Context, *, user=None):
-        """Shows statiostics of messages and reactions you or specified member sent. Use full name or tag."""
+        """Shows statistics of messages and reactions you or specified member sent. Use full name or tag."""
         if user is None:
             user = ctx.author
         else:

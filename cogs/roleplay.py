@@ -149,7 +149,7 @@ class Roleplay:
     @_rp.command(name='afmu')
     async def _afmu(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Activates Auto Field Maintenance Unit
+        Activates Auto Field Maintenance Unit.
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -219,7 +219,7 @@ class Roleplay:
     @_rp.command(name='chaff')
     async def _chaff(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Activates Chaff Launcher
+        Activates Chaff Launcher.
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -253,7 +253,7 @@ class Roleplay:
     @_rp.command(name='els')
     async def _els(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Activates Environmental Layout Scanner
+        Activates Environmental Layout Scanner.
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -316,7 +316,7 @@ class Roleplay:
     @_rp.command(name='hsl')
     async def _hsl(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Activates Heat Sink Launcher
+        Activates Heat Sink Launcher.
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -369,7 +369,7 @@ class Roleplay:
     @_rp.command(name='kws')
     async def _kws(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Activates Kill Warrant Scanner
+        Activates Kill Warrant Scanner.
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -412,7 +412,7 @@ class Roleplay:
     @_rp.command(name='hdp')
     async def _hdp(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Activates Holo-Me Decoy Projector
+        Activates Holo-Me Decoy Projector.
         """
         if not await can_manage_bot(ctx):
             who = None
@@ -450,7 +450,7 @@ class Roleplay:
     @_rp.command(name='vdc')
     async def _vdc(self, ctx, who=None, channel: discord.TextChannel = None):
         """
-        Activates Virtual Distortion Cloak
+        Activates Virtual Distortion Cloak.
         """
         if not await can_manage_bot(ctx):
             who = None

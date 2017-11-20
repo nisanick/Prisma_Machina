@@ -9,8 +9,11 @@ class Nasa:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(hidden=True)
+    @commands.command()
     async def apod(self, ctx):
+        """
+        Shows Astronomical Picture of the Day straight from NASA
+        """
         response = await Web.get_response("https://api.nasa.gov/planetary/apod?api_key={}".format(config.NASA_API))
         embed = discord.Embed(title='Astronomy Picture of the Day', description='**{}** | {}'.format(response["title"],response["date"]))
         embed.add_field(name='Explanation', value=response['explanation'], inline=False)

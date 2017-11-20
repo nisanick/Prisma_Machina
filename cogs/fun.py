@@ -11,8 +11,11 @@ class Fun:
         self.bot = bot
         self.limit = default_chance
 
-    @commands.command(hidden=True)
+    @commands.command()
     async def awesomenessof(self, ctx, who):
+        """
+        Tells you how awesome you are in comparison to Wisewolf.
+        """
         options = [
             'is Exceeding expectations',
             'Went down by 1 point since last time',
