@@ -24,7 +24,7 @@ class Roleplay:
             await ctx.send("Subcommand required!")
 
     @_rp.command(name="hack")
-    async def _hack(self, ctx, difficulty: int, who=None, channel: discord.TextChannel=None):
+    async def _hack(self, ctx, difficulty: int, who=None, channel: discord.TextChannel = None):
         """
         Initiates hack with specified difficulty.
         """
@@ -34,18 +34,23 @@ class Roleplay:
             difficulty = abs(difficulty)
 
         if difficulty > 0:
-            limit = 50
+            limit = [
+                10, 25, 40, 50, 70, 75,
+            ]
         else:
-            limit = -1
+            limit = [
+                -1, -1, -1, -1, -1, -1,
+            ]
 
         who = who or ctx.message.author
         channel = channel or ctx.channel
 
         embed = discord.Embed(title="**::Hacking sequence initiated for Security Level {}::**".format(abs(difficulty)),
-                              description=("<:rp_utility1:371816529458626570> Encryption Cracking Unit paired with device.\n"
-                                           "<:rp_utility1:371816529458626570> Emulation Program Functional.\n"
-                                           "<:rp_utility1:371816529458626570> Data Package Compilation Program Functional.\n"
-                                           "<:rp_utility1:371816529458626570> Virus Defense Program Functional."),
+                              description=(
+                              "<:rp_utility1:371816529458626570> Encryption Cracking Unit paired with device.\n"
+                              "<:rp_utility1:371816529458626570> Emulation Program Functional.\n"
+                              "<:rp_utility1:371816529458626570> Data Package Compilation Program Functional.\n"
+                              "<:rp_utility1:371816529458626570> Virus Defense Program Functional."),
                               colour=discord.Colour.orange())
         if isinstance(who, discord.Member):
             embed.set_author(name=who.nick or who.display_name, icon_url=who.avatar_url)
@@ -61,21 +66,24 @@ class Roleplay:
 
             prob = random.randint(0, 100)
 
-            if prob > limit:
-                embed.add_field(name="**[Core Process {} of {}]**".format(i+1, abs(difficulty)), value=hacks_pass[i].format(embed.author.name), inline=False)
+            if prob > limit[i]:
+                embed.add_field(name="**[Core Process {} of {}]**".format(i + 1, abs(difficulty)),
+                                value=hacks_pass[i].format(embed.author.name), inline=False)
                 await message.edit(embed=embed)
             else:
-                embed.add_field(name="**[Core Process {} of {}]**".format(i+1, abs(difficulty)), value=hacks_fail[i].format(embed.author.name), inline=False)
+                embed.add_field(name="**[Core Process {} of {}]**".format(i + 1, abs(difficulty)),
+                                value=hacks_fail[i].format(embed.author.name), inline=False)
                 await message.edit(embed=embed)
                 await asyncio.sleep(self.delta)
                 embed.colour = discord.Colour.red()
                 embed.add_field(name="**::Hacking sequence failed::**",
-                                value=("<:rp_utility0:371816528326164490> Encryption Cracking Unit disconnected from device.\n"
-                                       "<:rp_utility0:371816528326164490> Emulation Program was locked out of the system.\n"
-                                       "<:rp_utility0:371816528326164490> Data Package Failed, purging corrupted data.\n"
-                                       "<:rp_utility1:371816529458626570> All hostile viruses quarantined and purged.\n"
-                                       "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                       "Allow **30 seconds** for utility to cool for optimal performance."))
+                                value=(
+                                "<:rp_utility0:371816528326164490> Encryption Cracking Unit disconnected from device.\n"
+                                "<:rp_utility0:371816528326164490> Emulation Program was locked out of the system.\n"
+                                "<:rp_utility0:371816528326164490> Data Package Failed, purging corrupted data.\n"
+                                "<:rp_utility1:371816529458626570> All hostile viruses quarantined and purged.\n"
+                                "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
+                                "Allow **30 seconds** for utility to cool for optimal performance."))
                 await message.edit(embed=embed)
                 return
 
@@ -487,4 +495,3 @@ class Roleplay:
 
 def setup(bot: commands.Bot):
     bot.add_cog(Roleplay(bot))
-
