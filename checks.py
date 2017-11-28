@@ -11,11 +11,11 @@ async def can_manage_bot(ctx):
 
 
 async def in_admin_channel(ctx):
-    return ctx.channel.id == int(config.ADMINISTRATION_CHANNEL)
+    return ctx.channel.id in config.ADMINISTRATION_CHANNELS
 
 
 async def in_say_channel(ctx):
-    return ctx.channel.id in [int(config.ADMINISTRATION_CHANNEL), 374691520055345162]
+    return ctx.channel.id in [*config.ADMINISTRATION_CHANNELS, 374691520055345162]
 
 
 def react_check(self, reaction, user):

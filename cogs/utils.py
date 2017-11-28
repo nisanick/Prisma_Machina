@@ -44,10 +44,12 @@ class Utils:
         """Sends your feedback to High Council"""
         embed = discord.Embed(title="Feedback", description=message, colour=discord.Colour.green(), timestamp=datetime.utcnow())
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
-        channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
-        # channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
-        await channel.send("<@163037317278203908>", embed=embed)
-        # await channel.send("", embed=embed)
+        for channel_id in config.ADMINISTRATION_CHANNELS:
+            # channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
+            # channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
+            await ctx.bot.get_channel(channel_id).send(message, embed=embed)
+            # await channel.send("<@163037317278203908>", embed=embed)
+            # await channel.send("", embed=embed)
         await ctx.message.add_reaction('✅')
 
     @commands.command()
@@ -90,6 +92,11 @@ class Utils:
         await ctx.send(embed=embed)
 
     async def on_member_join(self, member: discord.Member):
+        try:
+            if member.display_name.__contains__('💎'):
+                return
+        except Exception:
+            print("nope")
         channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
         await channel.send(config.WELCOME.format(member.mention))
         mention = ""

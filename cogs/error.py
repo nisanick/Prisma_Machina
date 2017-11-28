@@ -69,7 +69,8 @@ class CommandErrorHandler:
         embed.add_field(name='Location', value='Channel: {0.channel}'.format(ctx))
         embed.add_field(name='Message', value=ctx.message.content)
 
-        await ctx.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).send(message, embed=embed)
+        for channel in config.ADMINISTRATION_CHANNELS:
+            await ctx.bot.get_channel(channel).send(message, embed=embed)
 
 
 def setup(bot):
