@@ -34,6 +34,7 @@ class Utils:
 
         total = 0
         result = ''
+        first = True
         for add_rolls in left.split('+'):
             sub_total = 0
             iterations = -1
@@ -49,16 +50,25 @@ class Utils:
 
                     rolled = 0
                     for i in range(0, int(dices)):
-                        rolled += random.randint(1, int(sides))
+                        if not first:
+                            result += ', '
+                        first = False
+                        temp = random.randint(1, int(sides))
+                        result += str(temp)
+                        rolled += temp
                 elif self.isNumber(sub):
                     rolled = int(sub)
+                    if not first:
+                        result += ', '
+                    first = False
+                    result += str(rolled)
                 if iterations == 0:
                     sub_total += rolled
                 else:
                     sub_total -= rolled
             total += sub_total
 
-        embed = discord.Embed(title=f'Roll {roll_string}', description=total, color=discord.Color.orange())
+        embed = discord.Embed(title=f'Roll {roll_string}', description=f"{total} \n[{result}]", color=discord.Color.orange())
         embed.set_author(name=ctx.message.author.nick or ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
         if mod is None:
             await ctx.send('', embed=embed)
@@ -71,10 +81,10 @@ class Utils:
                 diff = total > int(right)
 
             if diff:
-                embed.description = f'Pass ({total})'
+                embed.description = f'Pass ({total}) \n[{result}]'
                 embed.colour = discord.Color.green()
             else:
-                embed.description = f'Fail ({total})'
+                embed.description = f'Fail ({total}) \n[{result}]'
                 embed.colour = discord.Color.red()
 
             await ctx.send('', embed=embed)
