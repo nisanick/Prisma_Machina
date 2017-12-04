@@ -34,21 +34,29 @@ class Utils:
 
         total = 0
         result = ''
-        for sub in left.split('+'):
-            if sub.__contains__('d'):
-                if sub.startswith('d'):
-                    dices = 1
-                    sides = sub.split('d')[1]
-                else:
-                    dices = sub.split('d')[0]
-                    sides = sub.split('d')[1]
+        for add_rolls in left.split('+'):
+            sub_total = 0
+            iterations = -1
+            for sub in add_rolls.split('-'):
+                iterations += 1
+                if sub.lower().__contains__('d'):
+                    if sub.startswith('d'):
+                        dices = 1
+                        sides = sub.split('d')[1]
+                    else:
+                        dices = sub.split('d')[0]
+                        sides = sub.split('d')[1]
 
-                for i in range(0, int(dices)):
-                    rolled = random.randint(1, int(sides))
-                    total += rolled
-            elif self.isNumber(sub):
-                result += sub + ' +'
-                total += int(sub)
+                    rolled = 0
+                    for i in range(0, int(dices)):
+                        rolled += random.randint(1, int(sides))
+                elif self.isNumber(sub):
+                    rolled = int(sub)
+                if iterations == 0:
+                    sub_total += rolled
+                else:
+                    sub_total -= rolled
+            total += sub_total
 
         embed = discord.Embed(title=f'Roll {roll_string}', description=total, color=discord.Color.orange())
         embed.set_author(name=ctx.message.author.nick or ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
