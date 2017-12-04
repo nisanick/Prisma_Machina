@@ -17,6 +17,69 @@ class Utils:
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(name='roll')
+    async def _roll(self, ctx, *, roll_string: str):
+        left = roll_string.strip(" ")
+        right = None
+        mod = None
+
+        if roll_string.__contains__('<'):
+            left = roll_string.split('<')[0].strip(" ")
+            right = roll_string.split('<')[1].strip(" ")
+            mod = '<'
+        elif roll_string.__contains__('>'):
+            left = roll_string.split('>')[0].strip(" ")
+            right = roll_string.split('>')[1].strip(" ")
+            mod = '>'
+
+        total = 0
+        result = ''
+        for sub in left.split('+'):
+            if sub.__contains__('d'):
+                if sub.startswith('d'):
+                    dices = 1
+                    sides = sub.split('d')[1]
+                else:
+                    dices = sub.split('d')[0]
+                    sides = sub.split('d')[1]
+
+                for i in range(0, int(dices)):
+                    rolled = random.randint(1, int(sides))
+                    total += rolled
+            elif self.isNumber(sub):
+                result += sub + ' +'
+                total += int(sub)
+
+        embed = discord.Embed(title=f'Roll {roll_string}', description=total, color=discord.Color.orange())
+        embed.set_author(name=ctx.message.author.nick or ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
+        if mod is None:
+            await ctx.send('', embed=embed)
+            if not isinstance(ctx.channel, discord.DMChannel):
+                await ctx.message.delete()
+        else:
+            if mod is '<':
+                diff = total < int(right)
+            else:
+                diff = total > int(right)
+
+            if diff:
+                embed.description = f'Pass ({total})'
+                embed.colour = discord.Color.green()
+            else:
+                embed.description = f'Fail ({total})'
+                embed.colour = discord.Color.red()
+
+            await ctx.send('', embed=embed)
+            if not isinstance(ctx.channel, discord.DMChannel):
+                await ctx.message.delete()
+
+    def isNumber(self, tested):
+        try:
+            int(tested)
+            return True
+        except ValueError:
+            return False
+
     @commands.command(name='help')
     async def _help(self, ctx, *, command: str = None):
         # return
