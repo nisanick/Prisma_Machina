@@ -4,6 +4,7 @@ import random
 from web import Web
 from data.links import donation_link
 import database
+import config
 
 default_chance = 600
 
@@ -119,6 +120,8 @@ class Fun:
             return;
 
         if (self.duck_message is None or self.last_duck > 150) and random.randint(1, 1000) > 800:
+            if message.content.startswith(tuple(config.PREFIX)):
+                return
             self.duck_message = message
             self.duck_shots = 0
             self.users = []
