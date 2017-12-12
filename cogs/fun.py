@@ -118,7 +118,7 @@ class Fun:
         if message.channel.name.__contains__('rp-'):
             return;
 
-        if (self.duck_message is None or self.last_duck > 150) and random.randint(1, 1000) > 0:
+        if (self.duck_message is None or self.last_duck > 150) and random.randint(1, 1000) > 800:
             self.duck_message = message
             self.duck_shots = 0
             self.users = []
