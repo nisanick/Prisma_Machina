@@ -28,7 +28,7 @@ class Stats:
 
         limit = 6
         db = await database.Database.get_connection(self.bot.loop)
-        user_info = "SELECT message_count, reaction_count, special FROM users WHERE user_id = $1"
+        user_info = "SELECT message_count, reaction_count, special, ducks FROM users WHERE user_id = $1"
         words_used = ("SELECT words.word, usage_count, word_count.last_use FROM word_count "
                       "JOIN words ON word_count.word = words.word AND words.excluded = FALSE "
                       "WHERE user_id = $1 ORDER BY usage_count DESC LIMIT $2")
@@ -39,12 +39,13 @@ class Stats:
             user_id = user.id
             embed = discord.Embed(colour=discord.Colour(0xb85f98))
             name = user.name
+            footer = ""
             if isinstance(user, discord.Member):
                 name = user.nick
             embed.set_author(icon_url=user.avatar_url, name=name or user.name)
-            message_count, reaction_count, special = await db.fetchrow(user_info, str(user.id))
+            message_count, reaction_count, special, ducks = await db.fetchrow(user_info, str(user.id))
             if user_id == 186829544764866560:
-                embed.set_footer(text="You said 'By Achenar' {} times.".format(special))
+                footer += f"You said 'By Achenar' {special} times. "
             embed.add_field(name="Message statistics", inline=False,
                             value="You sent {} messages. Top used words:".format(message_count))
             async for (word, count, last_use) in db.cursor(words_used, *(str(user_id), limit)):
@@ -60,6 +61,8 @@ class Stats:
                     reaction = "<:{}:{}>".format(emoji.name, emoji.id)
                 embed.add_field(name=emoji or reaction, inline=True, value="{0:4} time(s)\nLast use: {1}"
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
+            embed.timestamp = user.joined_at
+            embed.set_footer(text=f"{footer}{ducks} ducks shot. Joined at ")
             await ctx.send(embed=embed)
             if not isinstance(ctx.channel, discord.DMChannel):
                 await ctx.message.delete()

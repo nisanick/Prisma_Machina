@@ -81,7 +81,7 @@ class Parser:
             return
         what = message.content
         what = what.replace("\n", " ")
-        if message.author.id is 186829544764866560:
+        if message.author.id == 186829544764866560:
             await self.techeron_check(what)
         what = what.split(" ")
         await self.__insert(what, message.author, message.created_at)
@@ -146,14 +146,12 @@ class Parser:
         await self.__delete_reaction(reaction, user)
 
     async def techeron_check(self, message):
-        text = "by achenar"
-        if not message.lower().__contains__(text):
-            return
-        insert = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET special = users.special + 1"
-        db = await database.Database.get_connection(self.bot.loop)
-        async with db.transaction():
-            await db.execute(insert, str(186829544764866560))
-        await database.Database.close_connection(db)
+        if message.lower().__contains__('by') and message.lower().__contains__('achenar'):
+            insert = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET special = users.special + 1"
+            db = await database.Database.get_connection(self.bot.loop)
+            async with db.transaction():
+                await db.execute(insert, str(186829544764866560))
+            await database.Database.close_connection(db)
 
     async def __insert(self, what, author: discord.Member, when: datetime, history=False):
         db = await database.Database.get_connection(self.bot.loop)
