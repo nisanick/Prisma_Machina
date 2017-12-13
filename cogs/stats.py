@@ -61,7 +61,8 @@ class Stats:
                     reaction = "<:{}:{}>".format(emoji.name, emoji.id)
                 embed.add_field(name=emoji or reaction, inline=True, value="{0:4} time(s)\nLast use: {1}"
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
-            embed.timestamp = user.joined_at
+            if isinstance(user, discord.Member):
+                embed.timestamp = user.joined_at
             embed.set_footer(text=f"{footer}{ducks} ducks shot. Joined at ")
             await ctx.send(embed=embed)
             if not isinstance(ctx.channel, discord.DMChannel):

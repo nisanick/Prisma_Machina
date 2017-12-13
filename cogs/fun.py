@@ -41,7 +41,7 @@ class Fun:
             await ctx.send("Awesomeness of Wisewolf {}".format(random.choice(options)))
         elif member.id == 186829544764866560:
             await ctx.send("BY ACHENAR... you compared to almighty Wisewolf? Please")
-        elif member.id == 152527690291871745:
+        elif member.id == 351706853153046549:
             await ctx.send("[REDACTED BY ADMINISTRATION - Clasified information]")
         elif member.id == 184799127807328258:
             await ctx.send(
