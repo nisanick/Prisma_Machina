@@ -134,7 +134,7 @@ class Utils:
         for channel_id in config.ADMINISTRATION_CHANNELS:
             # channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
             # channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
-            await ctx.bot.get_channel(channel_id).send(message, embed=embed)
+            await ctx.bot.get_channel(channel_id).send("", embed=embed)
             # await channel.send("<@163037317278203908>", embed=embed)
             # await channel.send("", embed=embed)
         await ctx.message.add_reaction('✅')
