@@ -120,7 +120,7 @@ class Fun:
         if message.channel.name.__contains__('rp-'):
             return;
 
-        if self.last_duck > 400 or random.randint(1, 1000) > 900:
+        if self.last_duck > 400 or (self.last_duck > 20 and random.randint(1, 1000) > 950):
             if message.content.startswith(tuple(config.PREFIX)):
                 return
             self.duck_message = message
