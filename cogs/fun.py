@@ -5,6 +5,7 @@ from web import Web
 from data.links import donation_link
 import database
 import config
+from datetime import datetime
 
 default_chance = 600
 
@@ -119,7 +120,7 @@ class Fun:
         if message.channel.name.__contains__('rp-'):
             return;
 
-        if (self.duck_message is None or self.last_duck > 150) and random.randint(1, 1000) > 800:
+        if self.last_duck > 400 or random.randint(1, 1000) > 00:
             if message.content.startswith(tuple(config.PREFIX)):
                 return
             self.duck_message = message
@@ -138,25 +139,25 @@ class Fun:
         if reaction.emoji == '🔫' and reaction.message == self.duck_message:
             self.users.append(user.id)
             self.duck_shots += 1
-            if self.duck_shots <= 3:
-                amount = 1
-                if self.duck_shots == 1:
-                    amount = 10
-                values = {
-                    'giver': 294171600478142466,
-                    'receiver': user.id,
-                    'amount': amount
-                }
+            amount = 1
+            if self.duck_shots == 1:
+                amount = 5
 
-                response = await Web.get_response(donation_link, values)
+            if self.duck_message.created_at.timestamp() + 30 > datetime.utcnow().timestamp():
+                amount += 5
+            values = {
+                'giver': 294171600478142466,
+                'receiver': user.id,
+                'amount': amount
+            }
 
-                insert = "INSERT INTO users (user_id, message_count, reaction_count, special, ducks) VALUES ($1, 0, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET ducks = users.ducks + 1"
-                db = await database.Database.get_connection(self.bot.loop)
-                async with db.transaction():
-                    await db.execute(insert, str(user.id))
-                await database.Database.close_connection(db)
-            else:
-                self.duck_message = None
+            await Web.get_response(donation_link, values)
+
+            insert = "INSERT INTO users (user_id, message_count, reaction_count, special, ducks) VALUES ($1, 0, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET ducks = users.ducks + 1"
+            db = await database.Database.get_connection(self.bot.loop)
+            async with db.transaction():
+                await db.execute(insert, str(user.id))
+            await database.Database.close_connection(db)
 
 
 def setup(bot: commands.Bot):
