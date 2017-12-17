@@ -120,7 +120,7 @@ class Fun:
         if message.channel.name.__contains__('rp-'):
             return;
 
-        if self.last_duck > 400 or (self.last_duck > 20 and random.randint(1, 1000) > 950):
+        if self.last_duck > 400 or (self.last_duck > 20 and random.randint(1, 1000) > 980):
             if message.content.startswith(tuple(config.PREFIX)):
                 return
             self.duck_message = message
@@ -141,10 +141,10 @@ class Fun:
             self.duck_shots += 1
             amount = 1
             if self.duck_shots == 1:
-                amount = 5
+                amount = 6
 
-            if self.duck_message.created_at.timestamp() + 30 > datetime.utcnow().timestamp():
-                amount += 5
+            if self.duck_message.created_at.timestamp() + 15 > datetime.utcnow().timestamp():
+                amount += 4
             values = {
                 'giver': 294171600478142466,
                 'receiver': user.id,
