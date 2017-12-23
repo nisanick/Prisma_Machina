@@ -145,7 +145,11 @@ class Fun:
             return
         if user.id in self.users:
             return
-        if reaction.emoji == '🔫' and reaction.message == self.duck_message:
+        hunt = '🔫'
+        if datetime.strptime(f'24.12.{datetime.today().year}', '%d.%m.%Y') < datetime.today() < datetime.strptime(
+                f'27.12.{datetime.today().year}', '%d.%m.%Y'):
+            hunt = '🎁'
+        if reaction.emoji == hunt and reaction.message == self.duck_message:
             self.users.append(user.id)
             self.duck_shots += 1
             amount = 1
