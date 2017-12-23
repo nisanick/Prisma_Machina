@@ -129,7 +129,7 @@ class Fun:
                 return
             self.duck_message = message
             self.duck_shots = 0
-            self.users = []
+            self.users = [294171600478142466]
             self.last_duck = 0
             reaction = '🦆'
             if datetime.strptime(f'24.12.{datetime.today().year}', '%d.%m.%Y') < datetime.today() < datetime.strptime(
