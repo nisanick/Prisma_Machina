@@ -117,8 +117,8 @@ class Fun:
         else:
             self.limit = self.limit - 10
 
-        if number > 700 and datetime.strptime(f'24.12.{datetime.today().year}', '%d.%m.%Y') < datetime.today() < datetime.strptime(
-                    f'27.12.{datetime.today().year}', '%d.%m.%Y'):
+        if number > 00 and datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+                    f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
             await message.add_reaction(random.choice(['⛄', '❄️', '🌟', '🍪', '🎅', '🤶', '🎄', '🔔', '🎶']))
 
         if message.channel.name.__contains__('rp-'):
@@ -132,8 +132,8 @@ class Fun:
             self.users = [294171600478142466]
             self.last_duck = 0
             reaction = '🦆'
-            if datetime.strptime(f'24.12.{datetime.today().year}', '%d.%m.%Y') < datetime.today() < datetime.strptime(
-                    f'27.12.{datetime.today().year}', '%d.%m.%Y'):
+            if datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+                    f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
                 reaction = '🎁'
 
             await self.duck_message.add_reaction(reaction)
@@ -146,8 +146,8 @@ class Fun:
         if user.id in self.users:
             return
         hunt = '🔫'
-        if datetime.strptime(f'24.12.{datetime.today().year}', '%d.%m.%Y') < datetime.today() < datetime.strptime(
-                f'27.12.{datetime.today().year}', '%d.%m.%Y'):
+        if datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+                f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
             hunt = '🎁'
         if reaction.emoji == hunt and reaction.message == self.duck_message:
             self.users.append(user.id)
