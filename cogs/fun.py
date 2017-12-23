@@ -117,7 +117,7 @@ class Fun:
         else:
             self.limit = self.limit - 10
 
-        if number > 00 and datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+        if number > 700 and datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
                     f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
             await message.add_reaction(random.choice(['⛄', '❄️', '🌟', '🍪', '🎅', '🤶', '🎄', '🔔', '🎶']))
 
