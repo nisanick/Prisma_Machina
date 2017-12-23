@@ -117,17 +117,26 @@ class Fun:
         else:
             self.limit = self.limit - 10
 
-        if message.channel.name.__contains__('rp-'):
-            return;
+        if number > 700 and datetime.strptime(f'24.12.{datetime.today().year}', '%d.%m.%Y') < datetime.today() < datetime.strptime(
+                    f'27.12.{datetime.today().year}', '%d.%m.%Y'):
+            await message.add_reaction(random.choice(['⛄', '❄️', '🌟', '🍪', '🎅', '🤶', '🎄', '🔔', '🎶']))
 
-        if self.last_duck > 400 or (self.last_duck > 20 and random.randint(1, 1000) > 980):
+        if message.channel.name.__contains__('rp-'):
+            return
+
+        if self.last_duck > 500 or (self.last_duck > 40 and random.randint(1, 1000) > 985):
             if message.content.startswith(tuple(config.PREFIX)):
                 return
             self.duck_message = message
             self.duck_shots = 0
             self.users = []
             self.last_duck = 0
-            await self.duck_message.add_reaction('🦆')
+            reaction = '🦆'
+            if datetime.strptime(f'24.12.{datetime.today().year}', '%d.%m.%Y') < datetime.today() < datetime.strptime(
+                    f'27.12.{datetime.today().year}', '%d.%m.%Y'):
+                reaction = '🎁'
+
+            await self.duck_message.add_reaction(reaction)
         else:
             self.last_duck += 1
 
