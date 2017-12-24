@@ -6,6 +6,7 @@ from data.links import donation_link
 import database
 import config
 from datetime import datetime
+import asyncio
 
 default_chance = 600
 
@@ -136,6 +137,7 @@ class Fun:
                     f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
                 reaction = '🎁'
 
+            await asyncio.sleep(random.randint(1, 60))
             await self.duck_message.add_reaction(reaction)
         else:
             self.last_duck += 1
