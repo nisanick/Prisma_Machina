@@ -171,7 +171,7 @@ class Utils:
     @commands.command()
     async def time(self, ctx):
         """Shows current Galactic Time"""
-        year = datetime.now().timetuple().tm_year
+        year = datetime.utcnow().timetuple().tm_year
         now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")
         embed = discord.Embed(title="Current Galactic Time", description=now, color=discord.Colour.dark_orange())
         if not isinstance(ctx.channel, discord.DMChannel):
