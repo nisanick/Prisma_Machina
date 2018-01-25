@@ -24,7 +24,7 @@ class CommandErrorHandler:
         ctx   : Context
         error : Exception"""
 
-        to_delete = [ctx.message]
+        to_delete = []
 
         error = getattr(error, 'original', error)
 
@@ -37,6 +37,8 @@ class CommandErrorHandler:
             return
         else:
             message = "<@163037317278203908>"
+
+        to_delete.append(ctx.message)
 
         handler = {
             discord.Forbidden: '**I do not have the required permissions to run this command.**',
