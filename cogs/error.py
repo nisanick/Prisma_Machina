@@ -50,7 +50,7 @@ class CommandErrorHandler:
         try:
             message = handler[type(error)]
         except KeyError:
-            to_delete.append(await ctx.send('❌ Your command couldn\'t be processed. Please reffer to [p]help command. ❌'))
+            to_delete.append(await ctx.send('❌ Your command couldn\'t be processed. Please refer to [p]help command. ❌'))
         else:
             to_delete.append(await ctx.send(message))
 

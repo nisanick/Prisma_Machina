@@ -44,7 +44,7 @@ class Fun:
         elif member.id == 186829544764866560:
             await ctx.send("BY ACHENAR... you compared to almighty Wisewolf? Please")
         elif member.id == 351706853153046549:
-            await ctx.send("[REDACTED BY ADMINISTRATION - Clasified information]")
+            await ctx.send("[REDACTED BY ADMINISTRATION - Classified information]")
         elif member.id == 184799127807328258:
             await ctx.send(
                 "Her awesomeness will be greatly missed in our hearts. May her soul find its place amongst the eagles of the Empire.")
