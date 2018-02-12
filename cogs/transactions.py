@@ -19,7 +19,7 @@ class Transactions:
         """Gives {amount} of diamonds from your account to whoever you choose. Requires linked accounts!"""
         await self.transaction(ctx, amount, ctx.author, who)
 
-    @commands.command(hidden=True, alieses=['award', 'aw', 'reward'])
+    @commands.command(hidden=True, name='award', alieses=['aw', 'reward'])
     @commands.check(checks.can_manage_bot)
     async def _award(self, ctx: commands.Context, amount, *, who: discord.Member):
         """Gives {amount} of diamonds from bot account to whoever you choose. Requires linked accounts and Admin rights!"""
