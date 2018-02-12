@@ -16,9 +16,7 @@ class Nasa:
         """
         response = await Web.get_response("https://api.nasa.gov/planetary/apod?api_key={}".format(config.NASA_API))
         embed = discord.Embed(title='Astronomy Picture of the Day', description='**{}** | {}'.format(response["title"], response["date"]))
-        raw_response = response['explanation']
-        await ctx.send(raw_response)
-        embed.add_field(name='Explanation', value=raw_response[0, 2000], inline=False)
+        embed.add_field(name='Explanation', value=response['explanation'][0: 2000], inline=False)
         embed.add_field(name='HD Download', value='[Click here!]({})'.format(response["hdurl"]))
         embed.set_image(url=response['url'])
         embed.timestamp = datetime.utcnow()
