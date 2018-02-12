@@ -56,7 +56,7 @@ class Utils:
                         temp = random.randint(1, int(sides))
                         result += str(temp)
                         rolled += temp
-                elif self.isNumber(sub):
+                elif self.is_number(sub):
                     rolled = int(sub)
                     if not first:
                         result += ', '
@@ -96,7 +96,7 @@ class Utils:
             if not isinstance(ctx.channel, discord.DMChannel):
                 await ctx.message.delete()
 
-    def isNumber(self, tested):
+    def is_number(self, tested):
         try:
             int(tested)
             return True
