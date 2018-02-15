@@ -191,7 +191,7 @@ class Parser:
                         when,
                     )
                 except asyncpg.StringDataRightTruncationError as err:
-                    print(word + " " + err)
+                    print(word + " " + str(err))
                 await db.execute(insert_count, *count_values)
         await database.Database.close_connection(db)
 
