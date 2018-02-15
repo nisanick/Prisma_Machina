@@ -190,9 +190,10 @@ class Parser:
                         str(author.id),
                         when,
                     )
+                    await db.execute(insert_count, *count_values)
                 except asyncpg.StringDataRightTruncationError as err:
                     print(word + " " + str(err))
-                await db.execute(insert_count, *count_values)
+
         await database.Database.close_connection(db)
 
     async def __delete(self, what, author: discord.Member):
