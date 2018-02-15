@@ -71,7 +71,7 @@ class Utils:
         if not result.__contains__(','):
             result = ''
         else:
-            result = f'[{result}]'
+            result = '[{}]'.format(result)
 
         embed = discord.Embed(title='Roll {}'.format(roll_string), description="{} \n{}".format(total,result), color=discord.Color.orange())
         embed.set_author(name=ctx.message.author.nick or ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
