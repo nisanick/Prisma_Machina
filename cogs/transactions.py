@@ -19,6 +19,16 @@ class Transactions:
         """Gives {amount} of diamonds from your account to whoever you choose. Requires linked accounts!"""
         await self.transaction(ctx, amount, ctx.author, who)
 
+    @commands.command(hidden=True, name='award', alieses=['aw', 'reward'])
+    @commands.check(checks.can_manage_bot)
+    async def _award(self, ctx: commands.Context, amount, *, who: discord.Member):
+        """Gives {amount} of diamonds from bot account to whoever you choose. Requires linked accounts and Admin rights!"""
+        try:
+            member = await commands.MemberConverter().convert(ctx, '294171600478142466')
+        except commands.CommandError:
+            member = ctx.author
+        await self.transaction(ctx, amount, member, who)
+
     @commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
     async def take(self, ctx, amount, *, who: discord.Member):
