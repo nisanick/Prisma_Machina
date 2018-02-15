@@ -63,7 +63,7 @@ class Stats:
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
             if isinstance(user, discord.Member):
                 embed.timestamp = user.joined_at
-            embed.set_footer(text=f"{footer}{ducks} ducks shot. Joined at ")
+            embed.set_footer(text="{}{} ducks shot. Joined at ".format(footer, ducks))
             await ctx.send(embed=embed)
             if not isinstance(ctx.channel, discord.DMChannel):
                 await ctx.message.delete()
