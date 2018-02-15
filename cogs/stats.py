@@ -45,7 +45,7 @@ class Stats:
             embed.set_author(icon_url=user.avatar_url, name=name or user.name)
             message_count, reaction_count, special, ducks = await db.fetchrow(user_info, str(user.id))
             if user_id == 186829544764866560:
-                footer += f"You said 'By Achenar' {special} times. "
+                footer += "You said 'By Achenar' {} times. ".format(special)
             embed.add_field(name="Message statistics", inline=False,
                             value="You sent {} messages. Top used words:".format(message_count))
             async for (word, count, last_use) in db.cursor(words_used, *(str(user_id), limit)):

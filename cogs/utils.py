@@ -73,7 +73,7 @@ class Utils:
         else:
             result = f'[{result}]'
 
-        embed = discord.Embed(title=f'Roll {roll_string}', description=f"{total} \n{result}", color=discord.Color.orange())
+        embed = discord.Embed(title='Roll {}'.format(roll_string), description="{} \n{}".format(total,result), color=discord.Color.orange())
         embed.set_author(name=ctx.message.author.nick or ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
         if mod is None:
             await ctx.send('', embed=embed)
@@ -86,10 +86,10 @@ class Utils:
                 diff = total > int(right)
 
             if diff:
-                embed.description = f'Pass ({total}) \n{result}'
+                embed.description = 'Pass ({}) \n{}'.format(total, result)
                 embed.colour = discord.Color.green()
             else:
-                embed.description = f'Fail ({total}) \n{result}'
+                embed.description = 'Fail ({}) \n{}'.format(total, result)
                 embed.colour = discord.Color.red()
 
             await ctx.send('', embed=embed)

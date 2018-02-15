@@ -47,10 +47,10 @@ class Roleplay:
 
         embed = discord.Embed(title="**::Hacking sequence initiated for Security Level {}::**".format(abs(difficulty)),
                               description=(
-                              "<:rp_utility1:371816529458626570> Encryption Cracking Unit paired with device.\n"
-                              "<:rp_utility1:371816529458626570> Emulation Program Functional.\n"
-                              "<:rp_utility1:371816529458626570> Data Package Compilation Program Functional.\n"
-                              "<:rp_utility1:371816529458626570> Virus Defense Program Functional."),
+                                  "<:rp_utility1:371816529458626570> Encryption Cracking Unit paired with device.\n"
+                                  "<:rp_utility1:371816529458626570> Emulation Program Functional.\n"
+                                  "<:rp_utility1:371816529458626570> Data Package Compilation Program Functional.\n"
+                                  "<:rp_utility1:371816529458626570> Virus Defense Program Functional."),
                               colour=discord.Colour.orange())
         if isinstance(who, discord.Member):
             embed.set_author(name=who.nick or who.display_name, icon_url=who.avatar_url)
@@ -78,12 +78,12 @@ class Roleplay:
                 embed.colour = discord.Colour.red()
                 embed.add_field(name="**::Hacking sequence failed::**",
                                 value=(
-                                "<:rp_utility0:371816528326164490> Encryption Cracking Unit disconnected from device.\n"
-                                "<:rp_utility0:371816528326164490> Emulation Program was locked out of the system.\n"
-                                "<:rp_utility0:371816528326164490> Data Package Failed, purging corrupted data.\n"
-                                "<:rp_utility1:371816529458626570> All hostile viruses quarantined and purged.\n"
-                                "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                "Allow **30 seconds** for utility to cool for optimal performance."))
+                                    "<:rp_utility0:371816528326164490> Encryption Cracking Unit disconnected from device.\n"
+                                    "<:rp_utility0:371816528326164490> Emulation Program was locked out of the system.\n"
+                                    "<:rp_utility0:371816528326164490> Data Package Failed, purging corrupted data.\n"
+                                    "<:rp_utility1:371816529458626570> All hostile viruses quarantined and purged.\n"
+                                    "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
+                                    "Allow **30 seconds** for utility to cool for optimal performance."))
                 await message.edit(embed=embed)
                 return
 

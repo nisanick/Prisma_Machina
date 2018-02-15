@@ -101,8 +101,8 @@ class Parser:
             message.content,
             datetime.utcnow()
         )
-        async with db.transaction():
-            await db.execute(insert, *values)
+        # async with db.transaction():
+        # await db.execute(insert, *values)
         await database.Database.close_connection(db)
 
     async def on_message_edit(self, before, after):
@@ -131,8 +131,8 @@ class Parser:
             after.content,
             when
         )
-        async with db.transaction():
-            await db.execute(insert, *values)
+        # async with db.transaction():
+        # await db.execute(insert, *values)
         await database.Database.close_connection(db)
 
     async def on_reaction_add(self, reaction, user):
@@ -225,8 +225,9 @@ class Parser:
                         "ON CONFLICT (reaction, user_id) DO UPDATE SET usage_count = reaction_count.usage_count + 1, last_use = $3")
         if history:
             insert_reaction = "INSERT INTO reactions(reaction, custom, last_use) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING "
-            insert_count = ("INSERT INTO reaction_count(reaction, user_id, usage_count, last_use) VALUES ($1, $2, 1, $3)"
-                            "ON CONFLICT (reaction, user_id) DO UPDATE SET usage_count = reaction_count.usage_count + 1")
+            insert_count = (
+                "INSERT INTO reaction_count(reaction, user_id, usage_count, last_use) VALUES ($1, $2, 1, $3)"
+                "ON CONFLICT (reaction, user_id) DO UPDATE SET usage_count = reaction_count.usage_count + 1")
         db = await database.Database.get_connection(self.bot.loop)
         async with db.transaction():
             await db.execute(insert_user, str(who.id))

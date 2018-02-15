@@ -121,8 +121,8 @@ class Fun:
         if message.channel.name.__contains__('rp-'):
             return
 
-        if number > 700 and datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
-                    f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
+        if number > 700 and datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+                    '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
             await message.add_reaction(random.choice(['⛄', '❄️', '🌟', '🍪', '🎅', '🤶', '🎄', '🔔', '🎶']))
 
         if self.last_duck > 500 or (self.last_duck > 40 and random.randint(1, 1000) > 985):
@@ -133,8 +133,8 @@ class Fun:
             self.users = [294171600478142466]
             self.last_duck = 0
             reaction = '🦆'
-            if datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
-                    f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
+            if datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+                    '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
                 reaction = '🎁'
 
             await asyncio.sleep(random.randint(1, 60))
@@ -148,8 +148,8 @@ class Fun:
         if user.id in self.users:
             return
         hunt = '🔫'
-        if datetime.strptime(f'24.12.{datetime.utcnow().year}', '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
-                f'27.12.{datetime.utcnow().year}', '%d.%m.%Y'):
+        if datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+                '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
             hunt = '🎁'
         if reaction.emoji == hunt and reaction.message == self.duck_message:
             self.users.append(user.id)
