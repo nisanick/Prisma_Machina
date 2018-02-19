@@ -27,8 +27,11 @@ class Nasa:
             embed.add_field(name='HD Download', value='[Click here!]({})'.format(response["hdurl"]))
         except Exception:
             print('No HD ulr')
-        embed.add_field(name='[url]({})'.format(response['url']))
-        embed.set_image(url=response['url'])
+
+        if(response['url'].__contains__('youtube')):
+            embed.add_field(name='Link url', value='[Click Here]({})'.format(response['url']))
+        else:
+            embed.set_image(url=response['url'])
         embed.timestamp = datetime.utcnow()
         embed.set_footer(text='Generated on ')
 
