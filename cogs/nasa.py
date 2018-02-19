@@ -29,7 +29,7 @@ class Nasa:
             print('No HD ulr')
 
         if(response['url'].__contains__('youtube')):
-            embed.add_field(name='Link url', value='[Click Here]({})'.format(response['url']))
+            embed.add_field(name='Content url', value='[Click Here]({})'.format(response['url']))
         else:
             embed.set_image(url=response['url'])
         embed.timestamp = datetime.utcnow()
