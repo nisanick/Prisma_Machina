@@ -20,14 +20,14 @@ class Nasa:
         embed.add_field(name='Explanation part 1/{}'.format(math.ceil(len(response['explanation'])/1000)), value=response['explanation'][0: boundary], inline=False)
 
         while boundary < len(response['explanation']):
-            embed.add_field(name='part {}/{}'.format(boundary/1000, math.ceil(len(response['explanation'])/1000)), value=response['explanation'][boundary: boundary + 1000])
+            embed.add_field(name='part {}/{}'.format(math.ceil(boundary/1000), math.ceil(len(response['explanation'])/1000)), value=response['explanation'][boundary: boundary + 1000])
             boundary = boundary + 1000
 
         try:
             embed.add_field(name='HD Download', value='[Click here!]({})'.format(response["hdurl"]))
         except Exception:
             print('No HD ulr')
-        embed.add_field(name='url', value='[url]({})'.format(response['url']))
+        embed.add_field(name='[url]({})'.format(response['url']))
         embed.set_image(url=response['url'])
         embed.timestamp = datetime.utcnow()
         embed.set_footer(text='Generated on ')
