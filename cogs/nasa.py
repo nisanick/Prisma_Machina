@@ -3,7 +3,7 @@ import config
 from discord.ext import commands
 from datetime import datetime
 import discord
-
+import math
 
 class Nasa:
     def __init__(self, bot: commands.Bot):
@@ -17,10 +17,10 @@ class Nasa:
         boundary = 1000;
         response = await Web.get_response("https://api.nasa.gov/planetary/apod?api_key={}".format(config.NASA_API))
         embed = discord.Embed(title='Astronomy Picture of the Day', description='**{}** | {}'.format(response["title"], response["date"]))
-        embed.add_field(name='Explanation', value=response['explanation'][0: boundary], inline=False)
+        embed.add_field(name='Explanation part 1/{}'.format(math.ceil(len(response['explanation'])/1000)), value=response['explanation'][0: boundary], inline=False)
 
         while boundary < len(response['explanation']):
-            embed.add_field(value=response['explanation'][boundary: boundary + 1000])
+            embed.add_field(name='part {}/{}'.format(boundary/1000, math.ceil(len(response['explanation'])/1000)), value=response['explanation'][boundary: boundary + 1000])
             boundary = boundary + 1000
 
         try:
