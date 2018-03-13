@@ -321,6 +321,60 @@ class Roleplay:
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
+    @_rp.command(name='ecu')
+    async def _ecu(self, ctx, who=None, channel: discord.TextChannel = None):
+        """
+        Activates Encryption Cracking Unit.
+        """
+        if not await can_manage_bot(ctx):
+            who = None
+            channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
+        chance = random.randint(1, 100)
+        embed = discord.Embed(title="**::Encryption Cracking Unit::**")
+
+        if isinstance(who, discord.Member):
+            embed.set_author(name=who.nick or who.display_name, icon_url=who.avatar_url)
+        else:
+            embed.set_author(name=who)
+
+        if chance <= 50:
+            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered."
+                                 "<:rp_utility1:371816529458626570> Any communications chatter intercepted."
+                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged."
+                                 "Processing…"
+                                 "Processing…"
+                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device."
+                                 "<:rp_utility1:371816529458626570> Heat Surge Detected."
+                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.colour = discord.Colour.green()
+        elif chance > 80:
+            embed.description = ("Processing…"
+                                 "Processing…"
+                                 "Processing…"
+                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected"
+                                 "Processing…"
+                                 "<:rp_utility0:371816528326164490> The device has failed to respond."
+                                 "Processing…"
+                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected."
+                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.colour = discord.Colour.red()
+        else:
+            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered."
+                                 "Processing…"
+                                 "<:rp_utility0:371816528326164490> Failed to intercept communications chatter."
+                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged."
+                                 "Processing…"
+                                 "Processing…"
+                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device."
+                                 "<:rp_utility1:371816529458626570> Heat Surge Detected."
+                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.colour = discord.Colour.orange()
+        await channel.send('', embed=embed)
+
     @_rp.command(name='hsl')
     async def _hsl(self, ctx, who=None, channel: discord.TextChannel = None):
         """
@@ -414,6 +468,47 @@ class Roleplay:
                                  "<:rp_utility1:371816529458626570> Identity Scan Failed.\n"
                                  "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
                                  "Allow **60 seconds** for utility to cool before triggering.")
+            embed.colour = discord.Colour.red()
+        await channel.send('', embed=embed)
+
+    @_rp.command(name='egg')
+    async def _egg(self, ctx, who=None, channel: discord.TextChannel = None):
+        """
+        Activates Electronic Ghost Generator.
+        """
+        if not await can_manage_bot(ctx):
+            who = None
+            channel = None
+
+        who = who or ctx.message.author
+        channel = channel or ctx.channel
+
+        chance = random.randint(1, 100)
+        embed = discord.Embed(title="**::Electronic Ghost Generator::**")
+
+        if isinstance(who, discord.Member):
+            embed.set_author(name=who.nick or who.display_name, icon_url=who.avatar_url)
+        else:
+            embed.set_author(name=who)
+
+        if chance <= 90:
+            embed.description = ("<:rp_utility1:371816529458626570> Frequencies generated successfully.\n"
+                                 "<:rp_utility1:371816529458626570> Effective range is **100 Meters**.\n"
+                                 "<:rp_utility1:371816529458626570> All individuals within 100 Meters are delirious and will experience hallucinations.\n"
+                                 "<:rp_utility1:371816529458626570>  Massive Heat Surge Detected.\n"
+                                 "Allow **2 Minutes** for utility to cool for optimal performance.\n"
+                                 )
+            embed.colour = discord.Colour.green()
+        else:
+            embed.description = (":rp_utility1: Frequencies generated successfully.\n"
+                                 "Processing…\n"
+                                 "Processing…\n"
+                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected\n"
+                                 "Processing…\n"
+                                 "<:rp_utility0:371816528326164490> Effective range is **5 Meters**.\n"
+                                 "<:rp_utility1:371816529458626570> " + (who.nick or who.display_name) + " is delirious and will experience hallucinations.\n"
+                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
+                                 "Allow **2 Minutes** for utility to cool for optimal performance.\n")
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
