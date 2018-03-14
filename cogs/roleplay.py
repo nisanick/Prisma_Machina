@@ -342,35 +342,35 @@ class Roleplay:
             embed.set_author(name=who)
 
         if chance <= 50:
-            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered."
-                                 "<:rp_utility1:371816529458626570> Any communications chatter intercepted."
-                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged."
-                                 "Processing…"
-                                 "Processing…"
-                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device."
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected."
+            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered.\n"
+                                 "<:rp_utility1:371816529458626570> Any communications chatter intercepted.\n"
+                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged.\n"
+                                 "Processing…\n"
+                                 "Processing…\n"
+                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device.\n"
+                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
                                  "Allow **2 Minutes** for utility to cool for optimal performance.")
             embed.colour = discord.Colour.green()
         elif chance > 80:
-            embed.description = ("Processing…"
-                                 "Processing…"
-                                 "Processing…"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected"
-                                 "Processing…"
-                                 "<:rp_utility0:371816528326164490> The device has failed to respond."
-                                 "Processing…"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected."
+            embed.description = ("Processing…\n"
+                                 "Processing…\n"
+                                 "Processing…\n"
+                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected\n"
+                                 "Processing…\n"
+                                 "<:rp_utility0:371816528326164490> The device has failed to respond.\n"
+                                 "Processing…\n"
+                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
                                  "Allow **2 Minutes** for utility to cool for optimal performance.")
             embed.colour = discord.Colour.red()
         else:
-            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered."
-                                 "Processing…"
-                                 "<:rp_utility0:371816528326164490> Failed to intercept communications chatter."
-                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged."
-                                 "Processing…"
-                                 "Processing…"
-                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device."
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected."
+            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered.\n"
+                                 "Processing…\n"
+                                 "<:rp_utility0:371816528326164490> Failed to intercept communications chatter.\n"
+                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged.\n"
+                                 "Processing…\n"
+                                 "Processing…\n"
+                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device.\n"
+                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
                                  "Allow **2 Minutes** for utility to cool for optimal performance.")
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)

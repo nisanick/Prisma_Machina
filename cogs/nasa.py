@@ -28,7 +28,7 @@ class Nasa:
         except Exception:
             print('No HD ulr')
 
-        if(response['url'].__contains__('youtube')):
+        if response['url'].__contains__('youtube'):
             embed.add_field(name='Content url', value='[Click Here]({})'.format(response['url']))
         else:
             embed.set_image(url=response['url'])
