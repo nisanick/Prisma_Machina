@@ -120,7 +120,7 @@ class Stats:
         counts = ("SELECT count(*) AS people, words.word, sum(usage_count) AS count, words.last_use "
                   "FROM word_count "
                   "JOIN words ON word_count.word = words.word "
-                  "WHERE words.word = $1"
+                  "WHERE words.word = $1 "
                   "GROUP BY words.word")
         times = ("SELECT word_count.last_use, usage_count FROM word_count "
                  "JOIN users ON users.user_id = word_count.user_id "
@@ -128,6 +128,7 @@ class Stats:
                  "WHERE users.user_id = $1 AND words.word = $2")
         async with db.transaction():
             try:
+                print(counts)
                 people, word, count, use = await db.fetchrow(counts, what)
                 last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
                 embed = discord.Embed(title=what, color=13434828, description="\"{}\" was used {} times by {} people, {} time(s) by you".format(word, count, people, usage))
@@ -138,7 +139,8 @@ class Stats:
                 embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(last_use))
                 embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(use))
             except TypeError as e:
-                embed = discord.Embed(title=what, color=13434828,description="\"{}\" was never used before.".format(what))
+                print(e)
+                embed = discord.Embed(title=what, color=13434828, description="\"{}\" was never used before.".format(what))
         await ctx.send("", embed=embed)
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.channel.delete_messages(to_delete)
