@@ -159,8 +159,8 @@ class Fun:
             if self.duck_shots == 1:
                 amount = 6
 
-            if self.duck_message.created_at.timestamp() + 15 > datetime.utcnow().timestamp():
-                amount += 4
+            # if self.duck_message.created_at.timestamp() + 15 > datetime.utcnow().timestamp():
+            #    amount += 4
             values = {
                 'giver': 294171600478142466,
                 'receiver': user.id,

@@ -117,30 +117,36 @@ class Stats:
         to_delete = [ctx.message]
         what = what.lower().strip()
         db = await database.Database.get_connection(self.bot.loop)
-        counts = ("SELECT count(*) AS people, words.word, sum(usage_count) AS count, words.last_use "
+
+        counts = ("SELECT count(*) AS people, words.word, sum(usage_count) AS count, words.last_use AS use "
                   "FROM word_count "
                   "JOIN words ON word_count.word = words.word "
                   "WHERE words.word = $1 "
                   "GROUP BY words.word")
+
         times = ("SELECT word_count.last_use, usage_count FROM word_count "
                  "JOIN users ON users.user_id = word_count.user_id "
                  "JOIN words ON word_count.word = words.word "
                  "WHERE users.user_id = $1 AND words.word = $2")
+
         async with db.transaction():
             try:
-                print(counts)
                 people, word, count, use = await db.fetchrow(counts, what)
                 last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
                 embed = discord.Embed(title=what, color=13434828, description="\"{}\" was used {} times by {} people, {} time(s) by you".format(word, count, people, usage))
                 name = ctx.author.name
+
                 if isinstance(ctx.author, discord.Member):
                     name = ctx.author.nick
+
                 embed.set_author(name=name, icon_url=ctx.author.avatar_url)
                 embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(last_use))
                 embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(use))
+
             except TypeError as e:
                 print(e)
                 embed = discord.Embed(title=what, color=13434828, description="\"{}\" was never used before.".format(what))
+
         await ctx.send("", embed=embed)
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.channel.delete_messages(to_delete)
