@@ -13,7 +13,7 @@ class Roleplay:
         self.bot = bot
         self.delta = 10
 
-    @commands.group(name='rp')
+    @commands.group(name='rp', case_insensitive=True)
     async def _rp(self, ctx):
         """
         Base command for RP utilities. Use !help rp for details.
