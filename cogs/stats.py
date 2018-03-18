@@ -132,7 +132,11 @@ class Stats:
         async with db.transaction():
             try:
                 people, word, count, use = await db.fetchrow(counts, what)
-                last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
+                try:
+                    last_use, usage = await db.fetchrow(times, *(str(ctx.message.author.id), what))
+                except TypeError as e:
+                    last_use = None
+                    usage = 0
                 embed = discord.Embed(title=what, color=13434828, description="\"{}\" was used {} times by {} people, {} time(s) by you".format(word, count, people, usage))
                 name = ctx.author.name
 
@@ -140,11 +144,11 @@ class Stats:
                     name = ctx.author.nick
 
                 embed.set_author(name=name, icon_url=ctx.author.avatar_url)
-                embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(last_use))
+                if usage > 0:
+                    embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(last_use))
                 embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(use))
 
             except TypeError as e:
-                print(e)
                 embed = discord.Embed(title=what, color=13434828, description="\"{}\" was never used before.".format(what))
 
         await ctx.send("", embed=embed)
