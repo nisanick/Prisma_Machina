@@ -137,13 +137,15 @@ class Stats:
                 except TypeError as e:
                     last_use = None
                     usage = 0
-                embed = discord.Embed(title=what, color=13434828, description="\"{}\" was used {} times by {} people, {} time(s) by you".format(word, count, people, usage))
+                embed = discord.Embed(title=what, color=13434828,
+                                      description="\"{}\" was used {} times by {} people, {} time(s) by you".format(
+                                          word, count, people, usage))
                 name = ctx.author.name
 
                 if isinstance(ctx.author, discord.Member):
                     name = ctx.author.nick
 
-                embed.set_author(name=name, icon_url=ctx.author.avatar_url)
+                embed.set_author(name=name or ctx.author.name, icon_url=ctx.author.avatar_url)
                 if usage > 0:
                     embed.add_field(name="Your last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(last_use))
                 embed.add_field(name="General last use", value="{:%d.%m.%Y %H:%M} (UTC)".format(use))

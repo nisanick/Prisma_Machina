@@ -2,6 +2,7 @@ import asyncio
 import random
 import re
 from datetime import datetime
+from datetime import timedelta
 
 import discord
 from discord.ext import commands
@@ -68,11 +69,12 @@ class Timer:
                           "floor(random()*(SELECT count(*) FROM messages WHERE used = $2)) LIMIT 1")
         event_insert = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 2, $2)"
         message_update = "UPDATE messages SET used = messages.used + 1 WHERE message_id = $1"
-        stamp = datetime.utcnow().timestamp()
+        today = datetime.utcnow()
+        tomorrow = today + timedelta(days=1)
 
-        if event_type == 2:
-            thumbnail = 'https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678'
-            time = datetime.fromtimestamp(stamp + random.randint(82800, 90000))
+        if event_type == 1:
+            thumbnail = 'TheDailyChat.png'
+            time = tomorrow.replace(hour=13, minute=0, second=0, microsecond=0).timestamp()
         else:
             return
         event_values = [
