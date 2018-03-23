@@ -95,7 +95,7 @@ class Timer:
                 channel = self.bot.get_channel(config.RP_CHANNEL)
                 embed = discord.Embed(title=message_title, description=message_text, color=message_color)
                 embed.set_author(name=message_author)
-                embed.set_thumbnail(url=thumbnail)
+                embed.set_thumbnail(url='http://nisanick.com/pictures/{}'.format(thumbnail))
                 embed.set_footer(text=message_footer)
                 await channel.send(embed=embed)
                 await db.execute(message_update, message_id)
