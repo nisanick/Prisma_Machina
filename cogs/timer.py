@@ -92,7 +92,8 @@ class Timer:
 
             async for (message_id, message_title, message_author, message_content, message_footer, message_color) in db.cursor(message_select, *values):
                 message_text = self.replace_emotes(message_content)
-                channel = self.bot.get_channel(config.RP_CHANNEL)
+                channel = self.bot.get_channel('340955202985132033')
+                # channel = self.bot.get_channel(config.RP_CHANNEL)
                 embed = discord.Embed(title=message_title, description=message_text, color=message_color)
                 embed.set_author(name=message_author)
                 embed.set_thumbnail(url='http://nisanick.com/pictures/{}'.format(thumbnail))
