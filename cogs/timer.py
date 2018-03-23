@@ -74,7 +74,7 @@ class Timer:
 
         if event_type == 1:
             thumbnail = 'TheDailyChat.png'
-            time = tomorrow.replace(hour=13, minute=0, second=0, microsecond=0).timestamp()
+            time = tomorrow.replace(hour=13, minute=0, second=0, microsecond=0)
         else:
             return
         event_values = [
