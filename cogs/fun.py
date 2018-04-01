@@ -50,14 +50,14 @@ class Fun:
             await ctx.send(
                 "Her awesomeness will be greatly missed in our hearts. May her soul find its place amongst the eagles of the Empire.")
         else:
-            if datetime.strptime('01.04.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
+            if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
                 await ctx.send("Everyone is better than Wisewolf")
             else:
                 await ctx.send("You will never be as awesome as Wisewolf")
 
     @commands.command(hidden=True)
     async def report(self, ctx, *, message=None):
-        if datetime.strptime('01.04.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
+        if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
             await ctx.send("{} was reported to proper authorities!".format(ctx.author.nick or ctx.author.name))
         else:
             await ctx.send("This incident was reported to proper authorities!")
@@ -143,7 +143,7 @@ class Fun:
             if datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
                     '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
                 reaction = '🎁'
-            elif datetime.strptime('01.04.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
+            elif datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
                 reaction = '🔫'
 
             await asyncio.sleep(random.randint(1, 60))
@@ -160,7 +160,7 @@ class Fun:
         if datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
                 '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
             hunt = '🎁'
-        elif datetime.strptime('01.04.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
+        elif datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
             hunt = '🦆'
         if reaction.emoji == hunt and reaction.message == self.duck_message:
             self.users.append(user.id)
