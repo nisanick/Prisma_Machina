@@ -29,6 +29,8 @@ class Parser:
                     what = what.replace("\n", " ")
                     if message.author.id == 186829544764866560:
                         await self.techeron_check(what)
+                    if message.author.id == 90325204173082624:
+                        await self.sinkarma_check(what)
                     what = what.split(" ")
                     await self.__insert(what, message.author, message.created_at, history=True)
                     for reaction in message.reactions:
@@ -83,6 +85,8 @@ class Parser:
         what = what.replace("\n", " ")
         if message.author.id == 186829544764866560:
             await self.techeron_check(what)
+        if message.author.id == 90325204173082624:
+            await self.sinkarma_check(what)
         what = what.split(" ")
         await self.__insert(what, message.author, message.created_at)
 
@@ -153,10 +157,18 @@ class Parser:
                 await db.execute(insert, str(186829544764866560))
             await database.Database.close_connection(db)
 
+    async def sinkarma_check(self, message):
+        if message.lower().__contains__('owo'):
+            insert = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET special = users.special + 1"
+            db = await database.Database.get_connection(self.bot.loop)
+            async with db.transaction():
+                await db.execute(insert, str(90325204173082624))
+            await database.Database.close_connection(db)
+
     async def __insert(self, what, author: discord.Member, when: datetime, history=False):
         db = await database.Database.get_connection(self.bot.loop)
         insert_word = "INSERT INTO words (word, excluded, last_use) VALUES ($1, $2, $3) ON CONFLICT (word) DO UPDATE SET last_use = $3"
-        insert_user = "INSERT INTO users (user_id, message_count, reaction_count) VALUES ($1, 1, 0) ON CONFLICT (user_id) DO UPDATE SET message_count = users.message_count + 1"
+        insert_user = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 1, 0, 0) ON CONFLICT (user_id) DO UPDATE SET message_count = users.message_count + 1"
         insert_count = ("INSERT INTO word_count (word, user_id, usage_count, last_use) VALUES($1, $2, 1, $3)"
                         "ON CONFLICT (word,user_id) DO UPDATE SET usage_count = word_count.usage_count + 1, last_use = $3")
         if history:
