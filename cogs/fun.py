@@ -82,7 +82,7 @@ class Fun:
                 "by") and message.content.lower().__contains__("achenar"):
             await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
-        if message.author.id == 90325204173082624 and message.content.lower().__contains__("wiggles"):
+        if message.author.id == 90325204173082624 and message.content.lower().__contains__("wiggle"):
             await message.add_reaction('🐍')
 
         if message.content.lower().__contains__("hi bot"):
