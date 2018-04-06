@@ -90,6 +90,11 @@ class Fun:
             if emoji:
                 await message.add_reaction(emoji)
 
+        if message.content.lower().__contains__("owo"):
+            emoji = self.bot.get_emoji(431859184850436096)
+            if emoji:
+                await message.add_reaction(emoji)
+
         if number > self.limit:
             if message.content.lower().__contains__("tharg") and number < 400:
                 emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
