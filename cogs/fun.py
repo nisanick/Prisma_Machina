@@ -82,6 +82,9 @@ class Fun:
                 "by") and message.content.lower().__contains__("achenar"):
             await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
 
+        if message.author.id == 90325204173082624 and message.content.lower().__contains__("wiggles"):
+            await message.add_reaction('🐍')
+
         if message.content.lower().__contains__("hi bot"):
             emoji = self.bot.get_emoji(340954397502865409)
             if emoji:
@@ -128,8 +131,9 @@ class Fun:
         if message.channel.name.__contains__('rp-'):
             return
 
-        if number > 700 and datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
-                    '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
+        if number > 700 and datetime.strptime('24.12.{}'.format(datetime.utcnow().year),
+                                              '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+                '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
             await message.add_reaction(random.choice(['⛄', '❄️', '🌟', '🍪', '🎅', '🤶', '🎄', '🔔', '🎶']))
 
         if self.last_duck > 500 or (self.last_duck > 40 and random.randint(1, 1000) > 985):
@@ -140,7 +144,8 @@ class Fun:
             self.users = [294171600478142466]
             self.last_duck = 0
             reaction = '🦆'
-            if datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+            if datetime.strptime('24.12.{}'.format(datetime.utcnow().year),
+                                 '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
                     '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
                 reaction = '🎁'
             elif datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
@@ -157,7 +162,8 @@ class Fun:
         if user.id in self.users:
             return
         hunt = '🔫'
-        if datetime.strptime('24.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
+        if datetime.strptime('24.12.{}'.format(datetime.utcnow().year),
+                             '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
                 '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
             hunt = '🎁'
         elif datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
