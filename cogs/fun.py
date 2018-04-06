@@ -91,7 +91,7 @@ class Fun:
                 await message.add_reaction(emoji)
 
         if message.content.lower().__contains__("owo"):
-            emoji = self.bot.get_emoji(431859184850436096)
+            emoji = self.bot.get_emoji(431859136192446474)
             if emoji:
                 await message.add_reaction(emoji)
 
@@ -132,6 +132,9 @@ class Fun:
                 self.limit = default_chance
         else:
             self.limit = self.limit - 10
+
+        if isinstance(message.channel, discord.DMChannel):
+            return
 
         if message.channel.name.__contains__('rp-'):
             return
