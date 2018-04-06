@@ -71,10 +71,14 @@ class Timer:
         message_update = "UPDATE messages SET used = messages.used + 1 WHERE message_id = $1"
         today = datetime.utcnow()
         tomorrow = today + timedelta(days=1)
+        in_a_week = today + timedelta(days=7)
 
         if event_type == 1:
             thumbnail = 'TheDailyChat.png'
             time = tomorrow.replace(hour=13, minute=0, second=0, microsecond=0)
+        elif event_type == 2:
+            thumbnail = 'GetTheTruth.png'
+            time = tomorrow.replace(hour=18, minute=0, second=0, microsecond=0)
         else:
             return
         event_values = [
