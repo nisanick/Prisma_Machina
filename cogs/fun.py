@@ -199,6 +199,11 @@ class Fun:
                 await db.execute(insert, str(user.id))
             await database.Database.close_connection(db)
 
+    @commands.command()
+    async def wuwhu(self, ctx):
+        await ctx.message.delete()
+        await ctx.send(file=discord.File('img/tech_wuwhu.PNG'))
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
