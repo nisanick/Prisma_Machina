@@ -21,7 +21,7 @@ class Fun:
         self.users = []
         self.last_duck = 0
 
-    @commands.command()
+    #@commands.command()
     async def awesomenessof(self, ctx, who):
         """
         Tells you how awesome you are in comparison to Wisewolf.
@@ -55,7 +55,7 @@ class Fun:
             else:
                 await ctx.send("You will never be as awesome as Wisewolf")
 
-    @commands.command(hidden=True)
+    #@commands.command(hidden=True)
     async def report(self, ctx, *, message=None):
         if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
             await ctx.send("{} was reported to proper authorities!".format(ctx.author.nick or ctx.author.name))
@@ -199,7 +199,7 @@ class Fun:
                 await db.execute(insert, str(user.id))
             await database.Database.close_connection(db)
 
-    @commands.command()
+    #@commands.command()
     async def wuwhu(self, ctx):
         await ctx.message.delete()
         await ctx.send(file=discord.File('img/tech_wuwhu.PNG'))
