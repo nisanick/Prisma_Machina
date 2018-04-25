@@ -82,6 +82,9 @@ class Timer:
         elif event_type == 3:
             thumbnail = 'Forculus_Chronometry.png'
             time = in_a_week.replace(hour=10, minute=0, second=0, microsecond=0)
+        elif event_type == 4:
+            thumbnail = 'Vector.jpg'
+            time = tomorrow.replace(hour=22, minute=0, second=0, microsecond=0)
         else:
             return
         event_values = [
