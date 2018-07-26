@@ -105,4 +105,5 @@ bot.remove_command('help')
 for ext in config.EXTENSIONS:
     bot.load_extension(ext)
 bot.run(config.TOKEN, reconnect=True)
+print("Crash recovery")
 os.execv(sys.executable, ['python'] + sys.argv)
