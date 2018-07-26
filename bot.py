@@ -6,6 +6,8 @@ from discord.ext import commands
 import database
 import asyncio
 
+import sys
+import os
 import config
 import checks
 # from importlib import reload as rld
@@ -103,3 +105,4 @@ bot.remove_command('help')
 for ext in config.EXTENSIONS:
     bot.load_extension(ext)
 bot.run(config.TOKEN, reconnect=True)
+os.execv(sys.executable, ['python'] + sys.argv)

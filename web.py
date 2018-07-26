@@ -4,6 +4,7 @@ import json
 import urllib.parse
 from bs4 import BeautifulSoup
 
+
 class Web:
 
     @staticmethod

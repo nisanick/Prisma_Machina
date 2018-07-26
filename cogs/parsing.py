@@ -85,7 +85,7 @@ class Parser:
         what = what.replace("\n", " ")
         if message.author.id == 186829544764866560:
             await self.techeron_check(what)
-        if message.author.id == 90325204173082624:
+        elif message.author.id == 90325204173082624:
             await self.sinkarma_check(what)
         what = what.split(" ")
         await self.__insert(what, message.author, message.created_at)
