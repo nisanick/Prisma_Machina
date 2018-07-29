@@ -104,6 +104,9 @@ async def reload(ctx, *args):
 bot.remove_command('help')
 for ext in config.EXTENSIONS:
     bot.load_extension(ext)
-bot.run(config.TOKEN, reconnect=True)
+try:
+    bot.run(config.TOKEN, reconnect=True)
+except Exception as e:
+    print(e)
 print("Crash recovery")
 os.execv(sys.executable, ['python3'] + sys.argv)

@@ -101,7 +101,7 @@ class Stats:
                 emoji_type = 2
             try:
                 emoji = await commands.EmojiConverter().convert(ctx, "diamond{}".format(emoji_type))
-            except commands.CommandError as err:
+            except commands.CommandError:
                 emoji = '💎'
             embed = discord.Embed(description="{} {}".format(emoji, count), color=discord.Colour.blue())
             rank = ""
