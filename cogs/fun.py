@@ -55,7 +55,7 @@ class Fun:
             else:
                 await ctx.send("You will never be as awesome as Wisewolf")
 
-    #@commands.command(hidden=True)
+    @commands.command(hidden=True)
     async def report(self, ctx, *, message=None):
         if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
             await ctx.send("{} was reported to proper authorities!".format(ctx.author.nick or ctx.author.name))
@@ -75,6 +75,15 @@ class Fun:
         embed.set_thumbnail(url="https://media.discordapp.net/attachments/302178821405278208/342186320384491523/TheDailyChat.png?width=508&height=678")
         embed.set_footer(text="Only on The People’s Media, Your Voice in the Empire and the Stars Beyond.")
         await msg.edit(embed=embed)"""
+
+    @commands.command(name='sudoku', aliases=['cs', 'commitsudoku'])
+    async def _sudoku(self, ctx):
+        embed = discord.Embed(title='Argh')
+        embed.set_image(url='http://nisanick.com/pictures/{}'.format('sudoku.png'))
+        embed.timestamp = datetime.utcnow()
+        embed.set_footer(text='Generated on ')
+        await ctx.send(content=None, embed=embed)
+        await ctx.message.delete()
 
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)
@@ -199,7 +208,7 @@ class Fun:
                 await db.execute(insert, str(user.id))
             await database.Database.close_connection(db)
 
-    #@commands.command()
+    @commands.command(hidden=True)
     async def wuwhu(self, ctx):
         await ctx.message.delete()
         await ctx.send(file=discord.File('img/tech_wuwhu.PNG'))
