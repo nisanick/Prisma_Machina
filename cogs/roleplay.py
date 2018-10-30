@@ -22,6 +22,7 @@ class Roleplay:
         self.playerids = []
         self.announce_message = None
         self.system_message = None
+        self.turn_number = 0
 
     @commands.group(name='rp', case_insensitive=True)
     async def _rp(self, ctx):
@@ -39,7 +40,8 @@ class Roleplay:
         """
         Tells the bot to post used actions and start new turn.
         """
-        message = 'Turn ended with these ations taking place:\n'
+        message = '**::TURN {}::**\n'.format(self.turn_number)
+        message += 'Turn ended with these actions taking place:\n'
         message += '```\n'
         message += "{:^35}|{:^25}\n".format('Player', 'Action')
         message += "{:*^35}|{:*^25}\n".format('', '')
@@ -52,6 +54,7 @@ class Roleplay:
         for player_id in self.playerids:
             player, action = self.players[player_id]
             self.players[player_id] = (player, None)
+        self.turn_number += 1
         await self.post_players(True)
 
     @_rp.command(name='start')
@@ -77,6 +80,7 @@ class Roleplay:
                 system_message = await system_channel.send("Session participants")
                 self.announce_message = announce_message
                 self.system_message = system_message
+                self.turn_number = 1
                 await db.execute(insert, *(str(announce_message.id), str(system_message.id)))
             else:
                 await ctx.send('There is already an unfinished session. Please end it before starting new one.')
@@ -153,18 +157,19 @@ class Roleplay:
             player, action = self.players[ctx.author.id]
             
             if what == '1':
-                action = player.light[1]
+                action = player.light[1] if player.light else None
             elif what == '2':
-                action = player.medium[1]
+                action = player.medium[1] if player.medium else None
             elif what == '3':
-                action = player.heavy[1]
+                action = player.heavy[1] if player.heavy else None
             elif what == '4':
-                action = player.melee[1]
+                action = player.melee[1] if player.melee else None
             elif what == '5':
-                action = player.defense[1]
+                action = player.defense[1] if player.defense else None
             elif what == '6':
-                action = player.disposable[1]
-                await player.use_item()
+                action = player.disposable[1] if player.disposable else None
+                if action:
+                    await player.use_item()
             elif what == 'hack':
                 if player.gloves[1].lower().__contains__("hacking") and player.gloves[1].lower().__contains__("system"):
                     action = await self._hack(ctx)
@@ -175,7 +180,13 @@ class Roleplay:
                 await getattr(self, '_' + action)(ctx)
             self.players[ctx.author.id] = (player, action)
             if action is None:
-                await ctx.send("You don't own a tool required to do this action")
+                to_delete = await ctx.send("You don't own a tool required to do this action")
+                await asyncio.sleep(1)
+                await to_delete.delete()
+            else:
+                to_delete = await ctx.send("Action registered.")
+                await asyncio.sleep(1)
+                await to_delete.delete()
             await self.post_players()
             
     @_rp.command(name='end')
