@@ -109,4 +109,4 @@ try:
 except Exception as e:
     print(e)
 print("Crash recovery")
-#os.execv(sys.executable, ['python3'] + sys.argv)
+os.execv(sys.executable, ['python3'] + sys.argv)
