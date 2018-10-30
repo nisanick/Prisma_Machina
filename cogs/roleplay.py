@@ -1,8 +1,13 @@
 import asyncio
 import random
 
+import checks
+from database import Database
 from checks import *
 from data.rp_texts import *
+from data.links import *
+from web import Web
+from roleplay.Player import Player
 
 import discord
 from discord.ext import commands
@@ -10,8 +15,13 @@ from discord.ext import commands
 
 class Roleplay:
     def __init__(self, bot: commands.Bot):
+        self.parameters = {}
         self.bot = bot
         self.delta = 10
+        self.players = {}
+        self.playerids = []
+        self.announce_message = None
+        self.system_message = None
 
     @commands.group(name='rp', case_insensitive=True)
     async def _rp(self, ctx):
@@ -23,11 +33,237 @@ class Roleplay:
         if ctx.invoked_subcommand is None:
             await ctx.send("Subcommand required!")
 
-    @_rp.command(name="hack")
-    async def _hack(self, ctx, difficulty: int, who=None, channel: discord.TextChannel = None):
+    @_rp.command(name='turn')
+    @commands.check(checks.can_manage_bot)
+    async def _turn(self, ctx):
+        """
+        Tells the bot to post used actions and start new turn.
+        """
+        message = 'Turn ended with these ations taking place:\n'
+        message += '```\n'
+        message += "{:^35}|{:^25}\n".format('Player', 'Action')
+        message += "{:*^35}|{:*^25}\n".format('', '')
+        for player_id, (player, action) in self.players.items():
+            player = self.system_message.guild.get_member(player_id)
+            message += "{:<35}|{:<25}\n".format(player.nick or player.name, action or '<no action set>')
+        message += '```\n'
+        message += 'New turn has begun, please state your actions.'
+        await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send(message)
+        for player_id in self.playerids:
+            player, action = self.players[player_id]
+            self.players[player_id] = (player, None)
+        await self.post_players(True)
+
+    @_rp.command(name='start')
+    @commands.check(checks.can_manage_bot)
+    async def _start(self, ctx):
+        """
+        Bot will create new RP session if there is not one running already.
+        
+        Players can join the session via `?rp join`
+        Players are supposed to state their action with `?rp use` command each turn.
+        Turns are ended by `?rp turn` command.
+        Session is over when `?rp end` command is used.
+        In case the session wasn't closed properly (bot crash, etc.) use `?rp clean` to reset it.
+        """
+        announce_channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
+        system_channel = self.bot.get_channel(config.ADMINISTRATION_CHANNEL)
+        db = await Database.get_connection(self.bot.loop)
+        insert = "INSERT INTO roleplay_session(announce_id, system_id) values ($1, $2)"
+        select = "SELECT 1 FROM roleplay_session WHERE done is FALSE"
+        async with db.transaction():
+            if await db.fetchval(select) is None:
+                announce_message = await announce_channel.send("Session started. To participate, use `?rp join`")
+                system_message = await system_channel.send("Session participants")
+                self.announce_message = announce_message
+                self.system_message = system_message
+                await db.execute(insert, *(str(announce_message.id), str(system_message.id)))
+            else:
+                await ctx.send('There is already an unfinished session. Please end it before starting new one.')
+        await Database.close_connection(db)
+
+    @_rp.command(name='join')
+    async def _join(self, ctx):
+        """
+        Joins you to currently open session, if there is one at the moment.
+        """
+        player_id = ctx.author.id
+        for player in self.playerids:
+            if player == player_id:
+                to_delete = await ctx.send('Player is already in session')
+                await asyncio.sleep(1)
+                await to_delete.delete()
+                return
+        args = {
+            # 'discord_id': ctx.author.id
+            'discord_id': '144229491907100672'
+        }
+        response = await Web.get_response(user_data_link, args)
+        player = Player(player_id, response['Inventory'])
+        self.players[player_id] = (player, None)
+        self.playerids.append(player_id)
+        await self.announce_message.edit(content='{}\n{} joined'.format(self.announce_message.content, ctx.author.nick or ctx.author.name))
+        await self.post_players()
+        
+    async def post_players(self, new=False):
+        if new:
+            self.system_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send(' ')
+        message = '```\n'
+        message += "{:^35}|{:^25}\n".format('Player', 'Action')
+        message += "{:*^35}|{:*^25}\n".format('', '')
+        for player_id, (player, action) in self.players.items():
+            player = self.system_message.guild.get_member(player_id)
+            message += "{:<35}|{:<25}\n".format(player.nick or player.name, action or '<no action set>')
+        message += '```'
+        await self.system_message.edit(content=message)
+        
+    @_rp.command(name='use')
+    async def _use(self, ctx, *, what=None):
+        """
+        Queues action for you this turn, refer to ?help rp use
+        
+        Options for 'what' are:
+        number 1-6 for equiped items in order of the character list.
+        1 - Light
+        2 - Medium
+        3 - Heavy
+        4 - Melee
+        5 - Defense
+        6 - Consumable !!IMPORTANT - will consume your item on use
+        
+        To use equiped utility slots, use abbreviate form of the name:
+        Chaff launcher               -> chaff
+        Auto Field Maintenance Unit  -> afmu
+        Environmental Layout Scanner -> els
+        Heat Sink Launcher           -> hsl
+        Kill Warrant Scanner         -> kws
+        Shield Cell Bank             -> scb
+        Encryption Cracking Unit     -> ecu
+        Holo-Me Decoy Projector      -> hdp
+        Virtual Distortion Cloak     -> vdc
+        Electronic Ghost Generator   -> egg
+        
+        Last option is 'hack' which will use your equiped hack tool
+        """
+
+        if what is None:
+            return
+        
+        if ctx.author.id in self.playerids and self.players[ctx.author.id][1] is None:
+            player, action = self.players[ctx.author.id]
+            
+            if what == '1':
+                action = player.light[1]
+            elif what == '2':
+                action = player.medium[1]
+            elif what == '3':
+                action = player.heavy[1]
+            elif what == '4':
+                action = player.melee[1]
+            elif what == '5':
+                action = player.defense[1]
+            elif what == '6':
+                action = player.disposable[1]
+                await player.use_item()
+            elif what == 'hack':
+                if player.gloves[1].lower().__contains__("hacking") and player.gloves[1].lower().__contains__("system"):
+                    action = await self._hack(ctx)
+                    if not action:
+                        return
+            elif player.have_util(what):
+                action = what
+                await getattr(self, '_' + action)(ctx)
+            self.players[ctx.author.id] = (player, action)
+            if action is None:
+                await ctx.send("You don't own a tool required to do this action")
+            await self.post_players()
+            
+    @_rp.command(name='end')
+    @commands.check(checks.can_manage_bot)
+    async def _end(self, ctx):
+        """
+        Ends currently open rp session
+        """
+        db = await Database.get_connection(self.bot.loop)
+        probe = "SELECT 1 FROM roleplay_session WHERE done IS FALSE"
+        select = "SELECT session_id, announce_id, system_id FROM roleplay_session WHERE done = FALSE"
+        update = "UPDATE roleplay_session SET done = TRUE WHERE session_id = $1"
+        async with db.transaction():
+            if await db.fetchval(probe) is None:
+                to_delete = await ctx.send("There is no open session to close.")
+                await asyncio.sleep(1)
+                await to_delete.delete()
+            else:
+                async for (session_id, announce_id, system_id) in db.cursor(select):
+                    sys_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).get_message(int(system_id))
+                    self.players.clear()
+                    self.playerids = []
+                    self.announce_message = None
+                    self.system_message = None
+                    await db.execute(update, session_id)
+                    await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send('Session ended. Thanks for participating')
+                    await sys_message.edit(content='{}\nSession ended'.format(sys_message.content))
+        await Database.close_connection(db)
+
+    @_rp.command(name='tool')
+    @commands.check(checks.can_manage_bot)
+    async def _tool(self, ctx, what, who, channel: discord.TextChannel):
+        """
+        Used in place of old RP utility commands
+        """
+        try:
+            await getattr(self, '_' + what)(ctx, who, channel)
+        except AttributeError:
+            await ctx.send("tool {} doesn't exist".format(what))
+
+    @_rp.command(name='clean')
+    @commands.check(checks.can_manage_bot)
+    async def _clean(self, ctx):
+        """
+        Force-closes all RP sessions
+        """
+        db = await Database.get_connection(self.bot.loop)
+        update = "UPDATE roleplay_session SET done = TRUE WHERE done IS FALSE"
+        async with db.transaction():
+            await db.execute(update)
+            self.players.clear()
+            self.playerids = []
+            self.announce_message = None
+            self.system_message = None
+            await ctx.send('Sessions cleaned')
+        await Database.close_connection(db)
+
+    @_rp.command(name='set')
+    @commands.check(checks.can_manage_bot)
+    async def _set(self, ctx, what: str, *params):
+        """
+        Helper command to set various parameters to RP session.
+
+        Currenly can be used only to set hacking target, for example `?rp set target 3` to set hack target to 3
+        """
+        if what == 'target' and params[0] is not None:
+            self.parameters[what] = params[0]
+    
+        else:
+            to_delete = await ctx.send('Unknown parameter!')
+            await asyncio.sleep(1)
+            await to_delete.delete()
+
+    async def _hack(self, ctx, difficulty: int = None, who=None, channel: discord.TextChannel = None):
         """
         Initiates hack with specified difficulty.
         """
+        if difficulty is None and 'target' in self.parameters and self.parameters['target'] is not None:
+            difficulty = int(self.parameters['target'])
+        else:
+            to_delete = await ctx.send("There is no hack target specified")
+            await asyncio.sleep(1)
+            await to_delete.delete()
+            values = self.players[ctx.author.id]
+            self.players[ctx.author.id] = (values[0], None)
+            await self.post_players()
+            return None
+            
         if not await can_manage_bot(ctx):
             who = None
             channel = None
@@ -55,7 +291,10 @@ class Roleplay:
         if isinstance(who, discord.Member):
             embed.set_author(name=who.nick or who.display_name, icon_url=who.avatar_url)
         else:
-            embed.set_author(name=who)
+            if who is not None:
+                embed.set_author(name=who)
+            else:
+                embed.set_author(name='Unknown user')
         message = await channel.send('', embed=embed)
         await asyncio.sleep(self.delta)
 
@@ -85,7 +324,7 @@ class Roleplay:
                                     "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
                                     "Allow **30 seconds** for utility to cool for optimal performance."))
                 await message.edit(embed=embed)
-                return
+                return 'hack'
 
         await asyncio.sleep(self.delta)
         embed.colour = discord.Colour.green()
@@ -97,8 +336,8 @@ class Roleplay:
                                "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
                                "Allow **60 seconds** for utility to cool for optimal performance."))
         await message.edit(embed=embed)
+        return 'hack'
 
-    @_rp.command(name='scb')
     async def _scb(self, ctx, who=None, channel: discord.TextChannel = None):
         """
          Activates Shield Cell Bank.
@@ -154,7 +393,6 @@ class Roleplay:
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='afmu')
     async def _afmu(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Auto Field Maintenance Unit.
@@ -224,7 +462,6 @@ class Roleplay:
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='chaff')
     async def _chaff(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Chaff Launcher.
@@ -258,7 +495,6 @@ class Roleplay:
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='els')
     async def _els(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Environmental Layout Scanner.
@@ -321,7 +557,6 @@ class Roleplay:
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='ecu')
     async def _ecu(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Encryption Cracking Unit.
@@ -375,7 +610,6 @@ class Roleplay:
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='hsl')
     async def _hsl(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Heat Sink Launcher.
@@ -428,7 +662,6 @@ class Roleplay:
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='kws')
     async def _kws(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Kill Warrant Scanner.
@@ -471,7 +704,6 @@ class Roleplay:
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='egg')
     async def _egg(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Electronic Ghost Generator.
@@ -512,7 +744,6 @@ class Roleplay:
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='hdp')
     async def _hdp(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Holo-Me Decoy Projector.
@@ -550,7 +781,6 @@ class Roleplay:
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 
-    @_rp.command(name='vdc')
     async def _vdc(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Activates Virtual Distortion Cloak.

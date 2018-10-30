@@ -127,6 +127,7 @@ class Timer:
             for emoji in self.bot.emojis:
                 if emoji.name.lower() == emote_name.lower():
                     emote = emoji
+                    break
             return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
 
         return return_text

@@ -119,13 +119,13 @@ class Parser:
         what = what.split(" ")
         when = datetime.utcnow()
         await self.__delete(what, before.author)
+        
         what = after.content
         what = what.replace("\n", " ")
         what = what.split(" ")
-        when = datetime.utcnow()
         await self.__insert(what, after.author, when)
 
-        db = await database.Database.get_connection(self.bot.loop)
+        '''db = await database.Database.get_connection(self.bot.loop)
         insert = ("INSERT INTO history (message_id, user_id, old, new, modification_date, type) "
                   "VALUES ($1, $2, $3, $4, $5, 'edit')")
         values = (
@@ -138,6 +138,7 @@ class Parser:
         # async with db.transaction():
         # await db.execute(insert, *values)
         await database.Database.close_connection(db)
+        '''
 
     async def on_reaction_add(self, reaction, user):
         if user.bot:
