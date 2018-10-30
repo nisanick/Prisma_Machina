@@ -163,7 +163,7 @@ class Roleplay:
             elif what == '3':
                 action = player.heavy[1] if player.heavy else None
             elif what == '4':
-                action = player.melee[1] if player.melee else None
+                action = player.melee[1] if player.melee else 'Punch'
             elif what == '5':
                 action = player.defense[1] if player.defense else None
             elif what == '6':
