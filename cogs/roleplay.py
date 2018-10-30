@@ -107,7 +107,7 @@ class Roleplay:
         
     async def post_players(self, new=False):
         if new:
-            self.system_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send(' ')
+            self.system_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send('placeholder')
         message = '```\n'
         message += "{:^35}|{:^25}\n".format('Player', 'Action')
         message += "{:*^35}|{:*^25}\n".format('', '')
