@@ -95,8 +95,8 @@ class Roleplay:
                 await to_delete.delete()
                 return
         args = {
-            # 'discord_id': ctx.author.id
-            'discord_id': '144229491907100672'
+            'discord_id': ctx.author.id
+            # 'discord_id': '144229491907100672'
         }
         response = await Web.get_response(user_data_link, args)
         player = Player(player_id, response['Inventory'])
