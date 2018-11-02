@@ -50,7 +50,7 @@ class Roleplay:
             message += "{:<35}|{:<25}\n".format(player.nick or player.name, action or '<no action set>')
         message += '```\n'
         message += 'New turn has begun, please state your actions.'
-        await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send(message)
+        await self.bot.get_channel(config.RP_CHANNEL).send(message)
         for player_id in self.playerids:
             player, action = self.players[player_id]
             self.players[player_id] = (player, None)
@@ -69,7 +69,7 @@ class Roleplay:
         Session is over when `?rp end` command is used.
         In case the session wasn't closed properly (bot crash, etc.) use `?rp clean` to reset it.
         """
-        announce_channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
+        announce_channel = self.bot.get_channel(config.RP_CHANNEL)
         system_channel = self.bot.get_channel(config.ADMINISTRATION_CHANNEL)
         db = await Database.get_connection(self.bot.loop)
         insert = "INSERT INTO roleplay_session(announce_id, system_id) values ($1, $2)"
@@ -212,7 +212,7 @@ class Roleplay:
                     self.announce_message = None
                     self.system_message = None
                     await db.execute(update, session_id)
-                    await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send('Session ended. Thanks for participating')
+                    await self.bot.get_channel(config.RP_CHANNEL).send('Session ended. Thanks for participating')
                     await sys_message.edit(content='{}\nSession ended'.format(sys_message.content))
         await Database.close_connection(db)
 
