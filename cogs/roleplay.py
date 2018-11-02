@@ -70,7 +70,7 @@ class Roleplay:
         In case the session wasn't closed properly (bot crash, etc.) use `?rp clean` to reset it.
         """
         announce_channel = self.bot.get_channel(config.RP_CHANNEL)
-        system_channel = self.bot.get_channel(config.ADMINISTRATION_CHANNEL)
+        system_channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
         db = await Database.get_connection(self.bot.loop)
         insert = "INSERT INTO roleplay_session(announce_id, system_id) values ($1, $2)"
         select = "SELECT 1 FROM roleplay_session WHERE done is FALSE"
@@ -111,7 +111,7 @@ class Roleplay:
         
     async def post_players(self, new=False):
         if new:
-            self.system_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send('placeholder')
+            self.system_message = await self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).send('placeholder')
         message = '```\n'
         message += "{:^35}|{:^25}\n".format('Player', 'Action')
         message += "{:*^35}|{:*^25}\n".format('', '')
@@ -206,7 +206,7 @@ class Roleplay:
                 await to_delete.delete()
             else:
                 async for (session_id, announce_id, system_id) in db.cursor(select):
-                    sys_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).get_message(int(system_id))
+                    sys_message = await self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).get_message(int(system_id))
                     self.players.clear()
                     self.playerids = []
                     self.announce_message = None
