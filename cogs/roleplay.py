@@ -50,7 +50,7 @@ class Roleplay:
             message += "{:<35}|{:<25}\n".format(player.nick or player.name, action or '<no action set>')
         message += '```\n'
         message += 'New turn has begun, please state your actions.'
-        await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send(message)
+        await self.bot.get_channel(326954112744816643).send(message)
         for player_id in self.playerids:
             player, action = self.players[player_id]
             self.players[player_id] = (player, None)
@@ -69,8 +69,8 @@ class Roleplay:
         Session is over when `?rp end` command is used.
         In case the session wasn't closed properly (bot crash, etc.) use `?rp clean` to reset it.
         """
-        announce_channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
-        system_channel = self.bot.get_channel(config.ADMINISTRATION_CHANNEL)
+        announce_channel = self.bot.get_channel(326954112744816643)
+        system_channel = self.bot.get_channel(374691520055345162)
         db = await Database.get_connection(self.bot.loop)
         insert = "INSERT INTO roleplay_session(announce_id, system_id) values ($1, $2)"
         select = "SELECT 1 FROM roleplay_session WHERE done is FALSE"
@@ -111,7 +111,7 @@ class Roleplay:
         
     async def post_players(self, new=False):
         if new:
-            self.system_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send('placeholder')
+            self.system_message = await self.bot.get_channel(374691520055345162).send('placeholder')
         message = '```\n'
         message += "{:^35}|{:^25}\n".format('Player', 'Action')
         message += "{:*^35}|{:*^25}\n".format('', '')
@@ -181,13 +181,23 @@ class Roleplay:
             self.players[ctx.author.id] = (player, action)
             if action is None:
                 to_delete = await ctx.send("You don't own a tool required to do this action")
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 await to_delete.delete()
             else:
                 to_delete = await ctx.send("Action registered.")
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 await to_delete.delete()
             await self.post_players()
+            
+    @_rp.command(name='pass')
+    async def _pass(self, ctx):
+        if ctx.author.id in self.playerids and self.players[ctx.author.id][1] is None:
+            player, action = self.players[ctx.author.id]
+            action = 'pass'
+            self.players[ctx.author.id] = (player, action)
+            to_delete = await ctx.send("Action registered.")
+            await asyncio.sleep(2)
+            await to_delete.delete()
             
     @_rp.command(name='end')
     @commands.check(checks.can_manage_bot)
@@ -202,17 +212,17 @@ class Roleplay:
         async with db.transaction():
             if await db.fetchval(probe) is None:
                 to_delete = await ctx.send("There is no open session to close.")
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
                 await to_delete.delete()
             else:
                 async for (session_id, announce_id, system_id) in db.cursor(select):
-                    sys_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).get_message(int(system_id))
+                    sys_message = await self.bot.get_channel(374691520055345162).get_message(int(system_id))
                     self.players.clear()
                     self.playerids = []
                     self.announce_message = None
                     self.system_message = None
                     await db.execute(update, session_id)
-                    await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send('Session ended. Thanks for participating')
+                    await self.bot.get_channel(326954112744816643).send('Session ended. Thanks for participating')
                     await sys_message.edit(content='{}\nSession ended'.format(sys_message.content))
         await Database.close_connection(db)
 
@@ -254,10 +264,12 @@ class Roleplay:
         """
         if what == 'target' and params[0] is not None:
             self.parameters[what] = params[0]
+        elif what == 'channel' and params[0] is not None:
+            self.parameters[what] = params[0]
     
         else:
             to_delete = await ctx.send('Unknown parameter!')
-            await asyncio.sleep(1)
+            await asyncio.sleep(2)
             await to_delete.delete()
 
     async def _hack(self, ctx, difficulty: int = None, who=None, channel: discord.TextChannel = None):
