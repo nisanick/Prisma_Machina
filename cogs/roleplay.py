@@ -35,7 +35,7 @@ class Roleplay:
             await ctx.send("Subcommand required!")
 
     @_rp.command(name='turn')
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     async def _turn(self, ctx):
         """
         Tells the bot to post used actions and start new turn.
@@ -58,7 +58,7 @@ class Roleplay:
         await self.post_players(True)
 
     @_rp.command(name='start')
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     async def _start(self, ctx):
         """
         Bot will create new RP session if there is not one running already.
@@ -200,7 +200,7 @@ class Roleplay:
             await to_delete.delete()
             
     @_rp.command(name='end')
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     async def _end(self, ctx):
         """
         Ends currently open rp session
@@ -227,7 +227,7 @@ class Roleplay:
         await Database.close_connection(db)
 
     @_rp.command(name='tool')
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     async def _tool(self, ctx, what, who, channel: discord.TextChannel):
         """
         Used in place of old RP utility commands
@@ -238,7 +238,7 @@ class Roleplay:
             await ctx.send("tool {} doesn't exist".format(what))
 
     @_rp.command(name='clean')
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     async def _clean(self, ctx):
         """
         Force-closes all RP sessions
@@ -255,7 +255,7 @@ class Roleplay:
         await Database.close_connection(db)
 
     @_rp.command(name='set')
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     async def _set(self, ctx, what: str, *params):
         """
         Helper command to set various parameters to RP session.

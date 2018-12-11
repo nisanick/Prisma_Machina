@@ -10,6 +10,15 @@ async def can_manage_bot(ctx):
     return False
 
 
+async def can_manage_rp(ctx):
+    if ctx.message.author.id in config.ADMIN_USERS:
+        return True
+    for role in ctx.message.author.roles:
+        if role.name == 'RP Session Admin':
+            return True
+    return False
+
+
 async def in_admin_channel(ctx):
     return ctx.channel.id in config.ADMINISTRATION_CHANNELS
 
