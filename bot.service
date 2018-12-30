@@ -1,0 +1,12 @@
+[Unit]
+Description=Prisma Machina
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+Restart=always
+User=root
+ExecStart=/usr/bin/python3 -u /opt/Prisma_Machina/bot.py >> log.txt 2>> err.txt &
+
+[Install]
+WantedBy=multi-user.target
