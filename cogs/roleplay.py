@@ -278,6 +278,9 @@ class Roleplay:
             await to_delete.delete()
             
     def react_check(self, reaction, user):
+        if user is None or user.id == self.bot.user.id:
+            return False
+        
         if reaction.message.id != self.prompt.id:
             return False
 
@@ -302,17 +305,18 @@ class Roleplay:
         difficulty = 0
         try:
             reaction, user = await self.bot.wait_for('reaction_add', check=self.react_check, timeout=60.0)
-            if reaction is '1\u20e3':
+            reaction = reaction.emoji
+            if reaction == '1\u20e3':
                 difficulty = 1
-            elif reaction is '2\u20e3':
+            elif reaction == '2\u20e3':
                 difficulty = 2
-            elif reaction is '3\u20e3':
+            elif reaction == '3\u20e3':
                 difficulty = 3
-            elif reaction is '4\u20e3':
+            elif reaction == '4\u20e3':
                 difficulty = 4
-            elif reaction is '5\u20e3':
+            elif reaction == '5\u20e3':
                 difficulty = 5
-            elif reaction is '6\u20e3':
+            elif reaction == '6\u20e3':
                 difficulty = 6
         except asyncio.TimeoutError:
             await ctx.send('Admin is bussy. Please try to set the hack again later!')

@@ -192,6 +192,5 @@ class Fun:
         await ctx.message.delete()
         await ctx.send(file=discord.File('{}img/tech_wuwhu.PNG'.format(config.BASE_DIR)))
 
-
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
