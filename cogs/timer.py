@@ -1,12 +1,12 @@
 import asyncio
 import random
-import re
 from datetime import datetime
 from datetime import timedelta
 
 import discord
 from discord.ext import commands
 
+from TextChecker import TextChecker
 import checks
 import config
 from data import links
@@ -101,7 +101,7 @@ class Timer:
             ]
 
             async for (message_id, message_title, message_author, message_content, message_footer, message_color) in db.cursor(message_select, *values):
-                message_text = self.replace_emotes(message_content)
+                message_text = TextChecker.replace_emotes(message_content, self.bot)
                 channel = self.bot.get_channel(config.RP_CHANNEL)
                 # channel = self.bot.get_channel(config.RP_CHANNEL)
                 embed = discord.Embed(title=message_title, description=message_text, color=message_color)
@@ -114,23 +114,6 @@ class Timer:
                 if schedule:
                     await db.execute(event_insert, *event_values)
         await Database.close_connection(db)
-
-    def replace_emotes(self, text: str) -> str:
-        emote_string = ":[A-z]+:"
-        return_text = text
-        expression = re.compile(emote_string)
-        result = expression.findall(text)
-
-        for word in result:
-            emote_name = word[1:-1]
-            emote = word
-            for emoji in self.bot.emojis:
-                if emoji.name.lower() == emote_name.lower():
-                    emote = emoji
-                    break
-            return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
-
-        return return_text
 
     async def check_articles(self, event_special):
         response = await Web.get_response(links.last_article_link)
