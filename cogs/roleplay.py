@@ -307,11 +307,11 @@ class Roleplay:
         channel = channel or ctx.channel
         
         embed = discord.Embed(title="**::Hacking sequence initiated for Security Level {}::**".format(abs(difficulty)),
-                              description=(
-                                  "<:rp_utility1:371816529458626570> Encryption Cracking Unit paired with device.\n"
-                                  "<:rp_utility1:371816529458626570> Emulation Program Functional.\n"
-                                  "<:rp_utility1:371816529458626570> Data Package Compilation Program Functional.\n"
-                                  "<:rp_utility1:371816529458626570> Virus Defense Program Functional."),
+                              description=TextChecker.replace_emotes(
+                                  ":rp_utility1: Encryption Cracking Unit paired with device.\n"
+                                  ":rp_utility1: Emulation Program Functional.\n"
+                                  ":rp_utility1: Data Package Compilation Program Functional.\n"
+                                  ":rp_utility1: Virus Defense Program Functional.", self.bot),
                               colour=discord.Colour.orange())
         if isinstance(who, discord.Member):
             embed.set_author(name=who.nick or who.display_name, icon_url=who.avatar_url)
@@ -341,25 +341,26 @@ class Roleplay:
                 await asyncio.sleep(self.delta)
                 embed.colour = discord.Colour.red()
                 embed.add_field(name="**::Hacking sequence failed::**",
-                                value=(
-                                    "<:rp_utility0:371816528326164490> Encryption Cracking Unit disconnected from device.\n"
-                                    "<:rp_utility0:371816528326164490> Emulation Program was locked out of the system.\n"
-                                    "<:rp_utility0:371816528326164490> Data Package Failed, purging corrupted data.\n"
-                                    "<:rp_utility1:371816529458626570> All hostile viruses quarantined and purged.\n"
-                                    "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                    "Allow **30 seconds** for utility to cool for optimal performance."))
+                                value=TextChecker.replace_emotes(
+                                    ":rp_utility0: Encryption Cracking Unit disconnected from device.\n"
+                                    ":rp_utility0: Emulation Program was locked out of the system.\n"
+                                    ":rp_utility0: Data Package Failed, purging corrupted data.\n"
+                                    ":rp_utility1: All hostile viruses quarantined and purged.\n"
+                                    ":rp_utility1: Heat Surge Detected.\n"
+                                    "Allow **30 seconds** for utility to cool for optimal performance.", self.bot))
                 await message.edit(embed=embed)
                 return 'hack'
         
         await asyncio.sleep(self.delta)
         embed.colour = discord.Colour.green()
         embed.add_field(name="**::Hacking sequence was completed successfully::**",
-                        value=("<:rp_utility1:371816529458626570> Encryption Cracking Unit paired with device.\n"
-                               "<:rp_utility1:371816529458626570> Emulation Program Operated Successfully.\n"
-                               "<:rp_utility1:371816529458626570> Data Package Created, ready for download to memory drive.\n"
-                               "<:rp_utility1:371816529458626570> All hostile viruses quarantined and purged.\n"
-                               "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                               "Allow **60 seconds** for utility to cool for optimal performance."))
+                        value=TextChecker.replace_emotes(
+                            ":rp_utility1: Encryption Cracking Unit paired with device.\n"
+                            ":rp_utility1: Emulation Program Operated Successfully.\n"
+                            ":rp_utility1: Data Package Created, ready for download to memory drive.\n"
+                            ":rp_utility1: All hostile viruses quarantined and purged.\n"
+                            ":rp_utility1: Heat Surge Detected.\n"
+                            "Allow **60 seconds** for utility to cool for optimal performance.", self.bot))
         await message.edit(embed=embed)
         return 'hack'
     
@@ -383,44 +384,46 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 60:
-            embed.description = TextChecker.replace_emotes("Processing…\n"
-                                                           "Processing…\n"
-                                                           "Processing…\n"
-                                                           ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
-                                                           "Processing…\n"
-                                                           "Processing…\n"
-                                                           "Processing…\n"
-                                                           ":rp_utility1: Thermal Weaponry are recharged to full capacity.\n"
-                                                           ":rp_utility1: Massive Heat Surge Detected.\n"
-                                                           "Allow **5 minutes** for utility to cool for optimal performance.",
-                                                           self.bot)
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Thermal Weaponry are recharged to full capacity.\n"
+                ":rp_utility1: Massive Heat Surge Detected.\n"
+                "Allow **5 minutes** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.green()
         elif chance > 90:
-            embed.description = TextChecker.replace_emotes("Processing…\n"
-                                                           "Processing…\n"
-                                                           ":rp_utility0: Module Malfunction Detected.\n"
-                                                           ":rp_utility0: Personal Shield Devices failed to recharge.\n"
-                                                           ":rp_utility0: Thermal Weaponry failed to recharge.\n"
-                                                           ":rp_utility1: Massive Heat Surge Detected.\n"
-                                                           ":rp_utility0: Meltdown Detected.\n"
-                                                           "Allow **5 minutes** for utility to cool before triggering.",
-                                                           self.bot)
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Module Malfunction Detected.\n"
+                ":rp_utility0: Personal Shield Devices failed to recharge.\n"
+                ":rp_utility0: Thermal Weaponry failed to recharge.\n"
+                ":rp_utility1: Massive Heat Surge Detected.\n"
+                ":rp_utility0: Meltdown Detected.\n"
+                "Allow **5 minutes** for utility to cool before triggering.",
+                self.bot)
             embed.colour = discord.Colour.red()
         else:
-            embed.description = TextChecker.replace_emotes("Processing…\n"
-                                                           "Processing…\n"
-                                                           "Processing…\n"
-                                                           ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
-                                                           "Processing…\n"
-                                                           "Processing…\n"
-                                                           "Processing…\n"
-                                                           ":rp_utility1: hermal Weaponry are recharged to full capacity.\n"
-                                                           ":rp_utility1: Heat Surge Detected.\n"
-                                                           "Allow **60 seconds** for utility to cool for optimal performance.",
-                                                           self.bot)
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: hermal Weaponry are recharged to full capacity.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **60 seconds** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
-        await channel.send('```python\n{}\n```'.format(embed.description))
     
     async def _afmu(self, ctx, who=None, channel: discord.TextChannel = None):
         """
@@ -442,52 +445,58 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 50:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Armor Integrity restored to 100%.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Armor Modifier Integrity restored to 100%.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Malfunctioned Accessories restored to 100%.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Malfunctioned Utilities restored to 100%.\n"
-                                 "<:rp_utility1:371816529458626570> Large Heat Surge Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Meltdown Detected.\n"
-                                 "Allow **10 minutes** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Armor Integrity restored to 100%.\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Armor Modifier Integrity restored to 100%.\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Malfunctioned Accessories restored to 100%.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Malfunctioned Utilities restored to 100%.\n"
+                ":rp_utility1: Large Heat Surge Detected.\n"
+                ":rp_utility0: Meltdown Detected.\n"
+                "Allow **10 minutes** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.green()
         elif chance > 75:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Armor Integrity ignored by device.\n"
-                                 "<:rp_utility0:371816528326164490> Armor Modifier Integrity ignored by device.\n"
-                                 "<:rp_utility0:371816528326164490> Malfunctioned Accessories ignored by device.\n"
-                                 "<:rp_utility0:371816528326164490> Malfunctioned Utilities ignored by device.\n"
-                                 "<:rp_utility1:371816529458626570> Large Heat Surge Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Meltdown Detected.\n"
-                                 "Allow **10 minutes** for utility to cool before triggering.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Module Malfunction Detected.\n"
+                ":rp_utility0: Armor Integrity ignored by device.\n"
+                ":rp_utility0: Armor Modifier Integrity ignored by device.\n"
+                ":rp_utility0: Malfunctioned Accessories ignored by device.\n"
+                ":rp_utility0: Malfunctioned Utilities ignored by device.\n"
+                ":rp_utility1: Large Heat Surge Detected.\n"
+                ":rp_utility0: Meltdown Detected.\n"
+                "Allow **10 minutes** for utility to cool before triggering.",
+                self.bot)
             embed.colour = discord.Colour.red()
         else:
-            embed.description = ("Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Armor Integrity ignored by device.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Armor Modifier Integrity ignored by device.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Malfunctioned Accessories restored to 100%.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Malfunctioned Utilities restored to 100%.\n"
-                                 "<:rp_utility1:371816529458626570> Large Heat Surge Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Meltdown Detected.\n"
-                                 "Allow **10 minutes** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                ":rp_utility0: Armor Integrity ignored by device.\n"
+                "Processing…\n"
+                ":rp_utility0: Armor Modifier Integrity ignored by device.\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Malfunctioned Accessories restored to 100%.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Malfunctioned Utilities restored to 100%.\n"
+                ":rp_utility1: Large Heat Surge Detected.\n"
+                ":rp_utility0: Meltdown Detected.\n"
+                "Allow **10 minutes** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
     
@@ -511,16 +520,18 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 90:
-            embed.description = ("<:rp_utility1:371816529458626570> Chaff launched successfully.\n"
-                                 "<:rp_utility1:371816529458626570> Hostile Sensors are unable to track for 20 Seconds.\n"
-                                 "<:rp_utility1:371816529458626570> Minor Heat Surge Detected.\n"
-                                 "Allow **30 seconds** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility1: Chaff launched successfully.\n"
+                ":rp_utility1: Hostile Sensors are unable to track for 20 Seconds.\n"
+                ":rp_utility1: Minor Heat Surge Detected.\n"
+                "Allow **30 seconds** for utility to cool for optimal performance.", self.bot)
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Chaff failed to launch.\n"
-                                 "<:rp_utility1:371816529458626570> Minor Heat Surge Detected.\n"
-                                 "Allow **30 seconds** for utility to cool before triggering.")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility0: Module Malfunction Detected.\n"
+                ":rp_utility0: Chaff failed to launch.\n"
+                ":rp_utility1: Minor Heat Surge Detected.\n"
+                "Allow **30 seconds** for utility to cool before triggering.", self.bot)
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
     
@@ -544,45 +555,51 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 50:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Scan completed successfully.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Landscape and structure layout updated.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Data Package created, ready to download to a memory drive.\n"
-                                 "<:rp_utility1:371816529458626570> Information updated to any detected Visual Assistant Systems in the squad.\n"
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Scan completed successfully.\n"
+                "Processing…\n"
+                ":rp_utility1: Landscape and structure layout updated.\n"
+                "Processing…\n"
+                ":rp_utility1: Data Package created, ready to download to a memory drive.\n"
+                ":rp_utility1: Information updated to any detected Visual Assistant Systems in the squad.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **60 seconds** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.green()
         elif chance > 90:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Scan failed.\n"
-                                 "<:rp_utility0:371816528326164490> Landscape and structure layout failed to update.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Data Package failed, purging corrupted data.\n"
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool before triggering.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Module Malfunction Detected.\n"
+                ":rp_utility0: Scan failed.\n"
+                ":rp_utility0: Landscape and structure layout failed to update.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Data Package failed, purging corrupted data.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **60 seconds** for utility to cool before triggering.",
+                self.bot)
             embed.colour = discord.Colour.red()
         else:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Scan completed successfully.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Landscape and structure layout updated.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Valuable insight on environment detected.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Data Package created, ready to download to a memory drive.\n"
-                                 "<:rp_utility1:371816529458626570> Information updated to any detected Visual Assistant Systems in the squad.\n"
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Scan completed successfully.\n"
+                "Processing…\n"
+                ":rp_utility1: Landscape and structure layout updated.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Valuable insight on environment detected.\n"
+                "Processing…\n"
+                ":rp_utility1: Data Package created, ready to download to a memory drive.\n"
+                ":rp_utility1: Information updated to any detected Visual Assistant Systems in the squad.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **60 seconds** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
     
@@ -606,36 +623,40 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 50:
-            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered.\n"
-                                 "<:rp_utility1:371816529458626570> Any communications chatter intercepted.\n"
-                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device.\n"
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility1: Detected encrypted data deciphered.\n"
+                ":rp_utility1: Any communications chatter intercepted.\n"
+                ":rp_utility1: Hostile Viruses Purged.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: All deciphered data stored on memory device.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool for optimal performance.", self.bot)
             embed.colour = discord.Colour.green()
         elif chance > 80:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> The device has failed to respond.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Module Malfunction Detected\n"
+                "Processing…\n"
+                ":rp_utility0: The device has failed to respond.\n"
+                "Processing…\n"
+                ":rp_utility1: Massive Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.red()
         else:
-            embed.description = ("<:rp_utility1:371816529458626570> Detected encrypted data deciphered.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Failed to intercept communications chatter.\n"
-                                 "<:rp_utility1:371816529458626570> Hostile Viruses Purged.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> All deciphered data stored on memory device.\n"
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility1: Detected encrypted data deciphered.\n"
+                "Processing…\n"
+                ":rp_utility0: Failed to intercept communications chatter.\n"
+                ":rp_utility1: Hostile Viruses Purged.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: All deciphered data stored on memory device.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool for optimal performance.", self.bot)
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
     
@@ -659,35 +680,38 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 90:
-            embed.description = ("Processing…\n"
-                                 "Processing...\n"
-                                 "<:rp_utility1:371816529458626570> All Generated Heat successfully pulled from Utilities.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing...\n"
-                                 "<:rp_utility1:371816529458626570> All Generated Heat successfully pulled from Thermal Weaponry.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Heat Sink spin cycle initiated, preparing to launch.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Heat Sink launched successfully.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing...\n"
+                ":rp_utility1: All Generated Heat successfully pulled from Utilities.\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing...\n"
+                ":rp_utility1: All Generated Heat successfully pulled from Thermal Weaponry.\n"
+                "Processing…\n"
+                ":rp_utility1: Heat Sink spin cycle initiated, preparing to launch.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility1: Heat Sink launched successfully.",
+                self.bot)
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("Processing…\n"
-                                 "Processing...\n"
-                                 "<:rp_utility1:371816529458626570> All Generated Heat successfully pulled from Utilities.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing...\n"
-                                 "<:rp_utility1:371816529458626570> All Generated Heat successfully pulled from Thermal Weaponry.\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Heat Sink spin cycle initiated, preparing to launch.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Heat buildup exceeds Heat Sink capacity.  Preparing to Overcharge disk.\n"
-                                 "WARNING: Keep clear of Heat Sink when launched;\n"
-                                 "<:rp_utility1:371816529458626570> Overcharged Heat Sink launched, certain to explode on contact.\n"
-                                 "Utility ready for use.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing...\n"
+                ":rp_utility1: All Generated Heat successfully pulled from Utilities.\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing...\n"
+                ":rp_utility1: All Generated Heat successfully pulled from Thermal Weaponry.\n"
+                "Processing…\n"
+                ":rp_utility1: Heat Sink spin cycle initiated, preparing to launch.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Heat buildup exceeds Heat Sink capacity.  Preparing to Overcharge disk.\n"
+                "WARNING: Keep clear of Heat Sink when launched;\n"
+                ":rp_utility1: Overcharged Heat Sink launched, certain to explode on contact.\n"
+                "Utility ready for use.", self.bot)
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
     
@@ -711,25 +735,29 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 90:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing...\n"
-                                 "<:rp_utility1:371816529458626570> Identity Scan Completed.\n"
-                                 "<:rp_utility1:371816529458626570> Information updated to any detected Visual Assistant Systems in the squad.\n"
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                 "Allow **30 seconds** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                "Processing...\n"
+                ":rp_utility1: Identity Scan Completed.\n"
+                ":rp_utility1: Information updated to any detected Visual Assistant Systems in the squad.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **30 seconds** for utility to cool for optimal performance.",
+                self.bot)
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                 "<:rp_utility1:371816529458626570> Identity Scan Failed.\n"
-                                 "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
-                                 "Allow **60 seconds** for utility to cool before triggering.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Module Malfunction Detected.\n"
+                ":rp_utility1: Identity Scan Failed.\n"
+                ":rp_utility1: Heat Surge Detected.\n"
+                "Allow **60 seconds** for utility to cool before triggering.",
+                self.bot)
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
     
@@ -753,24 +781,27 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 90:
-            embed.description = ("<:rp_utility1:371816529458626570> Frequencies generated successfully.\n"
-                                 "<:rp_utility1:371816529458626570> Effective range is **100 Meters**.\n"
-                                 "<:rp_utility1:371816529458626570> All individuals within 100 Meters are delirious and will experience hallucinations.\n"
-                                 "<:rp_utility1:371816529458626570>  Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.\n"
-                                 )
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility1: Frequencies generated successfully.\n"
+                ":rp_utility1: Effective range is **100 Meters**.\n"
+                ":rp_utility1: All individuals within 100 Meters are delirious and will experience hallucinations.\n"
+                ":rp_utility1:  Massive Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool for optimal performance.\n"
+                , self.bot)
             embed.colour = discord.Colour.green()
         else:
-            embed.description = (":rp_utility1: Frequencies generated successfully.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Effective range is **5 Meters**.\n"
-                                 "<:rp_utility1:371816529458626570> " + (
-                                         who.nick or who.display_name) + " is delirious and will experience hallucinations.\n"
-                                                                         "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                                                         "Allow **2 Minutes** for utility to cool for optimal performance.\n")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility1: Frequencies generated successfully.\n"
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Module Malfunction Detected\n"
+                "Processing…\n"
+                ":rp_utility0: Effective range is **5 Meters**.\n"
+                ":rp_utility1: " + (
+                        who.nick or who.display_name) + " is delirious and will experience hallucinations.\n"
+                                                        ":rp_utility1: Massive Heat Surge Detected.\n"
+                                                        "Allow **2 Minutes** for utility to cool for optimal performance.\n",
+                self.bot)
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
     
@@ -794,20 +825,22 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 90:
-            embed.description = ("<:rp_utility1:371816529458626570> 28 Decoy Clones projected successfully.\n"
-                                 "<:rp_utility1:371816529458626570> Audio Shimmering transmitted successfully.\n"
-                                 "<:rp_utility1:371816529458626570> Immune to targeting for 10 Seconds.\n"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility1: 28 Decoy Clones projected successfully.\n"
+                ":rp_utility1: Audio Shimmering transmitted successfully.\n"
+                ":rp_utility1: Immune to targeting for 10 Seconds.\n"
+                ":rp_utility1: Massive Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool for optimal performance.", self.bot)
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Decoy Clones failed to project.\n"
-                                 "<:rp_utility0:371816528326164490> Audio Shimmering failed to transmit.\n"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool before triggering.")
+            embed.description = TextChecker.replace_emotes(
+                "Processing…\n"
+                "Processing…\n"
+                ":rp_utility0: Module Malfunction Detected.\n"
+                ":rp_utility0: Decoy Clones failed to project.\n"
+                ":rp_utility0: Audio Shimmering failed to transmit.\n"
+                ":rp_utility1: Massive Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool before triggering.", self.bot)
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
     
@@ -831,19 +864,21 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 90:
-            embed.description = ("<:rp_utility1:371816529458626570> 60 Corrupted Holograms projected per minute.\n"
-                                 "<:rp_utility1:371816529458626570> Generating disruptive audio successfully.\n"
-                                 "<:rp_utility1:371816529458626570> Immune to recognition software for ten minutes.\n"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool for optimal performance.")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility1: 60 Corrupted Holograms projected per minute.\n"
+                ":rp_utility1: Generating disruptive audio successfully.\n"
+                ":rp_utility1: Immune to recognition software for ten minutes.\n"
+                ":rp_utility1: Massive Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool for optimal performance.", self.bot)
             embed.colour = discord.Colour.green()
         else:
-            embed.description = ("<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                 "<:rp_utility0:371816528326164490> 400 Corrupted Holograms erratically projected before jamming projector orb.\n"
-                                 "<:rp_utility1:371816529458626570> Disrupted audio hauntingly transmitted before overloading system memory.\n"
-                                 "<:rp_utility1:371816529458626570> Failed to conceal identity, drawing attention.\n"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                 "Allow **2 Minutes** for utility to cool before triggering.")
+            embed.description = TextChecker.replace_emotes(
+                ":rp_utility0: Module Malfunction Detected.\n"
+                ":rp_utility0: 400 Corrupted Holograms erratically projected before jamming projector orb.\n"
+                ":rp_utility1: Disrupted audio hauntingly transmitted before overloading system memory.\n"
+                ":rp_utility1: Failed to conceal identity, drawing attention.\n"
+                ":rp_utility1: Massive Heat Surge Detected.\n"
+                "Allow **2 Minutes** for utility to cool before triggering.", self.bot)
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
 

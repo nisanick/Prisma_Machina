@@ -6,12 +6,12 @@ class TextChecker:
 
     @staticmethod
     def replace_emotes(text: str, bot) -> str:
-        emote_string = ":[A-z]+:"
+        emote_string = ":[A-z0-9]+:"
         return_text = text
         expression = re.compile(emote_string)
         result = expression.findall(text)
 
-        for word in result:
+        for word in set(result):
             emote_name = word[1:-1]
             emote = word
             for emoji in bot.emojis:
