@@ -383,28 +383,6 @@ class Roleplay:
             embed.set_author(name=who)
         
         if chance <= 60:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Personal Shield Devices are recharged to full capacity.\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility1:371816529458626570> Thermal Weaponry are recharged to full capacity.\n"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                 "Allow **5 minutes** for utility to cool for optimal performance.")
-            embed.colour = discord.Colour.green()
-        elif chance > 90:
-            embed.description = ("Processing…\n"
-                                 "Processing…\n"
-                                 "<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Personal Shield Devices failed to recharge.\n"
-                                 "<:rp_utility0:371816528326164490> Thermal Weaponry failed to recharge.\n"
-                                 "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                 "<:rp_utility0:371816528326164490> Meltdown Detected.\n"
-                                 "Allow **5 minutes** for utility to cool before triggering.")
-            embed.colour = discord.Colour.red()
-        else:
             embed.description = TextChecker.replace_emotes("Processing…\n"
                                                            "Processing…\n"
                                                            "Processing…\n"
@@ -412,8 +390,32 @@ class Roleplay:
                                                            "Processing…\n"
                                                            "Processing…\n"
                                                            "Processing…\n"
-                                                           "<:rp_utility1:371816529458626570> hermal Weaponry are recharged to full capacity.\n"
-                                                           "<:rp_utility1:371816529458626570> Heat Surge Detected.\n"
+                                                           "<:rp_utility1:371816529458626570> Thermal Weaponry are recharged to full capacity.\n"
+                                                           "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
+                                                           "Allow **5 minutes** for utility to cool for optimal performance.",
+                                                           self.bot)
+            embed.colour = discord.Colour.green()
+        elif chance > 90:
+            embed.description = TextChecker.replace_emotes("Processing…\n"
+                                                           "Processing…\n"
+                                                           "<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
+                                                           "<:rp_utility0:371816528326164490> Personal Shield Devices failed to recharge.\n"
+                                                           "<:rp_utility0:371816528326164490> Thermal Weaponry failed to recharge.\n"
+                                                           "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
+                                                           "<:rp_utility0:371816528326164490> Meltdown Detected.\n"
+                                                           "Allow **5 minutes** for utility to cool before triggering.",
+                                                           self.bot)
+            embed.colour = discord.Colour.red()
+        else:
+            embed.description = TextChecker.replace_emotes("Processing…\n"
+                                                           "Processing…\n"
+                                                           "Processing…\n"
+                                                           ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
+                                                           "Processing…\n"
+                                                           "Processing…\n"
+                                                           "Processing…\n"
+                                                           ":rp_utility1: hermal Weaponry are recharged to full capacity.\n"
+                                                           ":rp_utility1: Heat Surge Detected.\n"
                                                            "Allow **60 seconds** for utility to cool for optimal performance.",
                                                            self.bot)
             embed.colour = discord.Colour.orange()
@@ -765,9 +767,9 @@ class Roleplay:
                                  "Processing…\n"
                                  "<:rp_utility0:371816528326164490> Effective range is **5 Meters**.\n"
                                  "<:rp_utility1:371816529458626570> " + (
-                                             who.nick or who.display_name) + " is delirious and will experience hallucinations.\n"
-                                                                             "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                                                             "Allow **2 Minutes** for utility to cool for optimal performance.\n")
+                                         who.nick or who.display_name) + " is delirious and will experience hallucinations.\n"
+                                                                         "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
+                                                                         "Allow **2 Minutes** for utility to cool for optimal performance.\n")
             embed.colour = discord.Colour.red()
         await channel.send('', embed=embed)
     
