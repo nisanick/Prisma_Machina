@@ -12,12 +12,14 @@ class TextChecker:
         result = expression.findall(text)
 
         for word in set(result):
-            emote_name = word[1:-1]
-            emote = word
-            for emoji in bot.emojis:
-                if emoji.name.lower() == emote_name.lower():
-                    emote = emoji
-                    break
-            return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
-
+            try:
+                emote_name = word[1:-1]
+                emote = word
+                for emoji in bot.emojis:
+                    if emoji.name.lower() == emote_name.lower():
+                        emote = emoji
+                        break
+                return_text = return_text.replace(word, "<:{}:{}>".format(emote.name, emote.id))
+            except AttributeError:
+                print("{} emoji doesn't exist".format(word))
         return return_text

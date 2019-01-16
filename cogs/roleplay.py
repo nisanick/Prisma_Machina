@@ -24,6 +24,7 @@ class Roleplay:
         self.announce_message = None
         self.system_message = None
         self.turn_number = 0
+        self.prompt = None
     
     @commands.group(name='rp', case_insensitive=True)
     async def _rp(self, ctx):
@@ -236,7 +237,8 @@ class Roleplay:
         """
         try:
             await getattr(self, '_' + what)(ctx, who, channel)
-        except AttributeError:
+        except AttributeError as ex:
+            print(ex)
             await ctx.send("tool {} doesn't exist".format(what))
     
     @_rp.command(name='clean')
@@ -266,28 +268,54 @@ class Roleplay:
         """
         if what == 'target' and params[0] is not None:
             self.parameters[what] = params[0]
+            await ctx.send('target set to {}'.format(params[0]))
         elif what == 'channel' and params[0] is not None:
             self.parameters[what] = params[0]
-        
         else:
             to_delete = await ctx.send('Unknown parameter!')
             await asyncio.sleep(2)
             await to_delete.delete()
+            
+    def react_check(self, reaction, user):
+        if reaction.message.id != self.prompt.id:
+            return False
+
+        for emoji in ['1\u20e3', '2\u20e3', '3\u20e3', '4\u20e3', '5\u20e3', '6\u20e3']:
+            if reaction.emoji == emoji:
+                return True
+        return False
     
-    async def _hack(self, ctx, difficulty: int = None, who=None, channel: discord.TextChannel = None):
+    async def _hack(self, ctx, who=None, channel: discord.TextChannel = None):
         """
         Initiates hack with specified difficulty.
         """
-        if difficulty is None and 'target' in self.parameters and self.parameters['target'] is not None:
-            difficulty = int(self.parameters['target'])
-        else:
-            to_delete = await ctx.send("There is no hack target specified")
-            await asyncio.sleep(1)
-            await to_delete.delete()
-            values = self.players[ctx.author.id]
-            self.players[ctx.author.id] = (values[0], None)
-            await self.post_players()
-            return None
+        prompt = await self.bot.get_channel(374691520055345162).send('{} is trying to hack something. Please select the level.'.format(ctx.author))
+        await prompt.add_reaction('1\u20e3')
+        await prompt.add_reaction('2\u20e3')
+        await prompt.add_reaction('3\u20e3')
+        await prompt.add_reaction('4\u20e3')
+        await prompt.add_reaction('5\u20e3')
+        await prompt.add_reaction('6\u20e3')
+        
+        self.prompt = prompt
+        difficulty = 0
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=self.react_check, timeout=60.0)
+            if reaction is '1\u20e3':
+                difficulty = 1
+            elif reaction is '2\u20e3':
+                difficulty = 2
+            elif reaction is '3\u20e3':
+                difficulty = 3
+            elif reaction is '4\u20e3':
+                difficulty = 4
+            elif reaction is '5\u20e3':
+                difficulty = 5
+            elif reaction is '6\u20e3':
+                difficulty = 6
+        except asyncio.TimeoutError:
+            await ctx.send('Admin is bussy. Please try to set the hack again later!')
+            return
         
         if not await can_manage_bot(ctx):
             who = None
