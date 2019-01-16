@@ -386,23 +386,23 @@ class Roleplay:
             embed.description = TextChecker.replace_emotes("Processing…\n"
                                                            "Processing…\n"
                                                            "Processing…\n"
-                                                           "<:rp_utility1:371816529458626570> Personal Shield Devices are recharged to full capacity.\n"
+                                                           ":rp_utility1: Personal Shield Devices are recharged to full capacity.\n"
                                                            "Processing…\n"
                                                            "Processing…\n"
                                                            "Processing…\n"
-                                                           "<:rp_utility1:371816529458626570> Thermal Weaponry are recharged to full capacity.\n"
-                                                           "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
+                                                           ":rp_utility1: Thermal Weaponry are recharged to full capacity.\n"
+                                                           ":rp_utility1: Massive Heat Surge Detected.\n"
                                                            "Allow **5 minutes** for utility to cool for optimal performance.",
                                                            self.bot)
             embed.colour = discord.Colour.green()
         elif chance > 90:
             embed.description = TextChecker.replace_emotes("Processing…\n"
                                                            "Processing…\n"
-                                                           "<:rp_utility0:371816528326164490> Module Malfunction Detected.\n"
-                                                           "<:rp_utility0:371816528326164490> Personal Shield Devices failed to recharge.\n"
-                                                           "<:rp_utility0:371816528326164490> Thermal Weaponry failed to recharge.\n"
-                                                           "<:rp_utility1:371816529458626570> Massive Heat Surge Detected.\n"
-                                                           "<:rp_utility0:371816528326164490> Meltdown Detected.\n"
+                                                           ":rp_utility0: Module Malfunction Detected.\n"
+                                                           ":rp_utility0: Personal Shield Devices failed to recharge.\n"
+                                                           ":rp_utility0: Thermal Weaponry failed to recharge.\n"
+                                                           ":rp_utility1: Massive Heat Surge Detected.\n"
+                                                           ":rp_utility0: Meltdown Detected.\n"
                                                            "Allow **5 minutes** for utility to cool before triggering.",
                                                            self.bot)
             embed.colour = discord.Colour.red()
