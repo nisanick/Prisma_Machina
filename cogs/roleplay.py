@@ -174,10 +174,11 @@ class Roleplay:
                 if action:
                     await player.use_item()
             elif what == 'hack':
-                if player.gloves[1].lower().__contains__("hacking") and player.gloves[1].lower().__contains__("system"):
-                    action = await self._hack(ctx)
-                    if not action:
-                        return
+                if player.gloves:
+                    if player.gloves[1].lower().__contains__("hacking") and player.gloves[1].lower().__contains__("system"):
+                        action = await self._hack(ctx)
+                        if not action:
+                            return
             elif player.have_util(what):
                 action = what
                 await getattr(self, '_' + action)(ctx)
