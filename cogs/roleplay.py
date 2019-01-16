@@ -420,6 +420,7 @@ class Roleplay:
                                                            self.bot)
             embed.colour = discord.Colour.orange()
         await channel.send('', embed=embed)
+        await channel.send('```python\n{}\n```'.format(embed.description))
     
     async def _afmu(self, ctx, who=None, channel: discord.TextChannel = None):
         """
