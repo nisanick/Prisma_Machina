@@ -202,6 +202,7 @@ class Roleplay:
             to_delete = await ctx.send("Action registered.")
             await asyncio.sleep(2)
             await to_delete.delete()
+            await self.post_players()
     
     @_rp.command(name='end')
     @commands.check(checks.can_manage_rp)
