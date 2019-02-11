@@ -46,6 +46,8 @@ class Fun:
             await ctx.send("BY ACHENAR... you compared to almighty Wisewolf? Please")
         elif member.id == 351706853153046549:  # Ryan
             await ctx.send("[REDACTED BY ADMINISTRATION - Classified information]")
+        elif member.id == 360543179591909397:  # Bear
+            await ctx.send("Rupey is as awesome as a teacher can be.")
         else:
             if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
                 await ctx.send("Everyone is better than Wisewolf")
