@@ -197,6 +197,9 @@ class Utils:
     @commands.check(checks.can_manage_bot)
     async def probe(self, ctx, *, who):
         user = await commands.MemberConverter().convert(ctx, who)
+        if user.id == 163037317278203908:
+            await ctx.send("I can't figure out where the probe should go.")
+            return
         probation = discord.utils.find(lambda r: r.name == 'Probation', ctx.guild.roles)
         senator = discord.utils.find(lambda r: r.name == 'Senator', ctx.guild.roles)
         await user.add_roles(*[probation, senator])
