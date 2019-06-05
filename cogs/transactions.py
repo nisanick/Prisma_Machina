@@ -26,9 +26,6 @@ class Transactions:
     @_award.command(name='diamonds', aliases=['d'], case_insensitive=True)
     @commands.check(checks.can_manage_rp)
     async def _diamonds(self, ctx: commands.Context, amount, *, who: discord.Member):
-        if int(amount) < 1:
-            await ctx.message.add_reaction('😏')
-            return
         await self.transaction(ctx, amount, ctx.author, who, award_link, 'diamonds')
     
     @_award.command(name='reputation', aliases=['r', 'rep'], case_insensitive=True)
@@ -45,19 +42,6 @@ class Transactions:
             await ctx.message.add_reaction('😏')
             return
         await self.transaction(ctx, amount, ctx.author, who)
-    
-    @commands.command(name='take', hidden=True, case_insensitive=True)
-    @commands.check(checks.can_manage_bot)
-    async def _take(self, ctx, amount, *, who: discord.Member):
-        if int(amount) < 1:
-            await ctx.message.add_reaction('😏')
-            return
-        
-        try:
-            bot = await commands.MemberConverter().convert(ctx, '294171600478142466')
-        except commands.CommandError:
-            bot = ctx.author
-        await self.transaction(ctx, amount, who, bot)
     
     def react_check(self, reaction, user):
         message = reaction.message
