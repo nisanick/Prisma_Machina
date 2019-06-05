@@ -1,4 +1,5 @@
 from web import Web
+import config
 
 
 class Player:
@@ -26,7 +27,7 @@ class Player:
         
         for item in items:
             slot = item["Slot"]
-            piece = (item['Item ID'], item["Item"])
+            piece = (item['Inventory ID'], item["Item"])
             if slot == 'melee':
                 self.melee = piece
             elif slot == 'utility':
@@ -83,7 +84,8 @@ class Player:
             return
         args = {
             'discord_id': self.user_id,
-            'item_id': item
+            'item_id': item,
+            'key': config.TRANSACTION_KEY
         }
         response = await Web.get_response(link, args)
     

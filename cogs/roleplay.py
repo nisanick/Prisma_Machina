@@ -101,10 +101,12 @@ class Roleplay:
                 await to_delete.delete()
                 return
         args = {
-            'discord_id': ctx.author.id
+            'discord_id': ctx.author.id,
+            'key': config.TRANSACTION_KEY
             # 'discord_id': '144229491907100672'
         }
         response = await Web.get_response(user_data_link, args)
+        await Web.get_response(lock_link, args)
         player = Player(player_id, response['Inventory'])
         self.players[player_id] = (player, None)
         self.playerids.append(player_id)
@@ -242,6 +244,11 @@ class Roleplay:
                     await self.bot.get_channel(326954112744816643).send('Session ended. Thanks for participating')
                     await sys_message.edit(content='{}\nSession ended'.format(sys_message.content))
         await Database.close_connection(db)
+        args = {
+            'discord_id': 'all',
+            'key'       : config.TRANSACTION_KEY
+        }
+        await Web.get_response(lock_link, args)
     
     @_rp.command(name='tool')
     @commands.check(checks.can_manage_rp)
@@ -271,6 +278,11 @@ class Roleplay:
             self.system_message = None
             await ctx.send('Sessions cleaned')
         await Database.close_connection(db)
+        args = {
+            'discord_id': 'all',
+            'key'       : config.TRANSACTION_KEY
+        }
+        await Web.get_response(lock_link, args)
     
     @_rp.command(name='set')
     @commands.check(checks.can_manage_rp)
