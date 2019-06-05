@@ -37,7 +37,7 @@ class Transactions:
         if int(amount) < 1:
             await ctx.message.add_reaction('😏')
             return
-        await self.transaction(ctx, amount, ctx.author, who, award_link, 'reputation')
+        await self.transaction(ctx, amount, ctx.author, who, award_link, 'rep')
     
     @commands.command(name='donate', aliases=['give', 'donation'], case_insensitive=True)
     async def _donate(self, ctx: commands.Context, amount, *, who: discord.Member):
@@ -125,9 +125,13 @@ class Transactions:
                     await ctx.message.add_reaction(emoji)
                     admin_channel = await commands.TextChannelConverter().convert(ctx,
                                                                                   config.ADMINISTRATION_CHANNEL)
+                    
+                    operation = 'donated'
+                    if endpoint is award_link:
+                        operation = 'awarded'
                     await admin_channel.send(
-                        "{} diamonds went from {} to {}".format(amount, giver.nick or giver.name,
-                                                                receiver.nick or receiver.name))
+                        "{} gave {} {} to {}".format(giver.nick or giver.name, amount, transaction_type,
+                                                     receiver.nick or receiver.name))
                 else:
                     await ctx.message.add_reaction('❌')
                     if code == 1:
