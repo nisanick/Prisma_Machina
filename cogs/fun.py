@@ -2,12 +2,7 @@
 import discord
 from discord.ext import commands
 import random
-from web import Web
-from data.links import donation_link
-import database
-import config
 from datetime import datetime
-import asyncio
 
 default_chance = 600
 
@@ -16,10 +11,6 @@ class Fun:
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.limit = default_chance
-        self.duck_message = None
-        self.duck_shots = 0
-        self.users = []
-        self.last_duck = 0
 
     @commands.command()
     async def awesomenessof(self, ctx, who):
@@ -62,15 +53,6 @@ class Fun:
             await ctx.send("This incident was reported to proper authorities!")
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
-
-    @commands.command(name='sudoku', aliases=['cs', 'commitsudoku'])
-    async def _sudoku(self, ctx):
-        embed = discord.Embed(title='Argh')
-        embed.set_image(url='http://nisanick.com/pictures/{}'.format('sudoku.png'))
-        embed.timestamp = datetime.utcnow()
-        embed.set_footer(text='Generated on ')
-        await ctx.send(content=None, embed=embed)
-        await ctx.message.delete()
 
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)
@@ -128,71 +110,7 @@ class Fun:
 
         if isinstance(message.channel, discord.DMChannel):
             return
-
-        if number > 700 and datetime.strptime('24.12.{}'.format(datetime.utcnow().year),
-                                              '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
-                '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
-            await message.add_reaction(random.choice(['⛄', '❄️', '🌟', '🍪', '🎅', '🤶', '🎄', '🔔', '🎶']))
-
-        if self.last_duck > 500 or (self.last_duck > 30 and random.randint(1, 1000) > 985):
-            if message.content.startswith(tuple(config.PREFIX)):
-                return
-            self.duck_message = message
-            self.duck_shots = 0
-            self.users = [294171600478142466]
-            self.last_duck = 0
-            reaction = '🦆'
-            if datetime.strptime('24.12.{}'.format(datetime.utcnow().year),
-                                 '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
-                    '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
-                reaction = '🎁'
-            elif datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
-                reaction = '🔫'
-
-            await asyncio.sleep(random.randint(1, 60))
-            await self.duck_message.add_reaction(reaction)
-        else:
-            self.last_duck += 1
-
-    async def on_reaction_add(self, reaction, user):
-        if self.duck_message is None:
-            return
-        if user.id in self.users:
-            return
-        hunt = '🔫'
-        if datetime.strptime('24.12.{}'.format(datetime.utcnow().year),
-                             '%d.%m.%Y') < datetime.utcnow() < datetime.strptime(
-                '27.12.{}'.format(datetime.utcnow().year), '%d.%m.%Y'):
-            hunt = '🎁'
-        elif datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
-            hunt = '🦆'
-        if reaction.emoji == hunt and reaction.message == self.duck_message:
-            self.users.append(user.id)
-            self.duck_shots += 1
-            amount = 1
-            if self.duck_shots == 1:
-                amount = 6
-
-            # if self.duck_message.created_at.timestamp() + 15 > datetime.utcnow().timestamp():
-            #    amount += 4
-            values = {
-                'giver': 294171600478142466,
-                'receiver': user.id,
-                'amount': amount
-            }
-
-            await Web.get_response(donation_link, values)
-
-            insert = "INSERT INTO users (user_id, message_count, reaction_count, special, ducks) VALUES ($1, 0, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET ducks = users.ducks + 1"
-            db = await database.Database.get_connection(self.bot.loop)
-            async with db.transaction():
-                await db.execute(insert, str(user.id))
-            await database.Database.close_connection(db)
-
-    @commands.command(hidden=True)
-    async def wuwhu(self, ctx):
-        await ctx.message.delete()
-        await ctx.send(file=discord.File('{}img/tech_wuwhu.PNG'.format(config.BASE_DIR)))
+        
 
 def setup(bot: commands.Bot):
     bot.add_cog(Fun(bot))
