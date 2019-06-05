@@ -136,7 +136,7 @@ class Roleplay:
         3 - Heavy
         4 - Melee
         5 - Defense
-        6 - Consumable !!IMPORTANT - will consume your item on use
+        6, 7, 8, 9 - Consumable !!IMPORTANT - will consume your item on use
         
         To use equiped utility slots, use abbreviate form of the name:
         Chaff launcher               -> chaff
@@ -170,9 +170,21 @@ class Roleplay:
             elif what == '5':
                 action = player.defense[1] if player.defense else None
             elif what == '6':
-                action = player.disposable[1] if player.disposable else None
+                action = player.disposable1[1] if player.disposable1 else None
                 if action:
-                    await player.use_item()
+                    await player.use_item(1)
+            elif what == '7':
+                action = player.disposable2[1] if player.disposable2 else None
+                if action:
+                    await player.use_item(2)
+            elif what == '8':
+                action = player.disposable3[1] if player.disposable3 else None
+                if action:
+                    await player.use_item(3)
+            elif what == '9':
+                action = player.disposable4[1] if player.disposable4 else None
+                if action:
+                    await player.use_item(4)
             elif what == 'hack':
                 if player.gloves:
                     if player.gloves[1].lower().__contains__("hacking") and player.gloves[1].lower().__contains__("system"):

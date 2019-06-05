@@ -14,7 +14,10 @@ class Player:
         self.defense = None
         self.nap = None
         self.light = None
-        self.disposable = None
+        self.disposable1 = None
+        self.disposable2 = None
+        self.disposable3 = None
+        self.disposable4 = None
         self.medium = None
         self.head = None
         self.drone = None
@@ -40,8 +43,14 @@ class Player:
                 self.defense = piece
             elif slot == 'light':
                 self.light = piece
-            elif slot == 'disposable':
-                self.disposable = piece
+            elif slot == 'disposable1':
+                self.disposable1 = piece
+            elif slot == 'disposable2':
+                self.disposable2 = piece
+            elif slot == 'disposable3':
+                self.disposable3 = piece
+            elif slot == 'disposable4':
+                self.disposable4 = piece
             elif slot == 'medium':
                 self.medium = piece
             elif slot == 'head':
@@ -55,15 +64,28 @@ class Player:
                 return True
         return False
     
-    async def use_item(self):
+    async def use_item(self, number):
         from data.links import item_use_link
         link = item_use_link
+        if number == 1:
+            item = self.disposable1[0]
+            self.disposable1 = None
+        elif number == 2:
+            item = self.disposable2[0]
+            self.disposable2 = None
+        elif number == 3:
+            item = self.disposable3[0]
+            self.disposable3 = None
+        elif number == 4:
+            item = self.disposable4[0]
+            self.disposable4 = None
+        else:
+            return
         args = {
             'discord_id': self.user_id,
-            'item_id': self.disposable[0]
+            'item_id': item
         }
         response = await Web.get_response(link, args)
-        self.disposable = None
     
     
 def add_utility(colection, piece):
