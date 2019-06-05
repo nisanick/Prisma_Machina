@@ -130,7 +130,7 @@ class Transactions:
                     if endpoint is award_link:
                         operation = 'awarded'
                     await admin_channel.send(
-                        "{} gave {} {} to {}".format(giver.nick or giver.name, amount, transaction_type,
+                        "{} {} {} {} to {}".format(giver.nick or giver.name, operation, amount, transaction_type,
                                                      receiver.nick or receiver.name))
                 else:
                     await ctx.message.add_reaction('❌')
