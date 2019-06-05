@@ -84,7 +84,7 @@ class Player:
             return
         args = {
             'discord_id': self.user_id,
-            'item_id': item,
+            'inv_id': item,
             'key': config.TRANSACTION_KEY
         }
         response = await Web.get_response(link, args)
