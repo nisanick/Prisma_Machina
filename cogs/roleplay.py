@@ -248,7 +248,7 @@ class Roleplay:
             'discord_id': 'all',
             'key'       : config.TRANSACTION_KEY
         }
-        await Web.get_response(lock_link, args)
+        await Web.get_response(unlock_link, args)
     
     @_rp.command(name='tool')
     @commands.check(checks.can_manage_rp)
@@ -282,7 +282,7 @@ class Roleplay:
             'discord_id': 'all',
             'key'       : config.TRANSACTION_KEY
         }
-        await Web.get_response(lock_link, args)
+        await Web.get_response(unlock_link, args)
     
     @_rp.command(name='set')
     @commands.check(checks.can_manage_rp)
