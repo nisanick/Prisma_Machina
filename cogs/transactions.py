@@ -24,12 +24,12 @@ class Transactions:
                 await ctx.channel.delete_messages(to_delete)
     
     @_award.command(name='diamonds', aliases=['d'], case_insensitive=True)
-    @commands.check(checks.can_manage_rp)
+    @commands.check(checks.can_manage_bot)
     async def _diamonds(self, ctx: commands.Context, amount, *, who: discord.Member):
         await self.transaction(ctx, amount, ctx.author, who, award_link, 'diamonds')
     
     @_award.command(name='reputation', aliases=['r', 'rep'], case_insensitive=True)
-    @commands.check(checks.can_manage_rp)
+    @commands.check(checks.can_manage_bot)
     async def _reputation(self, ctx: commands.Context, amount, *, who: discord.Member):
         if int(amount) < 1:
             await ctx.message.add_reaction('😏')
