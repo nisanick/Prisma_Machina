@@ -36,6 +36,14 @@ class Transactions:
             return
         await self.transaction(ctx, amount, ctx.author, who, award_link, 'rep')
     
+    @_award.command(name='both', aliases=['b'], case_insensitive=True)
+    @commands.check(checks.can_manage_bot)
+    async def _both(self, ctx: commands.Context, amount, *, who: discord.Member):
+        if int(amount) < 1:
+            await ctx.message.add_reaction('😏')
+            return
+        await self.transaction(ctx, amount, ctx.author, who, award_link, 'both')
+    
     @commands.command(name='donate', aliases=['give', 'donation'], case_insensitive=True)
     async def _donate(self, ctx: commands.Context, amount, *, who: discord.Member):
         if ctx.author.id == who.id or int(amount) < 1:
