@@ -5,7 +5,7 @@ from datetime import datetime
 import discord
 import math
 
-class Nasa:
+class Nasa(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

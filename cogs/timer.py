@@ -15,7 +15,7 @@ from web import Web
 import urllib.parse
 
 
-class Timer:
+class Timer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.execute = True

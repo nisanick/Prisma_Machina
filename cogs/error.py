@@ -18,7 +18,7 @@ class ResponseStatusError(AssBotException):
         super().__init__(msg)
 
 
-class CommandErrorHandler:
+class CommandErrorHandler(commands.Cog):
     async def on_command_error(self, ctx, error):
         """The event triggered when an error is raised while invoking a command.
         ctx   : Context

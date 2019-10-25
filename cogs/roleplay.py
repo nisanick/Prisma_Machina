@@ -14,7 +14,7 @@ import discord
 from discord.ext import commands
 
 
-class Roleplay:
+class Roleplay(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.parameters = {}
         self.bot = bot

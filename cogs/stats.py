@@ -7,7 +7,7 @@ from data.links import *
 from web import Web
 
 
-class Stats:
+class Stats(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

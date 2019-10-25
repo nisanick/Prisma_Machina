@@ -7,7 +7,7 @@ import config
 import checks
 
 
-class Transactions:
+class Transactions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.donations = []

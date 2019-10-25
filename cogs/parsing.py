@@ -6,7 +6,7 @@ import database
 import checks
 
 
-class Parser:
+class Parser(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

@@ -7,7 +7,7 @@ from datetime import datetime
 default_chance = 600
 
 
-class Fun:
+class Fun(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.limit = default_chance
