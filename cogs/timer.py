@@ -57,7 +57,8 @@ class Timer(commands.Cog):
 
                 # RP message
                 elif event_type == 2:
-                    await self.send_article(int(event_special), True)
+                    pass
+                    # await self.send_article(int(event_special), True)
 
                 await db.execute(event_update, event_id)
         await Database.close_connection(db)
