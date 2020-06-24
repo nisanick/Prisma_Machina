@@ -178,14 +178,15 @@ class Utils(commands.Cog):
             await ctx.message.delete()
         await ctx.send(embed=embed)
 
+    @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
         try:
             if member.display_name.__contains__('💎'):
                 return
         except Exception:
             print("nope")
-        channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
-        await channel.send(config.WELCOME.format(member.mention))
+        # channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
+        # await channel.send(config.WELCOME.format(member.mention))
         mention = ""
         for role in member.guild.roles:
             if role.name == 'High Council':
@@ -216,6 +217,7 @@ class Utils(commands.Cog):
             await ctx.message.delete()
         await database.Database.close_connection(db)
 
+    @commands.Cog.listener()
     async def on_member_remove(self, member):
         channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
         if isinstance(member, discord.Member):
@@ -245,6 +247,7 @@ class Utils(commands.Cog):
     async def _embed(self, ctx, channel: discord.TextChannel):
         pass
 
+    @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if message.author.id == self.bot.user.id or message.content.startswith(tuple(config.PREFIX)):
             return

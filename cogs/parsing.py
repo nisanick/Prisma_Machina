@@ -76,6 +76,7 @@ class Parser(commands.Cog):
             await database.Database.close_connection(db)
             await ctx.send("done")"""
 
+    @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if message.author.id == self.bot.user.id or message.content.startswith(tuple(config.PREFIX)):
             return
@@ -86,6 +87,7 @@ class Parser(commands.Cog):
         what = what.split(" ")
         await self.__insert(what, message.author, message.created_at)
 
+    @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
         if message.author.id == self.bot.user.id or message.content.startswith(tuple(config.PREFIX)):
             return
@@ -105,6 +107,7 @@ class Parser(commands.Cog):
             await db.execute(insert, *values)
         await database.Database.close_connection(db)
 
+    @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         if before.author.id == self.bot.user.id or before.content.startswith(tuple(config.PREFIX)):
             return
@@ -134,12 +137,14 @@ class Parser(commands.Cog):
         async with db.transaction():
             await db.execute(insert, *values)
         await database.Database.close_connection(db)
-        
+
+    @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
         if user.bot:
             return
         await self.__insert_reaction(reaction, user, datetime.utcnow())
 
+    @commands.Cog.listener()
     async def on_reaction_remove(self, reaction, user):
         if user.bot:
             return

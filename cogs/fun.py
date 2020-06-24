@@ -54,6 +54,7 @@ class Fun(commands.Cog):
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
 
+    @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)
 
