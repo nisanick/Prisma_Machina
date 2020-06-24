@@ -53,6 +53,7 @@ class Roleplay(commands.Cog):
         message += '```\n'
         message += 'New turn has begun, please state your actions.'
         await self.bot.get_channel(326954112744816643).send(message)
+        # await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send(message)
         for player_id in self.playerids:
             player, action = self.players[player_id]
             self.players[player_id] = (player, None)
@@ -73,6 +74,8 @@ class Roleplay(commands.Cog):
         """
         announce_channel = self.bot.get_channel(326954112744816643)
         system_channel = self.bot.get_channel(374691520055345162)
+        # announce_channel = self.bot.get_channel(config.ANNOUNCE_CHANNEL)
+        # system_channel = self.bot.get_channel(config.ADMINISTRATION_CHANNEL)
         db = await Database.get_connection(self.bot.loop)
         insert = "INSERT INTO roleplay_session(announce_id, system_id) values ($1, $2)"
         select = "SELECT 1 FROM roleplay_session WHERE done is FALSE"
@@ -117,6 +120,7 @@ class Roleplay(commands.Cog):
     async def post_players(self, new=False):
         if new:
             self.system_message = await self.bot.get_channel(374691520055345162).send('placeholder')
+            # self.system_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).send('placeholder')
         message = '```\n'
         message += "{:^35}|{:^25}\n".format('Player', 'Action')
         message += "{:*^35}|{:*^25}\n".format('', '')
@@ -235,13 +239,15 @@ class Roleplay(commands.Cog):
                 await to_delete.delete()
             else:
                 async for (session_id, announce_id, system_id) in db.cursor(select):
-                    sys_message = await self.bot.get_channel(374691520055345162).get_message(int(system_id))
+                    sys_message = await self.bot.get_channel(374691520055345162).fetch_message(int(system_id))
+                    # sys_message = await self.bot.get_channel(config.ADMINISTRATION_CHANNEL).fetch_message(int(system_id))
                     self.players.clear()
                     self.playerids = []
                     self.announce_message = None
                     self.system_message = None
                     await db.execute(update, session_id)
                     await self.bot.get_channel(326954112744816643).send('Session ended. Thanks for participating')
+                    # await self.bot.get_channel(config.ANNOUNCE_CHANNEL).send('Session ended. Thanks for participating')
                     await sys_message.edit(content='{}\nSession ended'.format(sys_message.content))
         await Database.close_connection(db)
         args = {
