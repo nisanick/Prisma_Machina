@@ -185,8 +185,8 @@ class Utils(commands.Cog):
                 return
         except Exception:
             print("nope")
-        # channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
-        # await channel.send(config.WELCOME.format(member.mention))
+        channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
+        await channel.send(config.WELCOME.format(member.mention))
         mention = ""
         for role in member.guild.roles:
             if role.name == 'High Council':
