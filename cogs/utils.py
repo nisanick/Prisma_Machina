@@ -183,6 +183,8 @@ class Utils(commands.Cog):
         try:
             if member.display_name.__contains__('💎'):
                 return
+            if member.guild.id != 205356098293727233:
+                return
         except Exception:
             print("nope")
         channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
