@@ -13,13 +13,17 @@ import checks
 # from importlib import reload as rld
 import logging
 
+
+intents = discord.Intents.default()
+intents.members = True
+
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, activity=discord.Activity(name='services to CMDRs', type=discord.ActivityType.playing), case_insensitive=True)
+bot = commands.Bot(command_prefix=config.PREFIX, help_attrs=config.HELP_ATTRIBUTES, activity=discord.Activity(name='services to CMDRs', type=discord.ActivityType.playing), case_insensitive=True, intents=intents)
 
 startup = datetime.utcnow()
 
