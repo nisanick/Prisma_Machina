@@ -1,4 +1,7 @@
 import asyncio
+import datetime
+import traceback
+import discord
 
 import zlib
 import zmq
@@ -9,6 +12,7 @@ import time
 import json
 from types import SimpleNamespace
 # import pyperclip
+import config
 
 """
  "  Configuration
@@ -56,5 +60,22 @@ async def eddn(bot):
         except zmq.ZMQError as e:
             print('ZMQSocketException: ' + str(e))
             sys.stdout.flush()
+            subscriber.disconnect(__relayEDDN)
+            time.sleep(5)
+            
+        except Exception as error:
+            embed = discord.Embed(title='Command Exception', color=discord.Color.red())
+            embed.set_footer(text='Occured on')
+            embed.timestamp = datetime.datetime.utcnow()
+    
+            exc = ''.join(traceback.format_exception(type(error), error, error.__traceback__, chain=False))
+            exc = exc.replace('`', '\u200b`')
+            embed.description = '```py\n{}\n```'.format(exc)
+    
+            embed.add_field(name='EDDN error', value="EDDN encountered an error")
+    
+            for channel in config.ERROR_CHANNELS:
+                await bot.get_channel(channel).send(type(error), embed=embed)
+
             subscriber.disconnect(__relayEDDN)
             time.sleep(5)
