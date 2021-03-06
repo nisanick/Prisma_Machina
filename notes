@@ -4,3 +4,7 @@ python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite#egg=d
 
 - asyncpg
 - bs4
+
+- pip3 install -Iv python-socketio==4.6.1
+- python-dateutil
+- pyzmq

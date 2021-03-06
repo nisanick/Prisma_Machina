@@ -5,14 +5,13 @@ import discord
 from discord.ext import commands
 import database
 import asyncio
+import socketio
+from dateutil.parser import isoparse
 
-import sys
-import os
 import config
 import checks
-# from importlib import reload as rld
 import logging
-
+from eddn import eddn
 
 intents = discord.Intents.default()
 intents.members = True
@@ -35,6 +34,8 @@ async def on_ready():
     print(startup)
     print(bot.user.name)
     print(bot.user.id)
+    await bot.get_cog('BGS').init_bgs()
+    await asyncio.gather(eddn(bot), ticker())
 
 
 @bot.command(hidden=True)
@@ -104,6 +105,46 @@ async def reload(ctx, *args):
             bot.unload_extension(extension)
             bot.load_extension(extension)
 
+sio = socketio.AsyncClient()
+
+
+@sio.event
+async def connect():
+    print('connection established')
+
+
+@sio.event
+async def message(data):
+    print('message received with ', data)
+    await update_tick(data)
+
+
+@sio.event
+async def tick(data):
+    print('new tick detected @ ', data)
+    await update_tick(data)
+
+
+@sio.event
+async def disconnect():
+    print('disconnected from server')
+
+
+async def ticker():
+    while True:
+        try:
+            await sio.connect('http://tick.phelbore.com:31173')
+            await sio.wait()
+        except socketio.exceptions.ConnectionError as e:
+            print(e)
+            await asyncio.sleep(5)
+    
+    
+async def update_tick(data):
+    date = isoparse(data)
+    bgs = bot.get_cog('BGS')
+    await bgs.set_tick_date(date)
+
 
 bot.remove_command('help')
 for ext in config.EXTENSIONS:
@@ -113,4 +154,3 @@ try:
 except Exception as e:
     print(e)
 print("Crash recovery")
-# os.execv(sys.executable, ['python3'] + sys.argv)

@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import aiohttp
 import async_timeout
 import json
@@ -8,7 +10,7 @@ from bs4 import BeautifulSoup
 class Web:
 
     @staticmethod
-    async def get_response(link, parameters=None):
+    async def get_response(link, parameters=None, result='json'):
         async with aiohttp.ClientSession() as session:
             with async_timeout.timeout(10):
                 if parameters:
@@ -16,7 +18,10 @@ class Web:
                 else:
                     url = '{}'.format(link)
                 async with session.get(url) as response:
-                    return json.loads(await response.text(encoding='utf8'))
+                    if result is 'object':
+                        return json.loads(await response.text(encoding='utf8'), object_hook=lambda d: SimpleNamespace(**d))
+                    else:
+                        return json.loads(await response.text(encoding='utf8'))
 
     @staticmethod
     async def get_site_header(article_id):

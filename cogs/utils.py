@@ -73,7 +73,7 @@ class Utils(commands.Cog):
         else:
             result = '[{}]'.format(result)
 
-        embed = discord.Embed(title='Roll {}'.format(roll_string), description="{} \n{}".format(total,result), color=discord.Color.orange())
+        embed = discord.Embed(title='Roll {}'.format(roll_string), description="{} \n{}".format(total, result), color=discord.Color.orange())
         embed.set_author(name=ctx.message.author.nick or ctx.message.author.display_name, icon_url=ctx.message.author.avatar_url)
         if mod is None:
             await ctx.send('', embed=embed)

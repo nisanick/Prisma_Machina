@@ -19,6 +19,7 @@ class ResponseStatusError(AssBotException):
 
 
 class CommandErrorHandler(commands.Cog):
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         """The event triggered when an error is raised while invoking a command.
         ctx   : Context
@@ -37,8 +38,7 @@ class CommandErrorHandler(commands.Cog):
             return
         else:
             message = "<@163037317278203908>"
-
-        to_delete.append(ctx.message)
+            to_delete.append(ctx.message)
 
         handler = {
             discord.Forbidden: '**I do not have the required permissions to run this command.**',
@@ -71,7 +71,7 @@ class CommandErrorHandler(commands.Cog):
         embed.add_field(name='Location', value='Channel: {0.channel}'.format(ctx))
         embed.add_field(name='Message', value=ctx.message.content)
 
-        for channel in config.ADMINISTRATION_CHANNELS:
+        for channel in config.ERROR_CHANNELS:
             await ctx.bot.get_channel(channel).send(message, embed=embed)
 
 
