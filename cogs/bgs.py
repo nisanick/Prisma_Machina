@@ -505,7 +505,7 @@ class BGS(commands.Cog):
                     our_faction.mild_warning.append(
                         "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
                 elif difference < 0.00:
-                    our_faction.not_controll.append(
+                    our_faction.not_control.append(
                         "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
                 elif difference <= 10.00:
                     our_faction.high_warning.append(
