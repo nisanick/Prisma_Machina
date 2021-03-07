@@ -306,18 +306,22 @@ class BGS(commands.Cog):
             embed.add_field(name="Missing systems", value="{}".format(missing_systems), inline=False)
             
             # states
-            embed.add_field(name="Pending states", value="none")
-            embed.add_field(name="Active states", value="none")
-            embed.add_field(name="Recovering states", value="none")
-            
+            embed.add_field(name="Active states", value="None", inline=False)
+            embed.add_field(name="Pending states", value="None")
+            embed.add_field(name="Recovering states", value="None")
+
             # expansion warning
-            embed.add_field(name="Expansion warning", value="none")
+            embed.add_field(name="Expansion warning", value="None")
             
             # low inf warning
-            embed.add_field(name="Inf getting low", value="none")
+            embed.add_field(name="Inf getting low", value="None")
             
             # conflict warning
-            embed.add_field(name="Inf too low", value="none")
+            embed.add_field(name="Inf too low", value="None")
+
+            # Not controll system warning
+            embed.add_field(name="Not in control", value="None")
+            
             
         await database.Database.close_connection(db)
         message = await channel.send(embed=embed)
@@ -388,8 +392,8 @@ class BGS(commands.Cog):
                 systems = "Tour completed"
             embed.set_field_at(1, name="Missing systems", value="{}".format(systems), inline=False)
             
-            embed.set_field_at(2, name="Pending states", value="{}".format(faction.pending))
-            embed.set_field_at(3, name="Active states", value="{}".format(faction.active))
+            embed.set_field_at(2, name="Active states", value="{}".format(faction.active), inline=False)
+            embed.set_field_at(3, name="Pending states", value="{}".format(faction.pending))
             embed.set_field_at(4, name="Recovering states", value="{}".format(faction.recovering))
 
             if len(faction.expansion_warning) > 0:
@@ -406,10 +410,16 @@ class BGS(commands.Cog):
                 high_warning = "\n".join(faction.high_warning)
             else:
                 high_warning = "None"
-            
+                
+            if len(faction.not_control) > 0:
+                not_control = "\n".join(faction.not_control)
+            else:
+                not_control = "None"
+
             embed.set_field_at(5, name="Expansion warning", value="{}".format(expansion_warning))
             embed.set_field_at(6, name="Inf getting low", value="{}".format(mild_warning))
             embed.set_field_at(7, name="Inf too low", value="{}".format(high_warning))
+            embed.set_field_at(8, name="Not in control", value="{}".format(not_control))
             
             await message.edit(embed=embed)
             
@@ -484,7 +494,7 @@ class BGS(commands.Cog):
         if not skip:
             print(data.StarSystem + " recorded")
             influences.sort(reverse=True)
-            if our_influence > 70.00:
+            if our_influence > 65.00:
                 our_faction.expansion_warning.append("{} {}%".format(data.StarSystem, round(our_influence, 2)))
             else:
                 if our_influence == influences[0]:
@@ -493,6 +503,9 @@ class BGS(commands.Cog):
                     difference = our_influence - influences[0]
                 if 10.00 < difference <= 20.00:
                     our_faction.mild_warning.append(
+                        "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
+                elif difference < 0.00:
+                    our_faction.not_controll.append(
                         "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
                 elif difference <= 10.00:
                     our_faction.high_warning.append(

@@ -15,6 +15,7 @@ class Faction(object):
         self.expansion_warning = list()
         self.mild_warning = list()
         self.high_warning = list()
+        self.not_control = list()
         
     def set_recovering(self, data):
         states = data.split('|')
