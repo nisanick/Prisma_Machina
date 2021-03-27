@@ -132,11 +132,7 @@ class Utils(commands.Cog):
         embed = discord.Embed(title="Feedback", description=message, colour=discord.Colour.green(), timestamp=datetime.utcnow())
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         for channel_id in config.ADMINISTRATION_CHANNELS:
-            # channel = await commands.TextChannelConverter().convert(ctx, config.ADMINISTRATION_CHANNEL)
-            # channel = await commands.TextChannelConverter().convert(ctx, '210467116392906753')
             await ctx.bot.get_channel(channel_id).send("", embed=embed)
-            # await channel.send("<@163037317278203908>", embed=embed)
-            # await channel.send("", embed=embed)
         await ctx.message.add_reaction('✅')
 
     @commands.command()
@@ -242,6 +238,7 @@ class Utils(commands.Cog):
             await user.create_dm()
             channel = user.dm_channel
         await channel.send(message)
+        await ctx.message.add_reaction('✅')
 
     @commands.command(name='embed', hidden=True)
     @commands.check(checks.can_manage_bot)
@@ -261,6 +258,21 @@ class Utils(commands.Cog):
             channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
             await channel.send("", embed=embed)
             await message.add_reaction('✅')
+            
+    @commands.command(name='rm', hidden=True)
+    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.in_say_channel)
+    async def _remove_message(self, ctx, message: discord.Message):
+        to_delete = [ctx.message]
+        if message.author.id == self.bot.user.id:
+            to_delete.append(message)
+        else:
+            to_delete.append(
+                await ctx.send(
+                    "Can't remove that message."))
+            await asyncio.sleep(7)
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.channel.delete_messages(to_delete)
 
 
 def setup(bot):
