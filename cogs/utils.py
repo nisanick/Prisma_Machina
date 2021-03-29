@@ -274,6 +274,11 @@ class Utils(commands.Cog):
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.channel.delete_messages(to_delete)
 
+    @commands.command(name='medit', hidden=True)
+    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.in_say_channel)
+    async def _edit_message(self, ctx, message: discord.Message, *, text):
+        await message.edit(content=text)
 
 def setup(bot):
     bot.add_cog(Utils(bot))
