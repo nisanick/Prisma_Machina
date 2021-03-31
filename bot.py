@@ -148,6 +148,7 @@ async def update_tick(data):
     bgs = bot.get_cog('BGS')
     if bgs is None:
         bot.load_extension('cogs.bgs')
+        bgs = bot.get_cog('BGS')
     await bgs.set_tick_date(date)
 
 

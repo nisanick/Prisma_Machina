@@ -37,6 +37,7 @@ async def eddn(bot):
     bgs = bot.get_cog('BGS')
     if bgs is None:
         bot.load_extension('cogs.bgs')
+        bgs = bot.get_cog('BGS')
 
     while True:
         try:
