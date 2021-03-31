@@ -263,16 +263,15 @@ class Utils(commands.Cog):
     @commands.check(checks.can_manage_bot)
     @commands.check(checks.in_say_channel)
     async def _remove_message(self, ctx, message: discord.Message):
-        to_delete = [ctx.message]
+        
         if message.author.id == self.bot.user.id:
-            to_delete.append(message)
+            await message.delete()
         else:
-            to_delete.append(
-                await ctx.send(
-                    "Can't remove that message."))
+            to_delete = await ctx.send("Can't remove that message.")
             await asyncio.sleep(7)
+            await to_delete.delete()
         if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.channel.delete_messages(to_delete)
+            await ctx.message.delete()
 
     @commands.command(name='medit', hidden=True)
     @commands.check(checks.can_manage_bot)

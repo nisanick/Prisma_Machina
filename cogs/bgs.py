@@ -271,7 +271,7 @@ class BGS(commands.Cog):
                 #     message = await channel.fetch_message(self.coa_message_id)
                 #     if message.pinned:
                 #         await message.unpin()
-                await self.recheck_systems()
+                # await self.recheck_systems() FIXME - EDDN API is currently not updating
                 self.faction_data[75253].message = await self.setup_bgs_message(channel, 75253)  # Colonists of Aurora
                 self.faction_data[23831].message = await self.setup_bgs_message(channel, 23831)  # Prismatic Imperium
                 self.faction_data[74847].message = await self.setup_bgs_message(channel, 74847)  # Adamantine Union
