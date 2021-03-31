@@ -35,7 +35,7 @@ class Fun(commands.Cog):
             await ctx.send("Awesomeness of Wisewolf {}".format(random.choice(options)))
         elif member.id == 186829544764866560:  # Techeron
             await ctx.send("BY ACHENAR... you compared to almighty Wisewolf? Please")
-        elif member.id == 351706853153046549:  # Ryan
+        elif member.id == 782079056601940008:  # Ryan
             await ctx.send("[REDACTED BY ADMINISTRATION - Classified information]")
         elif member.id == 360543179591909397:  # Bear
             await ctx.send("Rupey is as awesome as a teacher can be.")
@@ -57,6 +57,9 @@ class Fun(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         number = random.randint(1, 1000)
+        
+        if isinstance(message.channel, discord.DMChannel):
+            return
 
         if message.channel.name.__contains__('rp-'):
             return
@@ -108,9 +111,6 @@ class Fun(commands.Cog):
                 self.limit = default_chance
         else:
             self.limit = self.limit - 10
-
-        if isinstance(message.channel, discord.DMChannel):
-            return
         
 
 def setup(bot: commands.Bot):

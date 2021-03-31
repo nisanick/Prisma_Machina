@@ -455,3 +455,124 @@ Terminating Process;
     """,
 ]
 
+cheat_texts = {
+    'Fuchsia': ''':NetworkConsole: *[CMDR] activated a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▓▓▓▓▒▓▓▓ :rp_accept: Script Compiled: **Fuchsia**
+Diamond Market activities masked by generated algorithms.
+''',
+    'Olive': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░░░░░░░░ :rp_accept: Script Compiled: **Olive**
+Ping successful. Diamond Market status: **Active**
+''',
+    'Green': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░▒▒▒░░░░ :rp_accept: Script Compiled: **Green**
+Diamonds added to account.''',
+    'Navy': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░▓▓▒▓▒▒▒ :rp_accept: Script Compiled: **Navy**
+Diamonds removed from account.
+''',
+    'Turquoise': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒░░░▒▓▒▓ :rp_accept: Script Compiled: **Turquoise**
+Diamonds added to account.
+''',
+    'Violet': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒▓▓▒░▒▒░ :rp_accept: Script Compiled: **Violet**
+Diamonds removed from account.
+''',
+    'Maroon': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░░░▓░▓▓▒ :rp_accept: Script Compiled: **Maroon**
+Diamonds added to account.
+''',
+    'Yellow': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒▒░░▒▒▓░ :rp_accept: Script Compiled: **Yellow**
+Diamonds removed from account.
+''',
+    'Gold': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒▓░░▒▓▓▒ :rp_accept: Script Compiled: **Gold**
+Diamonds added to account.
+''',
+    'Silver': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▓▓▓▒░░░░ :rp_accept: Script Compiled: **Silver**
+Diamonds removed from account.
+''',
+    'Aqua': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒▒░▒▒░▒▓ :rp_accept: Script Compiled: **Aqua**
+Diamonds removed from account.
+''',
+    'Lime': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░▒▒░▒░▒ :rp_accept: Script Compiled: **Lime**
+Item added to account.
+''',
+    'Blue': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒▒▒▒▓▒░░ :rp_accept: Script Compiled: **Blue**
+Material added to account.
+''',
+    'Teal': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▓▓▒▓▒▒░░ :rp_accept: Script Compiled: **Teal**
+Personnel added to account.
+''',
+    'Emerald': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒▒░░░▒▒▒ :rp_accept: Script Compiled: **Emerald**
+Material added to account.
+''',
+    'Red': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒▒▓▓░░▒▒ :rp_accept: Script Compiled: **Red**
+Material added to account.
+''',
+    'Orange': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░▒▓▒▒▓▓▓ :rp_accept: Script Compiled: **Orange**
+Material added to account.
+''',
+    'White': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒░░▓░▓░▓ :rp_accept: Script Compiled: **White**
+Material added to account.
+''',
+    'Bronze': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░▒▓▓▒▓▒░ :rp_accept: Script Compiled: **Bronze**
+Item added to Account.''',
+    'Copper': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒░▓▒▓░░░ :rp_accept: Script Compiled: **Copper**
+Item added to account.
+''',
+    'Brass': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+░▒▓▒▓░▒▓ :rp_accept: Script Compiled: **Brass**
+Item added to account.''',
+    'Grey': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒░░░▒░▒░ :rp_accept: Script Compiled: **Grey**
+Item added to account.
+''',
+    'Black': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▒░░▓░▓░░ :rp_accept: Script Compiled: **Black**
+Item added to account.''',
+    'Pink': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▓░▓▓░▓░░ :rp_accept: Script Compiled: **Pink**
+Item added to account.''',
+    'Brown': ''':NetworkConsole: *[CMDR] executed a Quantum Hack on the Diamond Market.*
+[Encrypted Message]
+▓░▓▓░▓░░ :rp_accept: Script Compiled: **Brown**
+Item added to account.''',
+}
