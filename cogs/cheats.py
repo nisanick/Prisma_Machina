@@ -84,7 +84,9 @@ class Fun(commands.Cog):
                     remaining = "less than 3 hours"
                 else:
                     remaining = "less than 1 hour"
-                await ctx.send("You have to wait for " + remaining + " in order to use this")
+                to_delete = await ctx.send("You must wait for " + remaining + " to use this command again.")
+                await asyncio.sleep(7)
+                await to_delete.delete()
                 return
         name, item, min_bound, max_bound, colour = self.cheats[ctx.invoked_with]
         text = TextChecker.replace_emotes(cheat_texts[name], self.bot)
