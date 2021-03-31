@@ -35,6 +35,8 @@ async def eddn(bot):
     allowed_events = ['Location', 'FSDJump']
     
     bgs = bot.get_cog('BGS')
+    if bgs is None:
+        bot.load_extension('cogs.bgs')
 
     while True:
         try:

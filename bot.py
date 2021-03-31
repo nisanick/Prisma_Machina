@@ -34,6 +34,9 @@ async def on_ready():
     print(startup)
     print(bot.user.name)
     print(bot.user.id)
+    bgs = bot.get_cog('BGS')
+    if bgs is None:
+        bot.load_extension('cogs.bgs')
     await bot.get_cog('BGS').init_bgs()
     await asyncio.gather(eddn(bot), ticker())
 
@@ -143,6 +146,8 @@ async def ticker():
 async def update_tick(data):
     date = isoparse(data)
     bgs = bot.get_cog('BGS')
+    if bgs is None:
+        bot.load_extension('cogs.bgs')
     await bgs.set_tick_date(date)
 
 
