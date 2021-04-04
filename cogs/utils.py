@@ -285,7 +285,7 @@ class Utils(commands.Cog):
                     'discord_name': "{}#{}".format(member.name, member.discriminator)
                 }
                 response = await Web.get_response(link, args)
-                if response[''] == 0:
+                if response['Code'] != '0':
                     errors.append(member.name)
             print(",".join(errors))
             
