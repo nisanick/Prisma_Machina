@@ -14,6 +14,9 @@ async def can_manage_rp(ctx):
     if ctx.message.author.id in config.ADMIN_USERS:
         return True
     for role in ctx.message.author.roles:
+        if role.name in config.ADMIN_ROLES:
+            return True
+    for role in ctx.message.author.roles:
         if role.name == 'RP Session Admin':
             return True
     return False

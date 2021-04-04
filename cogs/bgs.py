@@ -27,8 +27,8 @@ class BGS(commands.Cog):
             74847: Faction(74847, "Adamantine Union", "https://inara.cz/minorfaction/35809/")
         }
         
-    @commands.command(name='fullscan', case_insensitive=True, hidden=True)
-    @commands.check(checks.can_manage_bot)
+    # @commands.command(name='fullscan', case_insensitive=True, hidden=True)
+    # @commands.check(checks.can_manage_bot)
     async def _full_scan(self, ctx, *, faction_name):
         async with ctx.typing():
             await self._fullscan_faction(faction_name, 1)

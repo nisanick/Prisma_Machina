@@ -39,11 +39,11 @@ async def eddn(bot):
         bot.load_extension('cogs.bgs')
         bgs = bot.get_cog('BGS')
 
-    while True:
+    while bot.bgs_run:
         try:
             subscriber.connect(__relayEDDN)
             
-            while True:
+            while bot.bgs_run:
                 __message = await subscriber.recv()
                 
                 if not __message:
@@ -77,8 +77,11 @@ async def eddn(bot):
     
             embed.add_field(name='EDDN error', value="EDDN encountered an error")
     
-            for channel in config.ERROR_CHANNELS:
-                await bot.get_channel(channel).send(type(error), embed=embed)
+            try:
+                for channel in config.ERROR_CHANNELS:
+                    await bot.get_channel(channel).send(type(error), embed=embed)
+            except Exception as error:
+                print(error)
 
             subscriber.disconnect(__relayEDDN)
             time.sleep(5)

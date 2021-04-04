@@ -108,7 +108,9 @@ async def reload(ctx, *args):
             bot.unload_extension(extension)
             bot.load_extension(extension)
 
+
 sio = socketio.AsyncClient()
+bot.bgs_run = True
 
 
 @sio.event
@@ -134,7 +136,7 @@ async def disconnect():
 
 
 async def ticker():
-    while True:
+    while bot.bgs_run:
         try:
             await sio.connect('http://tick.phelbore.com:31173')
             await sio.wait()
@@ -152,6 +154,15 @@ async def update_tick(data):
     await bgs.set_tick_date(date)
 
 
+@bot.command(name='restart', hidden=True)
+@commands.check(checks.can_manage_bot)
+@commands.check(checks.in_admin_channel)
+async def _restart(ctx):
+    bot.bgs_run = False
+    await sio.disconnect()
+    await bot.close()
+    bot.loop.close()
+
 bot.remove_command('help')
 for ext in config.EXTENSIONS:
     bot.load_extension(ext)
@@ -159,4 +170,4 @@ try:
     bot.run(config.TOKEN, reconnect=True)
 except Exception as e:
     print(e)
-print("Crash recovery")
+print("restart")

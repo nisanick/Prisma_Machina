@@ -1,6 +1,7 @@
 import asyncio
 import random
 from datetime import datetime
+from datetime import timedelta
 
 import discord
 from discord.ext import commands
@@ -203,7 +204,7 @@ class Utils(commands.Cog):
         senator = discord.utils.find(lambda r: r.name == 'Senator', ctx.guild.roles)
         await user.add_roles(*[probation, senator])
         insert_probation = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 1, $2)"
-        time = datetime.fromtimestamp(datetime.utcnow().timestamp() + 1209600)
+        time = datetime.utcnow() + timedelta(days=14)
         values = [
             time,
             str(user.id)
@@ -224,13 +225,13 @@ class Utils(commands.Cog):
             await channel.send('{} left the server'.format(member.name))
 
     @commands.command(name='say', hidden=True)
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _say(self, ctx, channel: discord.TextChannel, *, message):
         await channel.send(message)
 
     @commands.command(name='dm', hidden=True)
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _dm(self, ctx, user: discord.User, *, message):
         channel = user.dm_channel
@@ -258,9 +259,40 @@ class Utils(commands.Cog):
             channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
             await channel.send("", embed=embed)
             await message.add_reaction('✅')
-            
-    @commands.command(name='rm', hidden=True)
+
+    @commands.Cog.listener()
+    async def on_user_update(self, before: discord.User, after: discord.User):
+        if before.name != after.name or before.discriminator != after.discriminator:
+            link = update_link
+            args = {
+                'discord_id': after.id,
+                'key': config.TRANSACTION_KEY,
+                'discord_name': "{}#{}".format(after.name, after.discriminator)
+            }
+            response = await Web.get_response(link, args)
+
+    @commands.command(name='rescan_names', hidden=True)
     @commands.check(checks.can_manage_bot)
+    @commands.check(checks.in_admin_channel)
+    async def _update_all_discord_names(self, ctx):
+        async with ctx.typing():
+            errors = []
+            async for member in ctx.guild.fetch_members(limit=None):
+                link = update_link
+                args = {
+                    'discord_id'  : member.id,
+                    'key'         : config.TRANSACTION_KEY,
+                    'discord_name': "{}#{}".format(member.name, member.discriminator)
+                }
+                response = await Web.get_response(link, args)
+                if response[''] == 0:
+                    errors.append(member.name)
+            print(",".join(errors))
+            
+    
+    
+    @commands.command(name='rm', hidden=True)
+    @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _remove_message(self, ctx, message: discord.Message):
         
@@ -274,10 +306,11 @@ class Utils(commands.Cog):
             await ctx.message.delete()
 
     @commands.command(name='medit', hidden=True)
-    @commands.check(checks.can_manage_bot)
+    @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _edit_message(self, ctx, message: discord.Message, *, text):
         await message.edit(content=text)
+
 
 def setup(bot):
     bot.add_cog(Utils(bot))

@@ -18,8 +18,8 @@ from web import Web
 class Fun(commands.Cog):
     
     cheats = {
-        "▒▒▓▓▓▓▒▓▓▓▓▓▓▓▓▓▒▓▓": ('Fuchsia', None, 0, 0, 0xFF00FF),
-        "░░░░░░░░░░░░░░░░░░░": ('Olive', None, 0, 0, 0x808000),
+        "▒▒▓▓▓▓▒▓▓▓▓▓▓▓▓▓▒▓▓": ('Fuchsia', 'diamonds', 0, 0, 0xFF00FF),
+        "░░░░░░░░░░░░░░░░░░░": ('Olive', 'diamonds', 0, 0, 0x808000),
         "░░▒░░▒▒▒░░░░▒▒░░░▒░": ('Green', 'diamonds', 100, 500, 0x66FF00),
         "░▓▓░░▓▓▒▓▒▒▒░░▒▒▓░▒": ('Navy', 'diamonds', -500, -100, 0x000080),
         "▒░░░░▒░░▒▒▒░░░▒▓▒▓░": ('Turquoise', 'diamonds', 1000, 2000, 0x40E0D0),
