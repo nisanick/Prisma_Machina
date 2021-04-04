@@ -158,7 +158,7 @@ async def update_tick(data):
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def _restart(ctx):
-    await ctx.add_reaction('✅')
+    await ctx.message.add_reaction('✅')
     bot.bgs_run = False
     await sio.disconnect()
     await bot.close()
