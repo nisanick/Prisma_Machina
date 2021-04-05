@@ -436,6 +436,7 @@ class BGS(commands.Cog):
         our_influence = 0
         our_id = 0
         skip = False
+        conflict_data = None
         async with db.transaction():
             timestamp = isoparse(data.timestamp)
             if timestamp > self.last_tick and data.StarSystem not in self.updated_systems:
@@ -508,6 +509,7 @@ class BGS(commands.Cog):
                             else:
                                 conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
                 except AttributeError as e:
+                    print(e)
                     conflict_data = None
             else:
                 skip = True
