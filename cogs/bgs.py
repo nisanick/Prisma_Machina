@@ -367,7 +367,7 @@ class BGS(commands.Cog):
             
         await database.Database.close_connection(db)
 
-    async def update_message(self, faction_id):
+    async def update_message(self, faction_id, conflict_data=None):
         faction = self.faction_data[faction_id]
         channel = self.bot.get_channel(BGS_CHANNEL)
         message = await channel.fetch_message(faction.message)
@@ -420,6 +420,10 @@ class BGS(commands.Cog):
             embed.set_field_at(6, name="Inf getting low", value="{}".format(mild_warning))
             embed.set_field_at(7, name="Inf too low", value="{}".format(high_warning))
             embed.set_field_at(8, name="Not in control", value="{}".format(not_control))
+            
+            if conflict_data is not None:
+                name, value = conflict_data
+                embed.add_field(name=name, value=value)
             
             await message.edit(embed=embed)
             
@@ -489,6 +493,22 @@ class BGS(commands.Cog):
                     
                     influences.append(faction.Influence * 100)
                     await db.execute(insert_influence, *influence_values)
+                try:
+                    for conflict in data.Conflicts:
+                        faction1 = await self._get_faction_id(conflict.Faction1.Name)
+                        faction2 = await self._get_faction_id(conflict.Faction2.Name)
+                        if faction1 in (75253, 23831, 74847) or faction2 in (75253, 23831, 74847):
+                            war_type = conflict.WarType.capitalize()
+                            score1 = conflict.Faction1.WonDays
+                            score2 = conflict.Faction2.WonDays
+                            if war_type is "Civilwar":
+                                war_type = "Civil war"
+                            if faction1 in (75253, 23831, 74847):
+                                conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
+                            else:
+                                conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
+                except AttributeError as e:
+                    conflict_data = None
             else:
                 skip = True
         if not skip:
@@ -510,7 +530,7 @@ class BGS(commands.Cog):
                 elif difference <= 10.00:
                     our_faction.high_warning.append(
                         "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
-            await self.update_message(our_id)
+            await self.update_message(our_id, conflict_data)
                 
         await database.Database.close_connection(db)
             

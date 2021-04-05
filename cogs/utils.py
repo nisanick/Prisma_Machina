@@ -106,7 +106,6 @@ class Utils(commands.Cog):
 
     @commands.command(name='help')
     async def _help(self, ctx, *, command: str = None):
-        # return
         """Shows help about a command or the bot"""
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
@@ -285,11 +284,12 @@ class Utils(commands.Cog):
                     'discord_name': "{}#{}".format(member.name, member.discriminator)
                 }
                 response = await Web.get_response(link, args)
-                if response['Code'] != '0':
+                print(response)
+                if response['Code'] == 0 or response['Code'] == 1:
+                    pass
+                else:
                     errors.append(member.name)
             print(",".join(errors))
-            
-    
     
     @commands.command(name='rm', hidden=True)
     @commands.check(checks.can_manage_rp)
