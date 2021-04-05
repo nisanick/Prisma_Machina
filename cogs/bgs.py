@@ -509,7 +509,6 @@ class BGS(commands.Cog):
                             else:
                                 conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
                 except AttributeError as e:
-                    print(e)
                     conflict_data = None
             else:
                 skip = True

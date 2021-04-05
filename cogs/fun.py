@@ -4,6 +4,10 @@ from discord.ext import commands
 import random
 from datetime import datetime
 
+import config
+from web import Web
+import math
+
 default_chance = 600
 
 
@@ -45,8 +49,9 @@ class Fun(commands.Cog):
             else:
                 await ctx.send("You will never be as awesome as Wisewolf")
 
-    @commands.command(hidden=True)
-    async def report(self, ctx, *, message=None):
+    @commands.command()
+    async def report(self, ctx):
+        """Reports the incident directly to proper authorities!"""
         if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
             await ctx.send("{} was reported to proper authorities!".format(ctx.author.nick or ctx.author.name))
         else:
@@ -111,6 +116,39 @@ class Fun(commands.Cog):
                 self.limit = default_chance
         else:
             self.limit = self.limit - 10
+
+    @commands.command()
+    async def apod(self, ctx):
+        """
+        Shows Astronomical Picture of the Day straight from NASA
+        """
+        boundary = 1000
+        response = await Web.get_response("https://api.nasa.gov/planetary/apod?api_key={}".format(config.NASA_API))
+        embed = discord.Embed(title='Astronomy Picture of the Day',
+                              description='**{}** | {}'.format(response["title"], response["date"]))
+        embed.add_field(name='Explanation part 1/{}'.format(math.ceil(len(response['explanation']) / 1000)),
+                        value=response['explanation'][0: boundary], inline=False)
+    
+        while boundary < len(response['explanation']):
+            embed.add_field(name='part {}/{}'.format(math.ceil((boundary + 1000) / 1000),
+                                                     math.ceil(len(response['explanation']) / 1000)),
+                            value=response['explanation'][boundary: boundary + 1000])
+            boundary = boundary + 1000
+    
+        try:
+            embed.add_field(name='HD Download', value='[Click here!]({})'.format(response["hdurl"]))
+        except Exception:
+            print('No HD ulr')
+    
+        if response['url'].__contains__('youtube'):
+            embed.add_field(name='Content url', value='[Click Here]({})'.format(response['url']))
+        else:
+            embed.set_image(url=response['url'])
+        embed.timestamp = datetime.utcnow()
+        embed.set_footer(text='Generated on ')
+    
+        await ctx.send(content=None, embed=embed)
+        await ctx.message.delete()
         
 
 def setup(bot: commands.Bot):

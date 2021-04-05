@@ -13,7 +13,7 @@ class Stats(commands.Cog):
 
     @commands.command(aliases=['statistics', 'stat', 'stats'])
     async def statistic(self, ctx: commands.Context, *, user=None):
-        """Shows statistics of messages and reactions you or specified member sent. Use full name or tag."""
+        """Shows statistics of messages and reactions you or specified member sent. Use full name (name#number), ping or ID."""
         if user is None:
             user = ctx.author
         else:
@@ -73,7 +73,7 @@ class Stats(commands.Cog):
 
     @commands.command(aliases=['diamond'])
     async def diamonds(self, ctx, member: discord.Member=None):
-        """Shows how many diamonds you or specified member have. Requires linked account! Use full name or tag."""
+        """Shows how many diamonds you or specified member have. Requires linked account! Use full name (name#number), ping or ID."""
         link = user_data_link
         if member is None:
             member = ctx.author
@@ -93,11 +93,11 @@ class Stats(commands.Cog):
         else:
             count = int(response['Diamonds'])
             emoji_type = ''
-            if count > 10000:
+            if count > 100000:
                 emoji_type = 4
-            elif count > 2500:
+            elif count > 25000:
                 emoji_type = 3
-            elif count > 500:
+            elif count > 5000:
                 emoji_type = 2
             try:
                 emoji = await commands.EmojiConverter().convert(ctx, "diamond{}".format(emoji_type))

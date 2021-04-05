@@ -25,12 +25,63 @@ class Roleplay(commands.Cog):
         self.system_message = None
         self.turn_number = 0
         self.prompt = None
+
+    @commands.command(name='say')
+    @commands.check(checks.can_manage_rp)
+    @commands.check(checks.in_say_channel)
+    async def _say(self, ctx, channel: discord.TextChannel, *, message):
+        """
+        *RP Admin only* | *#rp-scripting only* | Sends a message as a bot in specified channel.
+        """
+        await channel.send(message)
+
+    @commands.command(name='dm')
+    @commands.check(checks.can_manage_rp)
+    @commands.check(checks.in_say_channel)
+    async def _dm(self, ctx, user: discord.User, *, message):
+        """
+        *RP Admin only* | *#rp-scripting only* | Sends a direct message as a bot to specified member. Use full name (name#number), ping or ID.
+        """
+        channel = user.dm_channel
+        if channel is None:
+            await user.create_dm()
+            channel = user.dm_channel
+        await channel.send(message)
+        await ctx.message.add_reaction('✅')
+    
+    @commands.command(name='rm')
+    @commands.check(checks.can_manage_rp)
+    @commands.check(checks.in_say_channel)
+    async def _remove_message(self, ctx, message: discord.Message):
+        """
+        *RP Admin only* | *#rp-scripting only* | Removes a specified message that the bot posted. Use message ID.
+        """
+        
+        if message.author.id == self.bot.user.id:
+            await message.delete()
+        else:
+            to_delete = await ctx.send("Can't remove that message.")
+            await asyncio.sleep(7)
+            await to_delete.delete()
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.message.delete()
+
+    @commands.command(name='medit')
+    @commands.check(checks.can_manage_rp)
+    @commands.check(checks.in_say_channel)
+    async def _edit_message(self, ctx, message: discord.Message, *, text):
+        """
+        *RP Admin only* | *#rp-scripting only* | Edits a specified message that bot posted. Use message ID.
+        """
+        await message.edit(content=text)
     
     @commands.group(name='rp', case_insensitive=True)
     async def _rp(self, ctx):
         """
-        Base command for RP utilities. Use !help rp for details.
-        Mind that parameters [who] [channel] are admin exclusive.
+        Base command for RP utilities. Use `?help rp` for details.
+        Mind that parameters [who] and [channel] are admin exclusive.
+        
+        Here is a list of all possible subcommands:
         """
         await ctx.message.delete()
         if ctx.invoked_subcommand is None:
@@ -40,7 +91,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _turn(self, ctx):
         """
-        Tells the bot to post used actions and start new turn.
+        *RP Admin only* | Tells the bot to post used actions and start new turn.
         """
         message = '**::TURN {}::**\n'.format(self.turn_number)
         message += 'Turn ended with these actions taking place:\n'
@@ -64,7 +115,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _start(self, ctx):
         """
-        Bot will create new RP session if there is not one running already.
+        *RP Admin only* | Creates a new RP session if there is not one running already. Use `?help rp start` for more information about RP sessions.
         
         Players can join the session via `?rp join`
         Players are supposed to state their action with `?rp use` command each turn.
@@ -133,7 +184,7 @@ class Roleplay(commands.Cog):
     @_rp.command(name='use')
     async def _use(self, ctx, *, what=None):
         """
-        Queues action for you this turn, refer to ?help rp use
+        Queues action for you this turn. Please use `?help rp use` for more information.
         
         Options for 'what' are:
         number 1-6 for equiped items in order of the character list.
@@ -213,6 +264,9 @@ class Roleplay(commands.Cog):
     
     @_rp.command(name='pass')
     async def _pass(self, ctx):
+        """
+        Passes current turn for you.
+        """
         if ctx.author.id in self.playerids and self.players[ctx.author.id][1] is None:
             player, action = self.players[ctx.author.id]
             action = 'pass'
@@ -226,7 +280,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _end(self, ctx):
         """
-        Ends currently open rp session
+        *RP Admin only* | Ends currently open rp session
         """
         db = await Database.get_connection(self.bot.loop)
         probe = "SELECT 1 FROM roleplay_session WHERE done IS FALSE"
@@ -260,7 +314,10 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _tool(self, ctx, what, who, channel: discord.TextChannel):
         """
-        Used in place of old RP utility commands
+        *RP Admin only* | Used in place of old RP utility commands.
+        
+        Please refer to `?help rp use` for the names of utilities.
+        This command can only be used for utilites (like hack, EGG, ECU...). It will not work on other equipment.
         """
         try:
             await getattr(self, '_' + what)(ctx, who, channel)
@@ -272,7 +329,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _clean(self, ctx):
         """
-        Force-closes all RP sessions
+        *RP Admin only* | Force-closes all RP sessions
         """
         db = await Database.get_connection(self.bot.loop)
         update = "UPDATE roleplay_session SET done = TRUE WHERE done IS FALSE"
@@ -290,11 +347,11 @@ class Roleplay(commands.Cog):
         }
         await Web.get_response(unlock_link, args)
     
-    @_rp.command(name='set')
+    # @_rp.command(name='set')
     @commands.check(checks.can_manage_rp)
     async def _set(self, ctx, what: str, *params):
         """
-        Helper command to set various parameters to RP session.
+        *RP Admin only* | Helper command to set various parameters to RP session.
 
         Currenly can be used only to set hacking target, for example `?rp set target 3` to set hack target to 3
         """

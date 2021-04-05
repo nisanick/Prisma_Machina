@@ -3,6 +3,8 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands
+from discord.ext.commands import ExtensionAlreadyLoaded
+
 import database
 import asyncio
 import socketio
@@ -41,33 +43,43 @@ async def on_ready():
     await asyncio.gather(eddn(bot), ticker())
 
 
-@bot.command(hidden=True)
+@bot.command()
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
-async def load(ctx, *args):
-
+async def load(ctx, *module):
+    """*Admin only* | *Admin channel only* | Loads a module from disk.
+        This command serves to load a set of commands from disk without restarting the whole bot. Can be used to allow certain commands to be used again or load a new set of commands.
+        Module name can be derived from the help page name.
+        !!Please don't use this command unless there is no other option. Restarting the bot or contacting Nisanick#5824 are prefered options!!
+         """
     if ctx.author.id not in config.ADMIN_USERS:
         return
 
-    if args.__len__() <= 0:
+    if module.__len__() <= 0:
         to_delete = await ctx.send("No argument passed")
         await asyncio.sleep(5)
         await to_delete.delete()
         return
 
-    what = 'cogs.{0}'.format(args[0])
+    what = 'cogs.{0}'.format(module[0])
     if what not in config.EXTENSIONS:
         config.EXTENSIONS.append(what)
+    try:
+        bot.load_extension(what)
+        await ctx.send("Extension {0} loaded".format(what))
+    except ExtensionAlreadyLoaded as error:
+        await ctx.send("Extension {0} already loaded".format(what))
 
-    bot.load_extension(what)
-    await ctx.send("Extension {0} loaded".format(what))
 
-
-@bot.command(hidden=True)
+@bot.command()
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def unload(ctx: commands.Context, *args):
-
+    """*Admin only* | *Admin channel only* | Removes a module from bot.
+        This command serves to remove a set of commands from the bot without the need to restart it. Can be used to prevent certain commands to be used.
+        Module name can be derived from the help page name.
+        !!Please don't use this command unless there is no other option. Restarting the bot or contacting Nisanick#5824 are prefered options!!
+         """
     if ctx.author.id not in config.ADMIN_USERS:
         return
 
@@ -88,11 +100,15 @@ async def unload(ctx: commands.Context, *args):
         await ctx.send("Extension {0} wasn't loaded".format(what))
 
 
-@bot.command(hidden=True)
+@bot.command()
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def reload(ctx, *args):
-
+    """*Admin only* | *Admin channel only* | Reloads a module from disk.
+        This command serves to reload a set of commands from disk without without restarting the whole bot. Effect is the same as using unload and then load command.
+        Module name can be derived from the help page name. If 'all' is sent instead of a specific module, all modules are reloaded.
+        !!Please don't use this command unless there is no other option. Restarting the bot or contacting Nisanick#5824 are prefered options!!
+         """
     if args.__len__() <= 0:
         await ctx.send("No argument passed")
         return
@@ -154,10 +170,14 @@ async def update_tick(data):
     await bgs.set_tick_date(date)
 
 
-@bot.command(name='restart', hidden=True)
+@bot.command(name="restart")
 @commands.check(checks.can_manage_bot)
 @commands.check(checks.in_admin_channel)
 async def _restart(ctx):
+    """*Admin only* | *Admin channel only* | Mericful shutdown and restart of the bot.
+        Closes all IO operations and disconnects the bot from discord, practically stoping the script. System then restarts the bot again.
+        !!This is a prefered option to deal with restarts if they are needed. Please don't unload/load modules on your own!!
+         """
     await ctx.message.add_reaction('✅')
     bot.bgs_run = False
     await sio.disconnect()

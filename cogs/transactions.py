@@ -16,6 +16,11 @@ class Transactions(commands.Cog):
     @commands.group(name='award', case_insensitive=True)
     @commands.check(checks.can_manage_bot)
     async def _award(self, ctx):
+        """
+        *Admin only* | Set of commands to award members with diamonds and reputation. `?help award` for more info.
+        
+        Here is a list of all possible subcommands:
+        """
         to_delete = [ctx.message]
         if ctx.invoked_subcommand is None:
             to_delete.append(await ctx.send("Subcommand required!"))
@@ -26,11 +31,17 @@ class Transactions(commands.Cog):
     @_award.command(name='diamonds', aliases=['d'], case_insensitive=True)
     @commands.check(checks.can_manage_bot)
     async def _diamonds(self, ctx: commands.Context, amount, *, who: discord.Member):
+        """
+        *Admin only* | Awards specified amount of diamonds to the member. Diamonds can be shortened to 'd'.
+        """
         await self.transaction(ctx, amount, ctx.author, who, award_link, 'diamonds')
     
     @_award.command(name='reputation', aliases=['r', 'rep'], case_insensitive=True)
     @commands.check(checks.can_manage_bot)
     async def _reputation(self, ctx: commands.Context, amount, *, who: discord.Member):
+        """
+        *Admin only* | Awards specified amount of reputation to the member. Reputation can be shortened to 'r' or 'rep'.
+        """
         if int(amount) < 1:
             await ctx.message.add_reaction('😏')
             return
@@ -39,6 +50,9 @@ class Transactions(commands.Cog):
     @_award.command(name='both', aliases=['b'], case_insensitive=True)
     @commands.check(checks.can_manage_bot)
     async def _both(self, ctx: commands.Context, amount, *, who: discord.Member):
+        """
+        *Admin only* | Awards specified amount of both diamonds and reputation to the member. Both can be shortened to 'b'.
+        """
         if int(amount) < 1:
             await ctx.message.add_reaction('😏')
             return
@@ -46,6 +60,9 @@ class Transactions(commands.Cog):
     
     @commands.command(name='donate', aliases=['give', 'donation'], case_insensitive=True)
     async def _donate(self, ctx: commands.Context, amount, *, who: discord.Member):
+        """
+        Transfers specified amount of diamonds from your account to target member. Use full name (name#number), ping or ID. Amount can only be positive. This command can be also called with `?give` and `?donation`.
+        """
         if ctx.author.id == who.id or int(amount) < 1:
             await ctx.message.add_reaction('😏')
             return

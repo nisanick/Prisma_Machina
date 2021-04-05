@@ -20,6 +20,21 @@ class Utils(commands.Cog):
 
     @commands.command(name='roll')
     async def _roll(self, ctx, *, roll_string: str):
+        """
+        Rolls a dice specified in roll_string. Use `?help roll` for more information.
+        
+        Parameter roll_string supports following:
+        - constant integer number, for example `?roll 4` to get specific result
+        - symbol 'd' followed by a positive integer number x to generate number in range 1 to x, inclusive, for example `?roll d20`
+        - symbol '+' or '-' to add or subtract more numbers together, for example `?roll d20+4`
+        - symbol '<' or '>' to check if left side is lower or higher than right side of equation, for example `?roll d20+4 > 10`
+        
+        Some aditional things to keep in mind:
+        - roll_string can contain at most one '<' or '>'
+        - both constant and generated numbers can be used on both sides of equation
+        - both '+' and '-' can be used on both sides of equation multiple times
+        - both constant and generated number can be used on both sides of '+' and '-'
+        """
         left = roll_string.strip(" ")
         right = None
         mod = None
@@ -106,7 +121,7 @@ class Utils(commands.Cog):
 
     @commands.command(name='help')
     async def _help(self, ctx, *, command: str = None):
-        """Shows help about a command or the bot"""
+        """Shows this message. If you supply a 'command' parameter, help for that command or group of commands will be given instead."""
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
         try:
@@ -128,7 +143,7 @@ class Utils(commands.Cog):
 
     @commands.command()
     async def feedback(self, ctx, *, message):
-        """Sends your feedback to High Council"""
+        """Sends your feedback to High Council."""
         embed = discord.Embed(title="Feedback", description=message, colour=discord.Colour.green(), timestamp=datetime.utcnow())
         embed.set_author(name=ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
         for channel_id in config.ADMINISTRATION_CHANNELS:
@@ -166,7 +181,7 @@ class Utils(commands.Cog):
 
     @commands.command()
     async def time(self, ctx):
-        """Shows current Galactic Time"""
+        """Shows current Galactic Time."""
         year = datetime.utcnow().timetuple().tm_year
         now = datetime.utcnow().replace(year=(year + 1286)).strftime("%H:%M %d %b %Y")
         embed = discord.Embed(title="Current Galactic Time", description=now, color=discord.Colour.dark_orange())
@@ -223,28 +238,6 @@ class Utils(commands.Cog):
         else:
             await channel.send('{} left the server'.format(member.name))
 
-    @commands.command(name='say', hidden=True)
-    @commands.check(checks.can_manage_rp)
-    @commands.check(checks.in_say_channel)
-    async def _say(self, ctx, channel: discord.TextChannel, *, message):
-        await channel.send(message)
-
-    @commands.command(name='dm', hidden=True)
-    @commands.check(checks.can_manage_rp)
-    @commands.check(checks.in_say_channel)
-    async def _dm(self, ctx, user: discord.User, *, message):
-        channel = user.dm_channel
-        if channel is None:
-            await user.create_dm()
-            channel = user.dm_channel
-        await channel.send(message)
-        await ctx.message.add_reaction('✅')
-
-    @commands.command(name='embed', hidden=True)
-    @commands.check(checks.can_manage_bot)
-    @commands.check(checks.in_admin_channel)
-    async def _embed(self, ctx, channel: discord.TextChannel):
-        pass
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
@@ -290,27 +283,7 @@ class Utils(commands.Cog):
                 else:
                     errors.append(member.name)
             print(",".join(errors))
-    
-    @commands.command(name='rm', hidden=True)
-    @commands.check(checks.can_manage_rp)
-    @commands.check(checks.in_say_channel)
-    async def _remove_message(self, ctx, message: discord.Message):
-        
-        if message.author.id == self.bot.user.id:
-            await message.delete()
-        else:
-            to_delete = await ctx.send("Can't remove that message.")
-            await asyncio.sleep(7)
-            await to_delete.delete()
-        if not isinstance(ctx.channel, discord.DMChannel):
-            await ctx.message.delete()
-
-    @commands.command(name='medit', hidden=True)
-    @commands.check(checks.can_manage_rp)
-    @commands.check(checks.in_say_channel)
-    async def _edit_message(self, ctx, message: discord.Message, *, text):
-        await message.edit(content=text)
-
+            
 
 def setup(bot):
     bot.add_cog(Utils(bot))
