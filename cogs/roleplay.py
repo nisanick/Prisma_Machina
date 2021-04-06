@@ -31,7 +31,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.in_say_channel)
     async def _say(self, ctx, channel: discord.TextChannel, *, message):
         """
-        *RP Admin only* | *#rp-scripting only* | Sends a message as a bot in specified channel.
+        *RP Moderator only* | *#rp-scripting only* | Sends a message as a bot in specified channel.
         """
         await channel.send(message)
 
@@ -40,7 +40,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.in_say_channel)
     async def _dm(self, ctx, user: discord.User, *, message):
         """
-        *RP Admin only* | *#rp-scripting only* | Sends a direct message as a bot to specified member. Use full name (name#number), ping or ID.
+        *RP Moderator only* | *#rp-scripting only* | Sends a direct message as a bot to specified member. Use full name (name#number), ping or ID.
         """
         channel = user.dm_channel
         if channel is None:
@@ -54,7 +54,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.in_say_channel)
     async def _remove_message(self, ctx, message: discord.Message):
         """
-        *RP Admin only* | *#rp-scripting only* | Removes a specified message that the bot posted. Use message ID.
+        *RP Moderator only* | *#rp-scripting only* | Removes a specified message that the bot posted. Use message ID.
         """
         
         if message.author.id == self.bot.user.id:
@@ -71,7 +71,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.in_say_channel)
     async def _edit_message(self, ctx, message: discord.Message, *, text):
         """
-        *RP Admin only* | *#rp-scripting only* | Edits a specified message that bot posted. Use message ID.
+        *RP Moderator only* | *#rp-scripting only* | Edits a specified message that bot posted. Use message ID.
         """
         await message.edit(content=text)
     
@@ -91,7 +91,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _turn(self, ctx):
         """
-        *RP Admin only* | Tells the bot to post used actions and start new turn.
+        *RP Moderator only* | Tells the bot to post used actions and start new turn.
         """
         message = '**::TURN {}::**\n'.format(self.turn_number)
         message += 'Turn ended with these actions taking place:\n'
@@ -115,7 +115,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _start(self, ctx):
         """
-        *RP Admin only* | Creates a new RP session if there is not one running already. Use `?help rp start` for more information about RP sessions.
+        *RP Moderator only* | Creates a new RP session if there is not one running already. Use `?help rp start` for more information about RP sessions.
         
         Players can join the session via `?rp join`
         Players are supposed to state their action with `?rp use` command each turn.
@@ -280,7 +280,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _end(self, ctx):
         """
-        *RP Admin only* | Ends currently open rp session
+        *RP Moderator only* | Ends currently open rp session
         """
         db = await Database.get_connection(self.bot.loop)
         probe = "SELECT 1 FROM roleplay_session WHERE done IS FALSE"
@@ -314,7 +314,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _tool(self, ctx, what, who, channel: discord.TextChannel):
         """
-        *RP Admin only* | Used in place of old RP utility commands.
+        *RP Moderator only* | Used in place of old RP utility commands.
         
         Please refer to `?help rp use` for the names of utilities.
         This command can only be used for utilites (like hack, EGG, ECU...). It will not work on other equipment.
@@ -329,7 +329,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _clean(self, ctx):
         """
-        *RP Admin only* | Force-closes all RP sessions
+        *RP Moderator only* | Force-closes all RP sessions
         """
         db = await Database.get_connection(self.bot.loop)
         update = "UPDATE roleplay_session SET done = TRUE WHERE done IS FALSE"
@@ -351,7 +351,7 @@ class Roleplay(commands.Cog):
     @commands.check(checks.can_manage_rp)
     async def _set(self, ctx, what: str, *params):
         """
-        *RP Admin only* | Helper command to set various parameters to RP session.
+        *RP Moderator only* | Helper command to set various parameters to RP session.
 
         Currenly can be used only to set hacking target, for example `?rp set target 3` to set hack target to 3
         """
