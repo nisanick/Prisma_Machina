@@ -93,11 +93,11 @@ class Stats(commands.Cog):
         else:
             count = int(response['Diamonds'])
             emoji_type = ''
-            if count > 100000:
+            if count > 200000:
                 emoji_type = 4
-            elif count > 25000:
+            elif count > 50000:
                 emoji_type = 3
-            elif count > 5000:
+            elif count > 10000:
                 emoji_type = 2
             try:
                 emoji = await commands.EmojiConverter().convert(ctx, "diamond{}".format(emoji_type))

@@ -4,7 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 from TextChecker import TextChecker
 import checks
@@ -19,14 +19,6 @@ class Timer(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.execute = True
-        self.step = 5
-        self.task = self.bot.loop.create_task(self.timer())
-
-    async def timer(self):
-        await asyncio.sleep(10)
-        while self.execute:
-            await self.check_events()
-            await asyncio.sleep(self.step)
 
     @commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
@@ -34,11 +26,13 @@ class Timer(commands.Cog):
     async def stop(self, ctx):
         self.execute = False
 
+    @tasks.loop(seconds=10.0)
     async def check_events(self):
         """ event types are as follows:
             0 - Website article
             1 - Probation
             2 - RP message
+            3 - APOD
         """
         event_select = "SELECT event_id, event_type, event_special FROM schedule WHERE done = FALSE AND event_time <= $1"
         event_update = "UPDATE schedule SET done = TRUE WHERE event_id = $1"
@@ -60,7 +54,44 @@ class Timer(commands.Cog):
                     pass
                     # await self.send_article(int(event_special), True)
 
+                # APOD
+                elif event_type == 3:
+                    await self.apod()
+
                 await db.execute(event_update, event_id)
+        await Database.close_connection(db)
+
+    async def apod(self):
+        """
+        Shows Astronomical Picture of the Day straight from NASA
+        """
+        response = await Web.get_response(
+            "https://api.nasa.gov/planetary/apod?thumbs=True&api_key={}".format(config.NASA_API))
+        embed = discord.Embed(title='{} | *{}*'.format(response["title"], 'Astronomy Picture of the Day'),
+                              description=response['explanation'], colour=0x5ADC1A)
+
+        if response["media_type"] == "video":
+            embed.add_field(name='Video link', value='[Click Here!]({})'.format(response['url']))
+            embed.set_image(url=response['thumbnail_url'])
+        elif response["media_type"] == "image":
+            embed.add_field(name='HD Download', value='[Click here!]({})'.format(response["hdurl"]))
+            embed.set_image(url=response['url'])
+
+        embed.timestamp = datetime.utcnow()
+        embed.set_footer(text='Generated on ')
+
+        channel = self.bot.get_channel(config.PLANETARIUM)
+        await channel.send(content=None, embed=embed)
+
+        event_insert = "INSERT INTO schedule(event_time, event_type, event_special) VALUES ($1, 3, $2)"
+        db = await Database.get_connection(self.bot.loop)
+        async with db.transaction():
+            tomorrow = datetime.utcnow() + timedelta(days=1)
+            values = [
+                tomorrow.replace(hour=6, minute=0, second=0, microsecond=0),
+                response["date"]
+            ]
+            await db.execute(event_insert, *values)
         await Database.close_connection(db)
 
     async def send_article(self, event_type, schedule=False):
@@ -110,7 +141,6 @@ class Timer(commands.Cog):
             async for (message_id, message_title, message_author, message_content, message_footer, message_color) in db.cursor(message_select, *values):
                 message_text = TextChecker.replace_emotes(message_content, self.bot)
                 channel = self.bot.get_channel(config.RP_CHANNEL)
-                # channel = self.bot.get_channel(config.RP_CHANNEL)
                 embed = discord.Embed(title=message_title, description=message_text, color=message_color)
                 embed.set_author(name=message_author)
                 embed.set_thumbnail(url='http://nisanick.com/pictures/{}'.format(thumbnail))

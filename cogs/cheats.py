@@ -68,7 +68,7 @@ class Fun(commands.Cog):
         cooldown_data = (
             str(ctx.author.id),
             ctx.invoked_with,
-            ctx.message.created_at - timedelta(days=1)
+            ctx.message.created_at - timedelta(hours=23)
         )
         async with db.transaction():
             async for (user_id, code, last_use) in db.cursor(cooldown_check, *cooldown_data):
