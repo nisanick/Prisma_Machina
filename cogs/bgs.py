@@ -259,18 +259,6 @@ class BGS(commands.Cog):
                 tick_select = "SELECT id as tick_id, time FROM tick ORDER BY time DESC LIMIT 1"
                 self.tick_id = (await db.fetchrow(tick_select))['tick_id']
                 channel = self.bot.get_channel(BGS_CHANNEL)
-                # if self.au_message_id > 0:
-                #     message = await channel.fetch_message(self.au_message_id)
-                #     if message.pinned:
-                #         await message.unpin()
-                # if self.pi_message_id > 0:
-                #     message = await channel.fetch_message(self.pi_message_id)
-                #     if message.pinned:
-                #         await message.unpin()
-                # if self.coa_message_id > 0:
-                #     message = await channel.fetch_message(self.coa_message_id)
-                #     if message.pinned:
-                #         await message.unpin()
                 # await self.recheck_systems() FIXME - EDDN API is currently not updating
                 self.faction_data[75253].message = await self.setup_bgs_message(channel, 75253)  # Colonists of Aurora
                 self.faction_data[23831].message = await self.setup_bgs_message(channel, 23831)  # Prismatic Imperium
@@ -348,22 +336,43 @@ class BGS(commands.Cog):
     async def init_bgs(self):
         db = await database.Database.get_connection(self.bot.loop)
         async with db.transaction():
+            tick_select = "SELECT id as tick_id, time FROM tick ORDER BY time DESC LIMIT 1"
+            tick_id, time = await db.fetchrow(tick_select)
+            self.tick_id = tick_id
+            self.last_tick = time
+
             messages_select = "SELECT id as faction_id, message_id FROM faction where id in (74847, 23831, 75253)"
             async for (faction_id, message_id) in db.cursor(messages_select):
                 system_select = "select count(*) as system_count from star_system where our_faction_id = $1"
                 async for record in db.cursor(system_select, faction_id):
                     self.faction_data[faction_id].systems = record['system_count']
-                if faction_id == 74847:
-                    self.faction_data[74847].message = message_id
-                elif faction_id == 23831:
-                    self.faction_data[23831].message = message_id
-                elif faction_id == 75253:
-                    self.faction_data[75253].message = message_id
-
-            tick_select = "SELECT id as tick_id, time FROM tick ORDER BY time DESC LIMIT 1"
-            tick_id, time = await db.fetchrow(tick_select)
-            self.tick_id = tick_id
-            self.last_tick = time
+                self.faction_data[faction_id].message = message_id
+                states_select = "select star_system.name, influence.system, influence.influence, influence.states, pending, recovering from influence join star_system on star_system.id = influence.system where tick = $1 and faction = $2"
+                async for (name, system_id, influence, states, pending, recovering) in db.cursor(states_select, *(tick_id, faction_id)):
+                    self.updated_systems.add(name)
+                    self.faction_data[faction_id].set_active(states)
+                    self.faction_data[faction_id].set_pending(pending)
+                    self.faction_data[faction_id].set_recovering(recovering)
+                    influence_select = "select faction, influence.influence from influence where influence.system = $1 and tick = $2 order by influence desc limit 2"
+                    their_influence = 0
+                    async for (inf_faction_id, faction_influence) in db.cursor(influence_select, *(system_id, tick_id)):
+                        if not inf_faction_id == faction_id:
+                            if faction_influence > their_influence:
+                                their_influence = faction_influence
+                    if influence > 65.00:
+                        self.faction_data[faction_id].expansion_warning.append("{} {}%".format(name, round(influence, 2)))
+                    else:
+                        difference = influence - their_influence
+                        if 10.00 < difference <= 20.00:
+                            self.faction_data[faction_id].mild_warning.append(
+                                "{} {}% ({})".format(name, round(influence, 2), round(difference, 2)))
+                        elif difference < 0.00:
+                            self.faction_data[faction_id].not_control.append(
+                                "{} {}% ({})".format(name, round(influence, 2), round(difference, 2)))
+                        elif difference <= 10.00:
+                            self.faction_data[faction_id].high_warning.append(
+                                "{} {}% ({})".format(name, round(influence, 2), round(difference, 2)))
+                await self.update_message(faction_id)
             
         await database.Database.close_connection(db)
 

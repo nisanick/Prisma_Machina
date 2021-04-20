@@ -42,6 +42,8 @@ async def on_ready():
     if bgs is None:
         bot.load_extension('cogs.bgs')
     await bot.get_cog('BGS').init_bgs()
+    channel = bot.get_channel(int(config.ANNOUNCE_CHANNEL))
+    await channel.send("Started up and ready")
     await asyncio.gather(eddn(bot), ticker())
 
 
