@@ -503,6 +503,8 @@ class BGS(commands.Cog):
                     
                     influences.append(faction.Influence * 100)
                     await db.execute(insert_influence, *influence_values)
+                update_system = "UPDATE star_system SET our_faction_id = $1 WHERE id = $2"
+                await db.execute(update_system, *(our_id, system_id))
                 try:
                     for conflict in data.Conflicts:
                         faction1 = await self._get_faction_id(conflict.Faction1.Name)
@@ -541,6 +543,7 @@ class BGS(commands.Cog):
                     our_faction.high_warning.append(
                         "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
             await self.update_message(our_id, conflict_data)
+
                 
         await database.Database.close_connection(db)
             

@@ -72,7 +72,7 @@ class Fun(commands.Cog):
         )
         async with db.transaction():
             async for (user_id, code, last_use) in db.cursor(cooldown_check, *cooldown_data):
-                cd_end = last_use + timedelta(days=1)
+                cd_end = last_use + timedelta(hours=23)
                 difference = cd_end - ctx.message.created_at
                 if difference > timedelta(hours=12):
                     remaining = "almost a day"
