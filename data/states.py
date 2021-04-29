@@ -70,8 +70,8 @@ class States:
             result.append('War ({})'.format(self.War))
         if self.CivilWar > 0:
             result.append('Civil War ({})'.format(self.CivilWar))
-        if self.Elections > 0:
-            result.append('Elections ({})'.format(self.Elections))
+        if self.Election > 0:
+            result.append('Elections ({})'.format(self.Election))
         if self.Retreat > 0:
             result.append('Retreat ({})'.format(self.Retreat))
         if self.Expansion > 0:
