@@ -19,7 +19,7 @@ class States:
         self.Colonisation = 0
         self.War = 0
         self.CivilWar = 0
-        self.Elections = 0
+        self.Election = 0
         self.Retreat = 0
         self.Expansion = 0
         
