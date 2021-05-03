@@ -38,6 +38,8 @@ async def on_ready():
     print(bot.user.id)
     timer = bot.get_cog('Timer')
     timer.check_events.start()
+    hunt = bot.get_cog('Hunt')
+    hunt.initialize_hunt()
     bgs = bot.get_cog('BGS')
     if bgs is None:
         bot.load_extension('cogs.bgs')

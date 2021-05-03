@@ -268,7 +268,7 @@ class Parser(commands.Cog):
             await db.execute(insert_user, str(who.id))
             # FIXME - sometimes sends PartialEmoji which crashes the DB with TypeError as it expects str instead.
             # Need to simulate
-            if isinstance(reaction.emoji, discord.Emoji):
+            if isinstance(reaction.emoji, discord.Emoji) or isinstance(reaction.emoji, discord.PartialEmoji):
                 emoji = str(reaction.emoji.id)
             else:
                 emoji = reaction.emoji

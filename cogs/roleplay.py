@@ -26,7 +26,7 @@ class Roleplay(commands.Cog):
         self.turn_number = 0
         self.prompt = None
 
-    @commands.command(name='say')
+    @commands.command(name='say', case_insensitive=True)
     @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _say(self, ctx, channel: discord.TextChannel, *, message):
@@ -35,7 +35,7 @@ class Roleplay(commands.Cog):
         """
         await channel.send(message)
 
-    @commands.command(name='dm')
+    @commands.command(name='dm', case_insensitive=True)
     @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _dm(self, ctx, user: discord.User, *, message):
@@ -49,7 +49,7 @@ class Roleplay(commands.Cog):
         await channel.send(message)
         await ctx.message.add_reaction('✅')
     
-    @commands.command(name='rm')
+    @commands.command(name='rm', case_insensitive=True)
     @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _remove_message(self, ctx, message: discord.Message):
@@ -66,7 +66,7 @@ class Roleplay(commands.Cog):
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
 
-    @commands.command(name='medit')
+    @commands.command(name='medit', case_insensitive=True)
     @commands.check(checks.can_manage_rp)
     @commands.check(checks.in_say_channel)
     async def _edit_message(self, ctx, message: discord.Message, *, text):
