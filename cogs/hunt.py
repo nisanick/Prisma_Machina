@@ -12,12 +12,6 @@ from os import path
 import random
 from datetime import datetime, timedelta
 
-# phase 1 - first news are out heralding the doom of the world - 3rd May 11pm UTC
-# phase 2 - second news are out, spawns start and % proportional of how much time passed until the next post - 10th May 2pm UTC
-# phase 3 - spawn on every message or maybe 80%? - 17th May 7pm UTC
-# phase 4 - killing enabled - 19th May 8am UTC
-# phase 5 - capturing enabled - 22nd May 8am UTC
-
 
 class Hunt(commands.Cog):
 
@@ -290,7 +284,7 @@ class Hunt(commands.Cog):
         """
         *Admin only* | Marks next eligible message for guaranteed spawn
         """
-        self.spawn_chance = 1000
+        self.spawn_chance = 10000
 
     @_hunt.command(name='allow', case_insensitive=True)
     @commands.check(checks.can_manage_bot)
