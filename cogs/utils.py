@@ -250,7 +250,7 @@ class Utils(commands.Cog):
 
                 # Probation
                 if event_type == 1:
-                    member = ctx.guild.get_member(event_special)
+                    member = ctx.guild.get_member(int(event_special))
                     embed.add_field(name="Probation expire", value="{:%d.%m.%Y %H:%M}\n{}".format(event_time, member.mention))
 
                 # RP message
