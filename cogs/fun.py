@@ -87,7 +87,7 @@ class Fun(commands.Cog):
                 self.limit = default_chance
 
             if "trumble" in message.content.lower():
-                emoji = discord.utils.get(message.guild.emojis, name='trumble')
+                emoji = discord.utils.get(message.guild.emojis, name='Trumble')
                 await message.add_reaction(emoji)
                 self.limit = default_chance
 

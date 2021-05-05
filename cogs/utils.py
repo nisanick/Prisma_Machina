@@ -230,6 +230,41 @@ class Utils(commands.Cog):
             await ctx.message.delete()
         await database.Database.close_connection(db)
 
+    @commands.command(name='schedule')
+    @commands.check(checks.can_manage_bot)
+    async def _schedule(self, ctx):
+        if not isinstance(ctx.channel, discord.DMChannel):
+            await ctx.message.delete()
+        event_select = "SELECT event_id, event_type, event_special, event_time FROM schedule WHERE done = FALSE"
+
+        db = await database.Database.get_connection(self.bot.loop)
+        async with db.transaction():
+            embed = discord.Embed(colour=discord.Colour(0xFFF91A), title='Schedule info', description="Currently scheduled events:")
+            embed.timestamp = datetime.utcnow()
+            embed.set_footer(text="Generated at")
+            async for (event_id, event_type, event_special, event_time) in db.cursor(event_select):
+
+                # Website article
+                if event_type == 0:
+                    embed.add_field(name="News check", value="{:%d.%m.%Y %H:%M}\nLast id: {}".format(event_time, event_special))
+
+                # Probation
+                if event_type == 1:
+                    member = ctx.guild.get_member(event_special)
+                    embed.add_field(name="Probation expire", value="{:%d.%m.%Y %H:%M}\n{}".format(event_time, member.mention))
+
+                # RP message
+                elif event_type == 2:
+                    pass
+                    # await self.send_article(int(event_special), True)
+
+                # APOD
+                elif event_type == 3:
+                    embed.add_field(name="APOD article check", value="{:%d.%m.%Y %H:%M}\nLast article: {}".format(event_time, event_special))
+            await ctx.send(embed=embed)
+        await database.Database.close_connection(db)
+
+
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         channel = self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
