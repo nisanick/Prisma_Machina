@@ -39,7 +39,7 @@ class Fun(commands.Cog):
             await ctx.send("Awesomeness of Wisewolf {}".format(random.choice(options)))
         elif member.id == 186829544764866560:  # Techeron
             await ctx.send("BY ACHENAR... you compared to almighty Wisewolf? Please..")
-        elif member.id == 782079056601940008:  # Ryan
+        elif member.id == 152527690291871745:  # Ryan
             await ctx.send("[REDACTED BY ADMINISTRATION - Classified information]")
         elif member.id == 360543179591909397:  # Bear
             await ctx.send("Rupey is as awesome as a teacher can be.")
@@ -82,7 +82,7 @@ class Fun(commands.Cog):
                 self.limit = default_chance
 
             if message.author.id == 186829544764866560 and "by" in message.content.lower() \
-                    and "achenar" in message.content.lower() and number < 400:
+                    and "achenar" in message.content.lower():
                 await message.add_reaction(random.choice(['🍺', '🍷', '🍸', '🍹', '🥃']))
                 self.limit = default_chance
 

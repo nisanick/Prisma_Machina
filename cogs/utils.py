@@ -233,6 +233,9 @@ class Utils(commands.Cog):
     @commands.command(name='schedule')
     @commands.check(checks.can_manage_bot)
     async def _schedule(self, ctx):
+        """
+        *Admin only* | Information about all scheduled events, like probation or news check.
+        """
         if not isinstance(ctx.channel, discord.DMChannel):
             await ctx.message.delete()
         event_select = "SELECT event_id, event_type, event_special, event_time FROM schedule WHERE done = FALSE"
