@@ -42,7 +42,7 @@ class Fun(commands.Cog):
         elif member.id == 152527690291871745:  # Ryan
             await ctx.send("[REDACTED BY ADMINISTRATION - Classified information]")
         elif member.id == 360543179591909397:  # Bear
-            await ctx.send("Rupey is as awesome as a teacher can be.")
+            await ctx.send("Is Rupey awesome or is it just a little lie? Tune into Prismatic Media News to find out!")
         else:
             if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
                 await ctx.send("Everyone is better than Wisewolf")
