@@ -23,15 +23,15 @@ class Fun(commands.Cog):
         """
         options = [
             'is Exceeding expectations',
-            'Went down by 1 point since last time',
-            'Needs to be 20% higher',
-            'is 43',
+            'went down by 1 point since last time',
+            'needs to be 20% higher',
+            'is 42',
             'is Over safety limits',
             'is Leeking from systems',
             'is Hidden under the sofa',
             'is Defined in 345.654.655 dictionaries as Stunning',
             'is Traveling at warp 6.9',
-            'Can get to Beagle Point in less than 5 parsecs',
+            'can get to Beagle Point in less than 5 parsecs',
 
         ]
         member = await commands.MemberConverter().convert(ctx, who)
