@@ -76,7 +76,7 @@ class Fun(commands.Cog):
                 await message.add_reaction(emoji)
 
         if number > self.limit:
-            if "tharg" in message.content.lower() and number < 400:
+            if "tharg" in message.content.lower():
                 emoji = discord.utils.get(message.guild.emojis, name='tinfoilhat')
                 await message.add_reaction(emoji or '👽')
                 self.limit = default_chance
