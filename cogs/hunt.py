@@ -200,8 +200,6 @@ class Hunt(commands.Cog):
             return
         if message.channel.id not in self.channels:
             return
-        if phase < 2:
-            return
         number = random.randint(1, 10000)
 
         if phase < 4:
@@ -233,7 +231,7 @@ class Hunt(commands.Cog):
         if ctx.invoked_subcommand is None:
             phase = self.get_phase()
             if phase < 4:
-                embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Phase {}'.format(phase), description="Nothing to see here, move along.")
+                embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Phase {}'.format(phase), description="Loading: {}%".format(self.spawn_chance/100))
             else:
                 embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Hunt settings', description="Here you can see an overview of the hunt settings and the current state")
 

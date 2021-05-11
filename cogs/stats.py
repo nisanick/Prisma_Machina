@@ -46,8 +46,6 @@ class Stats(commands.Cog):
             message_count, reaction_count, special, ducks = await db.fetchrow(user_info, str(user.id))
             if user_id == 186829544764866560:
                 footer += "You said 'By Achenar' {} times. ".format(special)
-            if user_id == 90325204173082624:
-                footer += "You said 'owo' {} times. ".format(special)
             embed.add_field(name="Message statistics", inline=False,
                             value="You sent {} messages. Top used words:".format(message_count))
             async for (word, count, last_use) in db.cursor(words_used, *(str(user_id), limit)):
@@ -65,7 +63,7 @@ class Stats(commands.Cog):
                                 .format(count, '{:%d.%m.%Y %H:%M}'.format(last_use)))
             if isinstance(user, discord.Member):
                 embed.timestamp = user.joined_at
-            embed.set_footer(text="{}{} ducks shot. Joined at ".format(footer, ducks))
+            embed.set_footer(text="{}{} hunts joined. Joined at ".format(footer, ducks))
             await ctx.send(embed=embed)
             if not isinstance(ctx.channel, discord.DMChannel):
                 await ctx.message.delete()
