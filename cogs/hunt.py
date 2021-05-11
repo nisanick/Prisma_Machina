@@ -77,6 +77,7 @@ class Hunt(commands.Cog):
                     self.phase_3_done = data["phase_3_done"]
                     self.base_reward = data["base_reward"]
                     self.hunt_cap_ratio = data["hunt_cap_ratio"]
+                    self.lifetime = data["lifetime"]
                 except Exception as e:
                     pass
         self.spawn_chance = self.base_chance
@@ -92,7 +93,8 @@ class Hunt(commands.Cog):
             "capture_reactions": self.capture_reactions,
             "phase_3_done": self.phase_3_done,
             "base_reward": self.base_reward,
-            "hunt_cap_ratio": self.hunt_cap_ratio
+            "hunt_cap_ratio": self.hunt_cap_ratio,
+            "lifetime": self.lifetime
         }
         with open(config.BASE_DIR + 'hunt_settings.json', 'w') as outfile:
             json.dump(settings, outfile)
