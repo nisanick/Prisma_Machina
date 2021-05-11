@@ -355,7 +355,7 @@ class Hunt(commands.Cog):
         """
         *Admin only* | Sets how long is a hunt actively waiting for reactions. Time is in minutes.
         """
-        self.lifetime = round(time)
+        self.lifetime = int(time)
         self.save_settings()
 
 
