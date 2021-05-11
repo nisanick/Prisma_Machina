@@ -94,7 +94,7 @@ class Hunt(commands.Cog):
             "base_reward": self.base_reward,
             "hunt_cap_ratio": self.hunt_cap_ratio
         }
-        with open('hunt_settings.json', 'w') as outfile:
+        with open(config.BASE_DIR + 'hunt_settings.json', 'w') as outfile:
             json.dump(settings, outfile)
 
     def clean_hunts(self):
