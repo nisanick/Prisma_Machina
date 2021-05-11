@@ -64,8 +64,8 @@ class Hunt(commands.Cog):
         return chance
 
     def initialize_hunt(self):
-        if path.isfile('hunt_settings.json'):
-            with open('hunt_settings.json') as json_file:
+        if path.isfile(config.BASE_DIR + 'hunt_settings.json'):
+            with open(config.BASE_DIR + 'hunt_settings.json') as json_file:
                 data = json.load(json_file)
                 try:
                     self.base_chance = data['base_chance']
