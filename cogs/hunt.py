@@ -25,7 +25,7 @@ class Hunt(commands.Cog):
         self.bot = bot
         self.post_init = False
         self.allowed = False
-        self.base_chance = 750
+        self.base_chance = 500
         self.base_reward = 100
         self.hunt_cap_ratio = 0.5
         self.lifetime = 1
@@ -58,7 +58,7 @@ class Hunt(commands.Cog):
         return int(10000 - (100 * remaining_time.total_seconds() / total_time.total_seconds()) * 100)
 
     def phase_4_chance(self):
-        chance = 10000 - self.phase_4_hunts * 10
+        chance = 10000 - self.phase_4_hunts * 200
         if chance < self.base_chance:
             chance = self.base_chance
         return chance
@@ -233,7 +233,7 @@ class Hunt(commands.Cog):
         if ctx.invoked_subcommand is None:
             phase = self.get_phase()
             if phase < 4:
-                embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Phase {}'.format(phase), description="Loading: {}%".format(self.spawn_chance/100))
+                embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Phase {}'.format(phase), description="Loading: {}%".format(self.phase_23_chance()/100))
             else:
                 embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Hunt settings', description="Here you can see an overview of the hunt settings and the current state")
 
@@ -242,7 +242,10 @@ class Hunt(commands.Cog):
                     state = "Active"
                 embed.add_field(name="State", value=state)
                 embed.add_field(name="Base spawn chance", value="{}%".format(self.base_chance / 100))
-                embed.add_field(name="Spawn chance", value="{}%".format(self.spawn_chance / 100))
+                chance = self.spawn_chance
+                if phase == 4:
+                    chance = self.phase_4_chance()
+                embed.add_field(name="Spawn chance", value="{}%".format(chance / 100))
 
                 embed.add_field(name="Base reward", value="{} <:diamond:230281835119247361>".format(self.base_reward))
                 embed.add_field(name="Hunt modifier", value="{}%".format(self.hunt_cap_ratio * 100))
