@@ -180,6 +180,10 @@ class Hunt(commands.Cog):
                 captured
             )
 
+            if phase == 4:
+                self.phase_4_hunts += 1
+                self.save_settings()
+
             insert_user = "INSERT INTO users (user_id, message_count, reaction_count, special, ducks) VALUES ($1, 0, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET ducks = users.ducks + 1"
             db = await database.Database.get_connection(self.bot.loop)
 
