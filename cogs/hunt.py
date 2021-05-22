@@ -15,12 +15,6 @@ from datetime import datetime, timedelta
 
 class Hunt(commands.Cog):
 
-    phase_1_day = datetime.strptime('2021.05.03 23:00', '%Y.%m.%d %H:%M')
-    phase_2_day = datetime.strptime('2021.05.10 14:00', '%Y.%m.%d %H:%M')
-    phase_3_day = datetime.strptime('2021.05.17 19:00', '%Y.%m.%d %H:%M')
-    phase_4_day = datetime.strptime('2021.05.19 08:00', '%Y.%m.%d %H:%M')
-    phase_5_day = datetime.strptime('2021.05.22 08:00', '%Y.%m.%d %H:%M')
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.post_init = False
@@ -33,35 +27,8 @@ class Hunt(commands.Cog):
         self.spawn_chance = 0
         self.hunts = {}
         self.reaction = '🐇'
-        self.phase_4_hunts = 0
         self.hunt_reactions = []
         self.capture_reactions = []
-        self.phase_3_done = False
-
-    def get_phase(self):
-        today = datetime.utcnow()
-        if today > self.phase_5_day:
-            return 5
-        if today > self.phase_4_day:
-            return 4
-        if today > self.phase_3_day:
-            return 3
-        if today > self.phase_2_day:
-            return 2
-        if today > self.phase_1_day:
-            return 1
-        return 0
-
-    def phase_23_chance(self):
-        total_time = self.phase_4_day - self.phase_2_day
-        remaining_time = self.phase_4_day - datetime.utcnow()
-        return int(10000 - (100 * remaining_time.total_seconds() / total_time.total_seconds()) * 100)
-
-    def phase_4_chance(self):
-        chance = 10000 - self.phase_4_hunts * 200
-        if chance < self.base_chance:
-            chance = self.base_chance
-        return chance
 
     def initialize_hunt(self):
         if path.isfile(config.BASE_DIR + 'hunt_settings.json'):
@@ -71,10 +38,8 @@ class Hunt(commands.Cog):
                     self.base_chance = data['base_chance']
                     self.allowed = data['allowed']
                     self.channels = data['channels']
-                    self.phase_4_hunts = data['phase_4_hunts']
                     self.hunt_reactions = data["hunt_reactions"]
                     self.capture_reactions = data["capture_reactions"]
-                    self.phase_3_done = data["phase_3_done"]
                     self.base_reward = data["base_reward"]
                     self.hunt_cap_ratio = data["hunt_cap_ratio"]
                     self.lifetime = data["lifetime"]
@@ -88,10 +53,8 @@ class Hunt(commands.Cog):
             "base_chance": self.base_chance,
             "allowed": self.allowed,
             "channels": self.channels,
-            "phase_4_hunts": self.phase_4_hunts,
             "hunt_reactions": self.hunt_reactions,
             "capture_reactions": self.capture_reactions,
-            "phase_3_done": self.phase_3_done,
             "base_reward": self.base_reward,
             "hunt_cap_ratio": self.hunt_cap_ratio,
             "lifetime": self.lifetime
@@ -104,19 +67,9 @@ class Hunt(commands.Cog):
             if datetime.utcnow() > self.hunts[hunt].end_time:
                 self.hunts.pop(hunt)
 
-    async def phase_3_purge(self):
-        insert = "UPDATE users SET ducks = 0 WHERE ducks > 0"
-        db = await database.Database.get_connection(self.bot.loop)
-        async with db.transaction():
-            await db.execute(insert)
-        await database.Database.close_connection(db)
-
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
-        phase = self.get_phase()
         if not self.post_init:
-            return
-        if phase < 4:
             return
         if self.allowed is not True:
             return
@@ -132,7 +85,7 @@ class Hunt(commands.Cog):
             return
 
         hunting = str(reaction) in self.hunt_reactions
-        capturing = phase > 4 and str(reaction) in self.capture_reactions
+        capturing = str(reaction) in self.capture_reactions
         # check if the reaction is correct
         if hunting or capturing:
             hunt_data.players.append(user.id)
@@ -144,12 +97,12 @@ class Hunt(commands.Cog):
             reward = 0
 
             if hunting:
-                self.spawn_chance -= 20
+                self.spawn_chance -= 500
                 hunted = 1
                 reward = self.base_reward * self.hunt_cap_ratio
                 hunt_data.hunted += 1
             if capturing:
-                self.spawn_chance += 40
+                self.spawn_chance += 1000
                 captured = 1
                 reward = self.base_reward * (1 - self.hunt_cap_ratio)
                 hunt_data.captured += 1
@@ -168,8 +121,10 @@ class Hunt(commands.Cog):
             }
             response = await Web.get_response(award_link, values)
 
-            if self.spawn_chance < 100:
-                self.spawn_chance = self.base_chance
+            if self.spawn_chance > self.base_chance * 2:
+                self.spawn_chance = self.base_chance * 2
+            elif self.spawn_chance < self.base_chance / 2:
+                self.spawn_chance = self.base_chance / 2
 
             insert_hunt = "INSERT INTO hunt (user_id, month, year, hunted, captured) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (user_id, month, year) DO UPDATE SET hunted = hunt.hunted + $4, captured = hunt.captured + $5"
             hunt_insert_data = (
@@ -179,10 +134,6 @@ class Hunt(commands.Cog):
                 hunted,
                 captured
             )
-
-            if phase == 4:
-                self.phase_4_hunts += 1
-                self.save_settings()
 
             insert_user = "INSERT INTO users (user_id, message_count, reaction_count, special, ducks) VALUES ($1, 0, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET ducks = users.ducks + 1"
             db = await database.Database.get_connection(self.bot.loop)
@@ -194,12 +145,7 @@ class Hunt(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        phase = self.get_phase()
 
-        if phase > 2 and not self.phase_3_done:
-            await self.phase_3_purge()
-            self.phase_3_done = True
-            self.save_settings()
         if not self.post_init:
             return
         if self.allowed is not True:
@@ -208,17 +154,11 @@ class Hunt(commands.Cog):
             return
         number = random.randint(1, 10000)
 
-        if phase < 4:
-            self.spawn_chance = self.phase_23_chance()
-        if phase == 4:
-            self.spawn_chance = self.phase_4_chance()
-
         if number <= self.spawn_chance:
             hunt_data = HuntData(self.bot.user.id, self.lifetime)
             self.hunts[message.id] = hunt_data
             try:
                 await message.add_reaction(self.reaction)
-                self.spawn_chance = self.base_chance
             except discord.errors.NotFound as ex:
                 self.spawn_chance = 10000
                 print("spawning on a removed message, guaranteeing next spawn")
@@ -235,36 +175,30 @@ class Hunt(commands.Cog):
         # if used by itself, it'll show an embed with current state of the hunt
         await ctx.message.delete()
         if ctx.invoked_subcommand is None:
-            phase = self.get_phase()
-            if phase < 4:
-                embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Phase {}'.format(phase), description="Loading: {}%".format(self.phase_23_chance()/100))
-            else:
-                embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Hunt settings', description="Here you can see an overview of the hunt settings and the current state")
+            embed = discord.Embed(colour=discord.Colour(0xF8F8FF), title='Hunt settings', description="Here you can see an overview of the hunt settings and the current state")
 
-                state = "Stoped"
-                if self.allowed:
-                    state = "Active"
-                embed.add_field(name="State", value=state)
-                embed.add_field(name="Base spawn chance", value="{}%".format(self.base_chance / 100))
-                chance = self.spawn_chance
-                if phase == 4:
-                    chance = self.phase_4_chance()
-                embed.add_field(name="Spawn chance", value="{}%".format(chance / 100))
+            state = "Stoped"
+            if self.allowed:
+                state = "Active"
+            embed.add_field(name="State", value=state)
+            embed.add_field(name="Base spawn chance", value="{}%".format(self.base_chance / 100))
+            chance = self.spawn_chance
+            embed.add_field(name="Spawn chance", value="{}%".format(chance / 100))
 
-                embed.add_field(name="Base reward", value="{} <:diamond:230281835119247361>".format(self.base_reward))
-                embed.add_field(name="Hunt modifier", value="{}%".format(self.hunt_cap_ratio * 100))
-                embed.add_field(name="Capture modifier", value="{}%".format((1 - self.hunt_cap_ratio) * 100))
+            embed.add_field(name="Base reward", value="{} <:diamond:230281835119247361>".format(self.base_reward))
+            embed.add_field(name="Hunt modifier", value="{}%".format(self.hunt_cap_ratio * 100))
+            embed.add_field(name="Capture modifier", value="{}%".format((1 - self.hunt_cap_ratio) * 100))
 
-                embed.add_field(name="Hunt timeout", value="{} minutes".format(self.lifetime))
-                channels = []
-                for channel_id in self.channels:
-                    channel = self.bot.get_channel(channel_id)
-                    channels.append(channel.name)
-                embed.add_field(name="Channels", value=", ".join(channels))
-                embed.add_field(name="Hunt emoji", value=" ".join(self.hunt_reactions))
-                embed.add_field(name="Capture emoji", value=" ".join(self.capture_reactions))
+            embed.add_field(name="Hunt timeout", value="{} minutes".format(self.lifetime))
+            channels = []
+            for channel_id in self.channels:
+                channel = self.bot.get_channel(channel_id)
+                channels.append(channel.name)
+            embed.add_field(name="Channels", value=", ".join(channels))
+            embed.add_field(name="Hunt emoji", value=" ".join(self.hunt_reactions))
+            embed.add_field(name="Capture emoji", value=" ".join(self.capture_reactions))
 
-                embed.set_footer(text="Please refer to `?help hunt` in order to change the settings")
+            embed.set_footer(text="Please refer to `?help hunt` in order to change the settings")
             await ctx.send(embed=embed)
 
     @_hunt.command(name='start', case_insensitive=True)
