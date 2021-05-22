@@ -97,15 +97,15 @@ class Hunt(commands.Cog):
 
             reward = 0
             
-            mod  = 0
+            mod = 0
 
             if hunting:
-                mod = -200
+                mod = -100
                 hunted = 1
                 reward = self.base_reward * self.hunt_cap_ratio
                 hunt_data.hunted += 1
             if capturing:
-                mod = 300
+                mod = 50
                 captured = 1
                 reward = self.base_reward * (1 - self.hunt_cap_ratio)
                 hunt_data.captured += 1
@@ -126,8 +126,8 @@ class Hunt(commands.Cog):
             }
             response = await Web.get_response(award_link, values)
 
-            if self.spawn_chance > self.base_chance * 4:
-                self.spawn_chance = self.base_chance * 4
+            if self.spawn_chance > self.base_chance * 2:
+                self.spawn_chance = self.base_chance * 2
             elif self.spawn_chance < self.base_chance / 4:
                 self.spawn_chance = self.base_chance / 4
 
