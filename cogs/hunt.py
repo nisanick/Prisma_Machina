@@ -29,6 +29,7 @@ class Hunt(commands.Cog):
         self.reaction = '🐇'
         self.hunt_reactions = []
         self.capture_reactions = []
+        self.guaranteed = False
 
     def initialize_hunt(self):
         if path.isfile(config.BASE_DIR + 'hunt_settings.json'):
@@ -158,7 +159,8 @@ class Hunt(commands.Cog):
             return
         number = random.randint(1, 10000)
 
-        if number <= self.spawn_chance:
+        if number <= self.spawn_chance or self.guaranteed:
+            self.guaranteed = False
             hunt_data = HuntData(self.bot.user.id, self.lifetime)
             self.hunts[message.id] = hunt_data
             try:
@@ -229,7 +231,7 @@ class Hunt(commands.Cog):
         """
         *Admin only* | Marks next eligible message for guaranteed spawn
         """
-        self.spawn_chance = 10000
+        self.guaranteed = True
 
     @_hunt.command(name='allow', case_insensitive=True)
     @commands.check(checks.can_manage_bot)
