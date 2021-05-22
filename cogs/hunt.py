@@ -111,7 +111,7 @@ class Hunt(commands.Cog):
 
             if hunt_data.hunted + hunt_data.captured > 1:
                 reward = reward/10
-            elif:
+            else:
                 self.spawn_chance += mod
 
             values = {
