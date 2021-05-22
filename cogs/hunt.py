@@ -1,3 +1,5 @@
+import asyncio
+
 import discord
 from discord.ext import commands
 
@@ -160,6 +162,7 @@ class Hunt(commands.Cog):
         number = random.randint(1, 10000)
 
         if number <= self.spawn_chance or self.guaranteed:
+            await asyncio.sleep(random.randint(1, 30))
             self.guaranteed = False
             hunt_data = HuntData(self.bot.user.id, self.lifetime)
             self.hunts[message.id] = hunt_data
