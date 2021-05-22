@@ -99,12 +99,12 @@ class Hunt(commands.Cog):
             mod  = 0
 
             if hunting:
-                mod = -500
+                mod = -200
                 hunted = 1
                 reward = self.base_reward * self.hunt_cap_ratio
                 hunt_data.hunted += 1
             if capturing:
-                mod = 1000
+                mod = 300
                 captured = 1
                 reward = self.base_reward * (1 - self.hunt_cap_ratio)
                 hunt_data.captured += 1
@@ -125,10 +125,10 @@ class Hunt(commands.Cog):
             }
             response = await Web.get_response(award_link, values)
 
-            if self.spawn_chance > self.base_chance * 2:
-                self.spawn_chance = self.base_chance * 2
-            elif self.spawn_chance < self.base_chance / 2:
-                self.spawn_chance = self.base_chance / 2
+            if self.spawn_chance > self.base_chance * 4:
+                self.spawn_chance = self.base_chance * 4
+            elif self.spawn_chance < self.base_chance / 4:
+                self.spawn_chance = self.base_chance / 4
 
             insert_hunt = "INSERT INTO hunt (user_id, month, year, hunted, captured) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (user_id, month, year) DO UPDATE SET hunted = hunt.hunted + $4, captured = hunt.captured + $5"
             hunt_insert_data = (
