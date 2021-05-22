@@ -95,20 +95,24 @@ class Hunt(commands.Cog):
             today = datetime.utcnow()
 
             reward = 0
+            
+            mod  = 0
 
             if hunting:
-                self.spawn_chance -= 500
+                mod = -500
                 hunted = 1
                 reward = self.base_reward * self.hunt_cap_ratio
                 hunt_data.hunted += 1
             if capturing:
-                self.spawn_chance += 1000
+                mod = 1000
                 captured = 1
                 reward = self.base_reward * (1 - self.hunt_cap_ratio)
                 hunt_data.captured += 1
 
             if hunt_data.hunted + hunt_data.captured > 1:
                 reward = reward/10
+            elif:
+                self.spawn_chance += mod
 
             values = {
                 'giver': self.bot.user.id,
