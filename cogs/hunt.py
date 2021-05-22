@@ -169,7 +169,7 @@ class Hunt(commands.Cog):
             try:
                 await message.add_reaction(self.reaction)
             except discord.errors.NotFound as ex:
-                self.spawn_chance = 10000
+                self.guaranteed = True
                 print("spawning on a removed message, guaranteeing next spawn")
 
     @commands.group(name='hunt', case_insensitive=True)
