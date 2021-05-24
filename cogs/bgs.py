@@ -26,6 +26,7 @@ class BGS(commands.Cog):
             23831: Faction(23831, "Prismatic Imperium", "https://inara.cz/minorfaction/25441/"),
             74847: Faction(74847, "Adamantine Union", "https://inara.cz/minorfaction/35809/")
         }
+        self.war_cache = {}
         
     # @commands.command(name='fullscan', case_insensitive=True, hidden=True)
     # @commands.check(checks.can_manage_bot)
@@ -250,6 +251,7 @@ class BGS(commands.Cog):
                 insert_tick = "INSERT INTO tick(time) values($1) ON CONFLICT DO NOTHING"
                 await db.execute(insert_tick, date)
                 self.updated_systems = set()
+                self.war_cache = {}
                 self.faction_data = {
                     75253: Faction(75253, "Colonists of Aurora", "https://inara.cz/minorfaction/44432/"),
                     23831: Faction(23831, "Prismatic Imperium", "https://inara.cz/minorfaction/25441/"),
@@ -448,8 +450,10 @@ class BGS(commands.Cog):
         conflict_data = None
         async with db.transaction():
             timestamp = isoparse(data.timestamp)
-            if timestamp > self.last_tick and data.StarSystem not in self.updated_systems:
-                self.updated_systems.add(data.StarSystem)
+            # if timestamp > self.last_tick and data.StarSystem not in self.updated_systems:
+            if timestamp > self.last_tick:
+                if data.StarSystem not in self.updated_systems:
+                    self.updated_systems.add(data.StarSystem)
                 system_id = await self._get_system_id(data.StarSystem)
                 
                 for faction in data.Factions:
@@ -515,10 +519,12 @@ class BGS(commands.Cog):
                             score2 = conflict.Faction2.WonDays
                             if war_type is "Civilwar":
                                 war_type = "Civil war"
-                            if faction1 in (75253, 23831, 74847):
-                                conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
-                            else:
-                                conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
+                            if data.StarSystem in self.war_cache and self.war_cache[data.StarSystem] != score1 + score2:
+                                self.war_cache[data.StarSystem] = score1 + score2
+                                if faction1 in (75253, 23831, 74847):
+                                    conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
+                                else:
+                                    conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
                 except AttributeError as e:
                     conflict_data = None
             else:
@@ -526,6 +532,21 @@ class BGS(commands.Cog):
         if not skip:
             print(data.StarSystem + " recorded")
             influences.sort(reverse=True)
+
+            if data.StarSystem in self.updated_systems:
+                for item in our_faction.expansion_warning:
+                    if data.StarSystem in item:
+                        our_faction.expansion_warning.remove(item)
+                for item in our_faction.mild_warning:
+                    if data.StarSystem in item:
+                        our_faction.mild_warning.remove(item)
+                for item in our_faction.not_control:
+                    if data.StarSystem in item:
+                        our_faction.not_control.remove(item)
+                for item in our_faction.high_warning:
+                    if data.StarSystem in item:
+                        our_faction.high_warning.remove(item)
+
             if our_influence > 65.00:
                 our_faction.expansion_warning.append("{} {}%".format(data.StarSystem, round(our_influence, 2)))
             else:
@@ -543,7 +564,6 @@ class BGS(commands.Cog):
                     our_faction.high_warning.append(
                         "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
             await self.update_message(our_id, conflict_data)
-
                 
         await database.Database.close_connection(db)
             
