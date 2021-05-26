@@ -439,7 +439,7 @@ class BGS(commands.Cog):
             await message.edit(embed=embed)
             
         await database.Database.close_connection(db)
-        
+
     async def submit(self, data):
         db = await database.Database.get_connection(self.bot.loop)
 
@@ -450,19 +450,17 @@ class BGS(commands.Cog):
         conflict_data = None
         async with db.transaction():
             timestamp = isoparse(data.timestamp)
-            # if timestamp > self.last_tick and data.StarSystem not in self.updated_systems:
-            if timestamp > self.last_tick:
-                if data.StarSystem not in self.updated_systems:
-                    self.updated_systems.add(data.StarSystem)
+            if timestamp > self.last_tick and data.StarSystem not in self.updated_systems:
+                self.updated_systems.add(data.StarSystem)
                 system_id = await self._get_system_id(data.StarSystem)
-                
+
                 for faction in data.Factions:
                     faction_id = await self._get_faction_id(faction.Name)
-                    
+
                     states = ""
                     pending = ""
                     recovering = ""
-                    
+
                     try:
                         for state in faction.ActiveStates:
                             if len(states) > 0:
@@ -470,7 +468,7 @@ class BGS(commands.Cog):
                             states = states + state.State
                     except AttributeError as e:
                         states = faction.FactionState
-                        
+
                     try:
                         for state in faction.RecoveringStates:
                             if len(recovering) > 0:
@@ -478,7 +476,7 @@ class BGS(commands.Cog):
                             recovering = recovering + state.State
                     except AttributeError as e:
                         recovering = ''
-                        
+
                     try:
                         for state in faction.PendingStates:
                             if len(pending) > 0:
@@ -486,7 +484,7 @@ class BGS(commands.Cog):
                             pending = pending + state.State
                     except AttributeError as e:
                         pending = ''
-                    
+
                     insert_influence = "INSERT INTO influence(faction, system, influence, tick, states, pending, recovering) VALUES($1, $2, $3, $4, $5, $6, $7) ON CONFLICT DO NOTHING"
                     influence_values = (
                         faction_id,
@@ -504,7 +502,7 @@ class BGS(commands.Cog):
                         our_faction.set_recovering(recovering)
                         our_faction.set_active(states)
                         our_faction.set_pending(pending)
-                    
+
                     influences.append(faction.Influence * 100)
                     await db.execute(insert_influence, *influence_values)
                 update_system = "UPDATE star_system SET our_faction_id = $1 WHERE id = $2"
@@ -519,12 +517,12 @@ class BGS(commands.Cog):
                             score2 = conflict.Faction2.WonDays
                             if war_type is "Civilwar":
                                 war_type = "Civil war"
-                            if data.StarSystem in self.war_cache and self.war_cache[data.StarSystem] != score1 + score2:
-                                self.war_cache[data.StarSystem] = score1 + score2
-                                if faction1 in (75253, 23831, 74847):
-                                    conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
-                                else:
-                                    conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
+                            if faction1 in (75253, 23831, 74847):
+                                conflict_data = (
+                                "{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
+                            else:
+                                conflict_data = (
+                                "{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
                 except AttributeError as e:
                     conflict_data = None
             else:
@@ -532,21 +530,6 @@ class BGS(commands.Cog):
         if not skip:
             print(data.StarSystem + " recorded")
             influences.sort(reverse=True)
-
-            if data.StarSystem in self.updated_systems:
-                for item in our_faction.expansion_warning:
-                    if data.StarSystem in item:
-                        our_faction.expansion_warning.remove(item)
-                for item in our_faction.mild_warning:
-                    if data.StarSystem in item:
-                        our_faction.mild_warning.remove(item)
-                for item in our_faction.not_control:
-                    if data.StarSystem in item:
-                        our_faction.not_control.remove(item)
-                for item in our_faction.high_warning:
-                    if data.StarSystem in item:
-                        our_faction.high_warning.remove(item)
-
             if our_influence > 65.00:
                 our_faction.expansion_warning.append("{} {}%".format(data.StarSystem, round(our_influence, 2)))
             else:
@@ -564,9 +547,6 @@ class BGS(commands.Cog):
                     our_faction.high_warning.append(
                         "{} {}% ({})".format(data.StarSystem, round(our_influence, 2), round(difference, 2)))
             await self.update_message(our_id, conflict_data)
-                
-        await database.Database.close_connection(db)
-            
         
 def setup(bot):
     bot.add_cog(BGS(bot))
