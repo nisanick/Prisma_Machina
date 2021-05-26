@@ -518,11 +518,9 @@ class BGS(commands.Cog):
                             if war_type is "Civilwar":
                                 war_type = "Civil war"
                             if faction1 in (75253, 23831, 74847):
-                                conflict_data = (
-                                "{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
+                                conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
                             else:
-                                conflict_data = (
-                                "{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
+                                conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
                 except AttributeError as e:
                     conflict_data = None
             else:
