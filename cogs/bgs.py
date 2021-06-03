@@ -519,7 +519,7 @@ class BGS(commands.Cog):
                             score2 = conflict.Faction2.WonDays
                             if war_type is "Civilwar":
                                 war_type = "Civil war"
-                            if data.StarSystem in self.war_cache and self.war_cache[data.StarSystem] != score1 + score2:
+                            if data.StarSystem not in self.war_cache or self.war_cache[data.StarSystem] != score1 + score2:
                                 self.war_cache[data.StarSystem] = score1 + score2
                                 if faction1 in (75253, 23831, 74847):
                                     conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
