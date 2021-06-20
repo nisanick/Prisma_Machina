@@ -102,12 +102,12 @@ class Hunt(commands.Cog):
             mod = 0
 
             if hunting:
-                mod = -100
+                mod = -25
                 hunted = 1
                 reward = self.base_reward * self.hunt_cap_ratio
                 hunt_data.hunted += 1
             if capturing:
-                mod = 50
+                mod = 25
                 captured = 1
                 reward = self.base_reward * (1 - self.hunt_cap_ratio)
                 hunt_data.captured += 1

@@ -147,6 +147,9 @@ class Roleplay(commands.Cog):
         """
         Joins you to currently open session, if there is one at the moment.
         """
+        if self.announce_message is None:
+            await ctx.send('No active session')
+            return
         player_id = ctx.author.id
         for player in self.playerids:
             if player == player_id:
