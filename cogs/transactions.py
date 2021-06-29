@@ -63,7 +63,7 @@ class Transactions(commands.Cog):
         """
         Transfers specified amount of diamonds from your account to target member. Use full name (name#number), ping or ID. Amount can only be positive. This command can be also called with `?give` and `?donation`.
         """
-        if ctx.author.id == who.id or int(amount) < 1:
+        if ctx.author.id == who.id or int(amount) < 1 or who.id == 163037317278203908:
             await ctx.message.add_reaction('😏')
             return
         await self.transaction(ctx, amount, ctx.author, who)
