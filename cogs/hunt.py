@@ -95,6 +95,8 @@ class Hunt(commands.Cog):
 
             hunted = 0
             captured = 0
+            first_hunt = 0
+            first_capture = 0
             today = datetime.utcnow()
 
             reward = 0
@@ -116,6 +118,10 @@ class Hunt(commands.Cog):
                 reward = reward/10
             else:
                 self.spawn_chance += mod
+                if hunting:
+                    first_hunt = 1
+                elif capturing:
+                    first_capture = 1
 
             values = {
                 'giver': self.bot.user.id,
@@ -133,13 +139,17 @@ class Hunt(commands.Cog):
             elif self.spawn_chance < self.base_chance / 4:
                 self.spawn_chance = self.base_chance / 4
 
-            insert_hunt = "INSERT INTO hunt (user_id, month, year, hunted, captured) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (user_id, month, year) DO UPDATE SET hunted = hunt.hunted + $4, captured = hunt.captured + $5"
+            insert_hunt = "INSERT INTO hunt (user_id, month, year, hunted, captured, first_hunt, first_capture) VALUES ($1, $2, $3, $4, $5, $6, $7) " \
+                          "ON CONFLICT (user_id, month, year) " \
+                          "DO UPDATE SET hunted = hunt.hunted + $4, captured = hunt.captured + $5, first_hunt = hunt.first_hunt + $6, first_capture = hunt.first_capture + $7"
             hunt_insert_data = (
                 str(user.id),
                 today.month,
                 today.year,
                 hunted,
-                captured
+                captured,
+                first_hunt,
+                first_capture
             )
 
             insert_user = "INSERT INTO users (user_id, message_count, reaction_count, special, ducks) VALUES ($1, 0, 0, 0, 1) ON CONFLICT (user_id) DO UPDATE SET ducks = users.ducks + 1"
@@ -195,8 +205,8 @@ class Hunt(commands.Cog):
             embed.add_field(name="Spawn chance", value="{}%".format(chance / 100))
 
             embed.add_field(name="Base reward", value="{} <:diamond:230281835119247361>".format(self.base_reward))
-            embed.add_field(name="Hunt modifier", value="{}%".format(self.hunt_cap_ratio * 100))
-            embed.add_field(name="Capture modifier", value="{}%".format((1 - self.hunt_cap_ratio) * 100))
+            embed.add_field(name="Hunt modifier", value="{:.2%}".format(self.hunt_cap_ratio))
+            embed.add_field(name="Capture modifier", value="{:.2%}".format(1 - self.hunt_cap_ratio))
 
             embed.add_field(name="Hunt timeout", value="{} minutes".format(self.lifetime))
             channels = []
@@ -307,6 +317,29 @@ class Hunt(commands.Cog):
         """
         self.lifetime = int(time)
         self.save_settings()
+
+    @_hunt.command(name="calc_ratio", case_insensitive=True)
+    @commands.check(checks.can_manage_bot)
+    async def _calc_ratio(self, ctx, month=None):
+        """
+        *Admin only* | Sets how long is a hunt actively waiting for reactions. Time is in minutes.
+        """
+        if month is None:
+            today = datetime.utcnow()
+            month = today.month
+        db = await database.Database.get_connection(self.bot.loop)
+        stats_select = "select sum(hunted + captured) as total, sum(hunted) as h, sum(captured) as c from hunt where month = $1"
+        async with db.transaction():
+            ratio = 0.5
+            async for (total, h, c) in db.cursor(stats_select, int(month)):
+                ratio = h/total
+                if ratio > 0.9:
+                    ratio = 0.9
+                elif ratio < 0.1:
+                    ratio = 0.1
+            self.hunt_cap_ratio = ratio
+            self.save_settings()
+        await database.Database.close_connection(db)
 
 
 def setup(bot: commands.Bot):
