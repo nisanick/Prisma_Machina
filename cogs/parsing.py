@@ -160,7 +160,7 @@ class Parser(commands.Cog):
 
     async def __insert(self, what, author: discord.Member, when: datetime, history=False):
         db = await database.Database.get_connection(self.bot.loop)
-        insert_word = "INSERT INTO words (word, excluded, last_use) VALUES ($1, $2, $3) ON CONFLICT (word) DO UPDATE SET last_use = $3"
+        insert_word = "INSERT INTO words (word, excluded, last_use) VALUES ($1, $2, $3) ON CONFLICT (word) DO UPDATE SET last_use = $3, excluded = $2"
         insert_user = "INSERT INTO users (user_id, message_count, reaction_count, special) VALUES ($1, 1, 0, 0) ON CONFLICT (user_id) DO UPDATE SET message_count = users.message_count + 1"
         insert_count = ("INSERT INTO word_count (word, user_id, usage_count, last_use) VALUES($1, $2, 1, $3)"
                         "ON CONFLICT (word,user_id) DO UPDATE SET usage_count = word_count.usage_count + 1, last_use = $3")
