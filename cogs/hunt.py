@@ -46,9 +46,10 @@ class Hunt(commands.Cog):
                     self.base_reward = data["base_reward"]
                     self.hunt_cap_ratio = data["hunt_cap_ratio"]
                     self.lifetime = data["lifetime"]
+                    self.spawn_chance = data["spawn_chance"]
                 except Exception as e:
+                    self.spawn_chance = self.base_chance
                     pass
-        self.spawn_chance = self.base_chance
         self.post_init = True
 
     def save_settings(self):
@@ -60,7 +61,8 @@ class Hunt(commands.Cog):
             "capture_reactions": self.capture_reactions,
             "base_reward": self.base_reward,
             "hunt_cap_ratio": self.hunt_cap_ratio,
-            "lifetime": self.lifetime
+            "lifetime": self.lifetime,
+            "spawn_chance": self.spawn_chance
         }
         with open(config.BASE_DIR + 'hunt_settings.json', 'w') as outfile:
             json.dump(settings, outfile)
@@ -118,10 +120,20 @@ class Hunt(commands.Cog):
                 reward = reward/10
             else:
                 self.spawn_chance += mod
+
+                if self.spawn_chance > self.base_chance * 2:
+                    self.spawn_chance = self.base_chance * 2
+                elif self.spawn_chance < self.base_chance / 4:
+                    self.spawn_chance = self.base_chance / 4
+                    
+                self.save_settings()
                 if hunting:
                     first_hunt = 1
                 elif capturing:
                     first_capture = 1
+                
+            if reward < 1:
+                reward = 1
 
             values = {
                 'giver': self.bot.user.id,
@@ -133,11 +145,6 @@ class Hunt(commands.Cog):
                 'type': "diamonds"
             }
             response = await Web.get_response(award_link, values)
-
-            if self.spawn_chance > self.base_chance * 2:
-                self.spawn_chance = self.base_chance * 2
-            elif self.spawn_chance < self.base_chance / 4:
-                self.spawn_chance = self.base_chance / 4
 
             insert_hunt = "INSERT INTO hunt (user_id, month, year, hunted, captured, first_hunt, first_capture) VALUES ($1, $2, $3, $4, $5, $6, $7) " \
                           "ON CONFLICT (user_id, month, year) " \
