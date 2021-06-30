@@ -339,7 +339,7 @@ class Hunt(commands.Cog):
         async with db.transaction():
             ratio = 0.5
             async for (total, h, c) in db.cursor(stats_select, int(month)):
-                ratio = h/total
+                ratio = c/total
                 if ratio > 0.9:
                     ratio = 0.9
                 elif ratio < 0.1:

@@ -65,7 +65,7 @@ class Stats(commands.Cog):
                     reactions.append(f'{reaction} | {count}x ({count/reaction_count:.2%})')
                     
                 total, hunted, captured, first_hunts, first_captures = await db.fetchrow(hunt_totals, str(user.id)) or (0, 0, 0, 0, 0)
-                total_hunts = f'total: {total}\nhunted: {hunted}\ncaptured: {captured}\nfirst hits: {first_hunts}\nfirst caps: {first_captures}'
+                total_hunts = f'total: {total or 0}\nhunted: {hunted or 0}\ncaptured: {captured or 0}\nfirst hits: {first_hunts or 0}\nfirst caps: {first_captures or 0}'
                 today = datetime.utcnow()
                 month_ago = today - relativedelta(months=1)
                 previous_total, previous_hunted, previous_captured, previous_first_hunts, previous_first_captures = await db.fetchrow(hunt_monthly, *(str(user.id), month_ago.month, month_ago.year)) or (0, 0, 0, 0, 0)
@@ -97,7 +97,8 @@ class Stats(commands.Cog):
                 except commands.CommandError:
                     emoji = '💎'
                 reputation = int(response['Reputation'])
-                rank = response['Prismatic_rank']
+                if response['Prismatic_rank'] != 'None':
+                    rank = response['Prismatic_rank']
                 
                 description = f'{emoji} {diamonds}\n<:reputation:441778122514366464> {reputation}\nTimezone: {timezone or ""}'
             
@@ -120,7 +121,7 @@ class Stats(commands.Cog):
             embed.add_field(name='Last month', value=previous_hunts, inline=True)
             embed.add_field(name='This month', value=this_hunts, inline=True)
     
-            embed.set_footer(text="Joined at ")
+            embed.set_footer(text="Joined on ")
             if isinstance(user, discord.Member):
                 embed.timestamp = user.joined_at
             await ctx.send(embed=embed)
