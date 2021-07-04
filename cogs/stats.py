@@ -81,6 +81,7 @@ class Stats(commands.Cog):
                 'discord_id': user.id
             }
             response = await Web.get_response(link, args)
+            rank = None
             if response['Response'] == 'User not found':
                 description = 'Account is not linked'
             else:
