@@ -46,7 +46,7 @@ async def on_ready():
     await bot.get_cog('BGS').init_bgs()
     channel = bot.get_channel(int(config.ADMINISTRATION_CHANNEL))
     await channel.send("Started up and ready")
-    await asyncio.gather(eddn(bot), ticker())
+    # await asyncio.gather(eddn(bot), ticker())
 
 
 @bot.command()

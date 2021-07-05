@@ -32,6 +32,8 @@ class Hunt(commands.Cog):
         self.hunt_reactions = []
         self.capture_reactions = []
         self.guaranteed = False
+        self.cap_mod = 2
+        self.hunt_mod = 4
 
     def initialize_hunt(self):
         if path.isfile(config.BASE_DIR + 'hunt_settings.json'):
@@ -121,19 +123,27 @@ class Hunt(commands.Cog):
             else:
                 self.spawn_chance += mod
 
-                if self.spawn_chance > self.base_chance * 2:
-                    self.spawn_chance = self.base_chance * 2
-                elif self.spawn_chance < self.base_chance / 4:
-                    self.spawn_chance = self.base_chance / 4
-                    
-                self.save_settings()
+                if self.spawn_chance > self.base_chance * self.cap_mod:
+                    self.spawn_chance = self.base_chance * self.cap_mod
+                elif self.spawn_chance < self.base_chance / self.hunt_mod:
+                    self.spawn_chance = self.base_chance / self.hunt_mod
+
+                self._calc_ratio()
                 if hunting:
                     first_hunt = 1
                 elif capturing:
                     first_capture = 1
+                    
+            if self.spawn_chance > self.base_chance:
+                maximum = self.base_chance * self.cap_mod - self.base_chance
+                diff = self.spawn_chance - self.base_chance
+                mod = diff * 1.0 / maximum
+                reward = reward * (1 - mod)
                 
             if reward < 1:
                 reward = 1
+                
+            print(reward)
 
             values = {
                 'giver': self.bot.user.id,
@@ -144,7 +154,7 @@ class Hunt(commands.Cog):
                 'key': config.TRANSACTION_KEY,
                 'type': "diamonds"
             }
-            response = await Web.get_response(award_link, values)
+            # response = await Web.get_response(award_link, values)
 
             insert_hunt = "INSERT INTO hunt (user_id, month, year, hunted, captured, first_hunt, first_capture) VALUES ($1, $2, $3, $4, $5, $6, $7) " \
                           "ON CONFLICT (user_id, month, year) " \
@@ -325,28 +335,17 @@ class Hunt(commands.Cog):
         self.lifetime = int(time)
         self.save_settings()
 
-    @_hunt.command(name="calc_ratio", case_insensitive=True)
-    @commands.check(checks.can_manage_bot)
-    async def _calc_ratio(self, ctx, month=None):
-        """
-        *Admin only* | Sets how long is a hunt actively waiting for reactions. Time is in minutes.
-        """
-        if month is None:
-            today = datetime.utcnow()
-            month = today.month
-        db = await database.Database.get_connection(self.bot.loop)
-        stats_select = "select sum(hunted + captured) as total, sum(hunted) as h, sum(captured) as c from hunt where month = $1"
-        async with db.transaction():
-            ratio = 0.5
-            async for (total, h, c) in db.cursor(stats_select, int(month)):
-                ratio = c/total
-                if ratio > 0.9:
-                    ratio = 0.9
-                elif ratio < 0.1:
-                    ratio = 0.1
-            self.hunt_cap_ratio = ratio
-            self.save_settings()
-        await database.Database.close_connection(db)
+    def _calc_ratio(self):
+        maximum = self.base_chance * self.cap_mod
+        
+        ratio = self.spawn_chance / maximum
+        if ratio > 0.9:
+            ratio = 0.9
+        elif ratio < 0.1:
+            ratio = 0.1
+        
+        self.hunt_cap_ratio = ratio
+        self.save_settings()
 
 
 def setup(bot: commands.Bot):
