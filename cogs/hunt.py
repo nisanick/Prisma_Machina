@@ -154,7 +154,7 @@ class Hunt(commands.Cog):
                 'key': config.TRANSACTION_KEY,
                 'type': "diamonds"
             }
-            # response = await Web.get_response(award_link, values)
+            response = await Web.get_response(award_link, values)
 
             insert_hunt = "INSERT INTO hunt (user_id, month, year, hunted, captured, first_hunt, first_capture) VALUES ($1, $2, $3, $4, $5, $6, $7) " \
                           "ON CONFLICT (user_id, month, year) " \
