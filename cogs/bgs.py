@@ -204,8 +204,9 @@ class BGS(commands.Cog):
         await database.Database.close_connection(db)
         return system_id
     
-    async def _get_faction_id(self, faction_name):
+    async def _get_faction_id(self, faction_name: str) -> int:
         db = await database.Database.get_connection(self.bot.loop)
+        faction_id = 0
         async with db.transaction():
             faction_result = await db.fetchrow("SELECT id FROM faction where name = $1", faction_name)
             if faction_result is None:
@@ -244,7 +245,7 @@ class BGS(commands.Cog):
         await database.Database.close_connection(db)
         return faction_id
 
-    async def set_tick_date(self, date):
+    async def set_tick_date(self, date) -> None:
         db = await database.Database.get_connection(self.bot.loop)
         async with db.transaction():
             if self.last_tick is None or self.last_tick < date:
