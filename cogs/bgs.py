@@ -287,31 +287,31 @@ class BGS(commands.Cog):
                 systems.append(name)
             self.faction_data[faction_id].systems = system_count
             # progress field
-            embed.add_field(name="Tour progress", value="0/{} - 0%".format(system_count), inline=False)
+            embed.add_field(name="🚀 Tour progress", value="0/{} - 0%".format(system_count), inline=False)
             
             # missing stations
             if len(systems) > 0:
                 missing_systems = ", ".join(systems)
             else:
                 missing_systems = "Tour completed"
-            embed.add_field(name="Missing systems", value="{}".format(missing_systems), inline=False)
+            embed.add_field(name="🛰️ Missing systems", value="{}".format(missing_systems), inline=False)
             
             # states
-            embed.add_field(name="Active states", value="None", inline=False)
-            embed.add_field(name="Pending states", value="None")
-            embed.add_field(name="Recovering states", value="None")
+            embed.add_field(name="📡 Active states", value="None", inline=False)
+            embed.add_field(name="📥 Pending states", value="None")
+            embed.add_field(name="📤 Recovering states", value="None")
 
             # expansion warning
-            embed.add_field(name="Expansion warning", value="None")
+            embed.add_field(name="⚠ Expansion warning", value="None")
             
             # low inf warning
-            embed.add_field(name="Inf getting low", value="None")
+            embed.add_field(name="❗ Inf getting low", value="None")
             
             # conflict warning
-            embed.add_field(name="Inf too low", value="None")
+            embed.add_field(name="‼ Inf too low", value="None")
 
             # Not controll system warning
-            embed.add_field(name="Not in control", value="None")
+            embed.add_field(name="⛔ Not in control", value="None")
             
             
         await database.Database.close_connection(db)
@@ -396,17 +396,17 @@ class BGS(commands.Cog):
                 missing_systems.append(name)
             done_count = faction.systems - missing_count
             percentage = 100 * done_count / faction.systems
-            embed.set_field_at(0, name="Tour progress", value="{}/{} - {}%".format(done_count, faction.systems, round(percentage)), inline=False)
+            embed.set_field_at(0, name="🚀 Tour progress", value="{}/{} - {}%".format(done_count, faction.systems, round(percentage)), inline=False)
             
             if len(missing_systems) > 0:
                 systems = ", ".join(missing_systems)
             else:
                 systems = "Tour completed"
-            embed.set_field_at(1, name="Missing systems", value="{}".format(systems), inline=False)
+            embed.set_field_at(1, name="🛰️ Missing systems", value="{}".format(systems), inline=False)
             
-            embed.set_field_at(2, name="Active states", value="{}".format(faction.active), inline=False)
-            embed.set_field_at(3, name="Pending states", value="{}".format(faction.pending))
-            embed.set_field_at(4, name="Recovering states", value="{}".format(faction.recovering))
+            embed.set_field_at(2, name="📡 Active states", value="{}".format(faction.active), inline=False)
+            embed.set_field_at(3, name="📥 Pending states", value="{}".format(faction.pending))
+            embed.set_field_at(4, name="📤 Recovering states", value="{}".format(faction.recovering))
 
             if len(faction.expansion_warning) > 0:
                 expansion_warning = "\n".join(faction.expansion_warning)
@@ -428,10 +428,10 @@ class BGS(commands.Cog):
             else:
                 not_control = "None"
 
-            embed.set_field_at(5, name="Expansion warning", value="{}".format(expansion_warning))
-            embed.set_field_at(6, name="Inf getting low", value="{}".format(mild_warning))
-            embed.set_field_at(7, name="Inf too low", value="{}".format(high_warning))
-            embed.set_field_at(8, name="Not in control", value="{}".format(not_control))
+            embed.set_field_at(5, name="⚠ Expansion warning", value="{}".format(expansion_warning))
+            embed.set_field_at(6, name="❗ Inf getting low", value="{}".format(mild_warning))
+            embed.set_field_at(7, name="‼ Inf too low", value="{}".format(high_warning))
+            embed.set_field_at(8, name="⛔ Not in control", value="{}".format(not_control))
             
             if conflict_data is not None:
                 name, value = conflict_data
@@ -523,9 +523,9 @@ class BGS(commands.Cog):
                             if data.StarSystem not in self.war_cache or self.war_cache[data.StarSystem] != score1 + score2:
                                 self.war_cache[data.StarSystem] = score1 + score2
                                 if faction1 in (75253, 23831, 74847):
-                                    conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
+                                    conflict_data = ("⚔️ {} in {}".format(war_type, data.StarSystem), "{} - {}".format(score1, score2))
                                 else:
-                                    conflict_data = ("{} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
+                                    conflict_data = ("⚔️ {} in {}".format(war_type, data.StarSystem), "{} - {}".format(score2, score1))
                 except AttributeError as e:
                     conflict_data = None
             else:
