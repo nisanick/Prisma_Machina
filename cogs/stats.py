@@ -70,9 +70,9 @@ class Stats(commands.Cog):
                 total, hunted, captured, first_hunts, first_captures = await db.fetchrow(hunt_totals, str(user.id)) or (0, 0, 0, 0, 0)
                 total_hunts = f'total: {total or 0}\nhunted: {hunted or 0}\ncaptured: {captured or 0}\nfirst hits: {first_hunts or 0}\nfirst caps: {first_captures or 0}'
 
-                previous_total, previous_hunted, previous_captured, previous_first_hunts, previous_first_captures = await db.fetchrow(hunt_monthly, *(str(user.id), two_months_ago.month, two_months_ago.year)) or (0, 0, 0, 0, 0)
+                previous_total, previous_hunted, previous_captured, previous_first_hunts, previous_first_captures = await db.fetchrow(hunt_monthly, *(str(user.id), month_ago.month, month_ago.year)) or (0, 0, 0, 0, 0)
                 previous_hunts = f'total: {previous_total}\nhunted: {previous_hunted}\ncaptured: {previous_captured}\nfirst hits: {previous_first_hunts}\nfirst caps: {previous_first_captures}'
-                this_total, this_hunted, this_captured, this_first_hunts, this_first_captures = await db.fetchrow(hunt_monthly, *(str(user.id), month_ago.month, month_ago.year)) or (0, 0, 0, 0, 0)
+                this_total, this_hunted, this_captured, this_first_hunts, this_first_captures = await db.fetchrow(hunt_monthly, *(str(user.id), today.month, today.year)) or (0, 0, 0, 0, 0)
                 this_hunts = f'total: {this_total}\nhunted: {this_hunted}\ncaptured: {this_captured}\nfirst hits: {this_first_hunts}\nfirst caps: {this_first_captures}'
             await database.Database.close_connection(db)
             
@@ -121,8 +121,8 @@ class Stats(commands.Cog):
             
             embed.add_field(name='Hunt stats', value='🐇', inline=False)
             embed.add_field(name='Total', value=total_hunts, inline=True)
-            embed.add_field(name=f'{two_months_ago:%B}', value=previous_hunts, inline=True)
-            embed.add_field(name=f'{month_ago:%B}', value=this_hunts, inline=True)
+            embed.add_field(name=f'{month_ago:%B}', value=previous_hunts, inline=True)
+            embed.add_field(name=f'{today:%B}', value=this_hunts, inline=True)
     
             embed.set_footer(text="Joined on ")
             if isinstance(user, discord.Member):
