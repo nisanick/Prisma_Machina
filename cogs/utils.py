@@ -199,13 +199,14 @@ class Utils(commands.Cog):
         except Exception:
             print("nope")
         channel = self.bot.get_channel(int(config.ANNOUNCE_CHANNEL))
-        await channel.send(config.WELCOME.format(member.mention))
         mention = ""
         for role in member.guild.roles:
             if role.name == 'High Council':
                 mention = role.mention
         await self.bot.get_channel(int(config.ADMINISTRATION_CHANNEL)).send(
             "{} just joined the server. {}".format(member.mention, mention))
+        await asyncio.sleep(5)
+        await channel.send(config.WELCOME.format(member.mention))
 
     @commands.command(hidden=True)
     @commands.check(checks.can_manage_bot)
