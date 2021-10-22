@@ -38,6 +38,9 @@ class Stats(commands.Cog):
             total_hunts = previous_hunts = this_hunts = timezone = ''
             words = []
             reactions = []
+            today = datetime.utcnow()
+            month_ago = today - relativedelta(months=1)
+            two_months_ago = today - relativedelta(months=2)
     
             # FROM DB
             limit = 10
@@ -66,8 +69,7 @@ class Stats(commands.Cog):
                     
                 total, hunted, captured, first_hunts, first_captures = await db.fetchrow(hunt_totals, str(user.id)) or (0, 0, 0, 0, 0)
                 total_hunts = f'total: {total or 0}\nhunted: {hunted or 0}\ncaptured: {captured or 0}\nfirst hits: {first_hunts or 0}\nfirst caps: {first_captures or 0}'
-                today = datetime.utcnow()
-                month_ago = today - relativedelta(months=1)
+
                 previous_total, previous_hunted, previous_captured, previous_first_hunts, previous_first_captures = await db.fetchrow(hunt_monthly, *(str(user.id), month_ago.month, month_ago.year)) or (0, 0, 0, 0, 0)
                 previous_hunts = f'total: {previous_total}\nhunted: {previous_hunted}\ncaptured: {previous_captured}\nfirst hits: {previous_first_hunts}\nfirst caps: {previous_first_captures}'
                 this_total, this_hunted, this_captured, this_first_hunts, this_first_captures = await db.fetchrow(hunt_monthly, *(str(user.id), today.month, today.year)) or (0, 0, 0, 0, 0)
@@ -119,8 +121,8 @@ class Stats(commands.Cog):
             
             embed.add_field(name='Hunt stats', value='🐇', inline=False)
             embed.add_field(name='Total', value=total_hunts, inline=True)
-            embed.add_field(name='Last month', value=previous_hunts, inline=True)
-            embed.add_field(name='This month', value=this_hunts, inline=True)
+            embed.add_field(name=f'{month_ago:%B}', value=previous_hunts, inline=True)
+            embed.add_field(name=f'{today:%B}', value=this_hunts, inline=True)
     
             embed.set_footer(text="Joined on ")
             if isinstance(user, discord.Member):

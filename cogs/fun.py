@@ -22,15 +22,15 @@ class Fun(commands.Cog):
         Tells you how awesome you are in comparison to Wisewolf.
         """
         options = [
-            'is Exceeding expectations',
+            'is exceeding expectations',
             'went down by 1 point since last time',
             'needs to be 20% higher',
             'is 42',
-            'is Over safety limits',
-            'is Leeking from systems',
-            'is Hidden under the sofa',
-            'is Defined in 345.654.655 dictionaries as Stunning',
-            'is Traveling at warp 6.9',
+            'is over safety limits',
+            'is leeking from systems',
+            'is hidden under the sofa',
+            'is defined in 345.654.655 dictionaries as Stunning',
+            'is traveling at warp 6.9',
             'can get to Beagle Point in less than 5 parsecs',
 
         ]
@@ -43,6 +43,8 @@ class Fun(commands.Cog):
             await ctx.send("[REDACTED BY ADMINISTRATION - Classified information]")
         elif member.id == 360543179591909397:  # Bear
             await ctx.send("Is Rupey awesome or is it just a little lie? Tune into Prismatic Media News to find out!")
+        elif member.id == 242178624696877057:  # Bear
+            await ctx.send("You will never be as awesome as Wisewolf...shame")
         else:
             if datetime.strptime('1.4.{}'.format(datetime.utcnow().year), '%d.%m.%Y') == datetime.utcnow():
                 await ctx.send("Everyone is better than Wisewolf")
